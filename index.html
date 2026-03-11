@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>اختبار الميزات الجديدة | ONX-TAQE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #0f1e3d 0%, #1a2a4a 100%);
+      color: #e0e0f0;
+      min-height: 100vh;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    /* ===== FOCUS MODE STYLES ===== */
+    body.focus-mode {
+      background: #0a0f1a !important;
+    }
+    body.focus-mode .focus-hide {
+      display: none !important;
+    }
+    body.focus-mode .focus-only {
+      display: block !important;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    /* ===== HEADER ===== */
+    .header {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .header h1 {
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #00d4ff, #7b2fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .header p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+    
+    /* ===== CARD ===== */
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title span { font-size: 1.3rem; }
+    
+    /* ===== BUTTONS ===== */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.8);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: #00d4ff;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #00d4ff, #0077ff);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,212,255,0.3);
+    }
+    .btn:active { transform: translateY(1px); }
+    
+    /* ===== TOAST ===== */
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 12px 20px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast span { font-size: 0.9rem; }
+    
+    /* ===== QUICK REACTIONS ===== */
+    .quick-reactions {
+      display: flex;
+      gap: 6px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .reaction-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .reaction-btn:hover {
+      background: rgba(0,212,255,0.15);
+      border-color: #00d4ff;
+      transform: scale(1.1);
+    }
+    .reaction-btn:active { transform: scale(0.95); }
+    
+    /* ===== COMMENT BOX ===== */
+    .comment-box {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+    .comment-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .comment-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 8px;
+    }
+    .reactions-count {
+      display: flex;
+      gap: 4px;
+      font-size: 0.85rem;
+    }
+    .reaction-item {
+      background: rgba(0,212,255,0.1);
+      padding: 2px 8px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    /* ===== NOTIFICATION STATUS ===== */
+    .notif-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      margin-top: 12px;
+      font-size: 0.85rem;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff4444;
+    }
+    .status-dot.granted { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
+    .status-dot.denied { background: #ff6b6b; }
+    
+    /* ===== FOCUS MODE INDICATOR ===== */
+    .focus-indicator {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(123,47,255,0.1));
+      border-radius: 16px;
+      border: 1px solid rgba(0,212,255,0.3);
+      margin: 20px 0;
+    }
+    .focus-indicator.active { display: block; }
+    .focus-indicator h3 {
+      color: #00d4ff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .focus-indicator p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+    
+    /* ===== UTILS ===== */
+    .hidden { display: none !important; }
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 20px 0;
+    }
+    
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .container { padding: 10px; }
+      .header h1 { font-size: 1.3rem; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div id="toast">
+    <span id="toast-icon">✅</span>
+    <span id="toast-text"></span>
+  </div>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="header focus-hide">
+      <h1>🧪 اختبار الميزات الجديدة</h1>
+      <p>ONX-TAQE PRO • جرب الميزات قبل إضافتها للكود الرئيسي</p>
+    </div>
+
+    <!-- Focus Mode Indicator (يظهر فقط في وضع التركيز) -->
+    <div class="focus-indicator focus-only" id="focusIndicator">
+      <h3>🎯 وضع التركيز مفعل</h3>
+      <p>تم إخفاء العناصر غير الضرورية للتركيز على المحتوى</p>
+      <button class="btn btn-outline" onclick="toggleFocusMode()" style="margin-top:12px">
+        ❌ الخروج من وضع التركيز
+      </button>
+    </div>
+
+    <!-- Feature 1: Focus Mode -->
+    <div class="card focus-hide">
+      <div class="card-title"><span>🎯</span> وضع التركيز (Focus Mode)</div>
+      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:12px">
+        يخفي العناصر الثانوية (الإحصائيات، الأزرار الجانبية) للتركيز على المحتوى الرئيسي.
+      </p>
+      <button class="btn btn-outline" onclick="toggleFocusMode()">
+        🎯 تفعيل/تعطيل وضع التركيز
+      </button>
+      <div class="notif-status" style="margin-top:12px">
+        <span class="status-dot" id="focusStatus"></span>
+        <span id="focusStatusText">الوضع الحالي: عادي</span>
+      </div>
+    </div>
+
+    <!-- Feature 2: Push Notifications -->
+    <div class="card focus-hide">
+      <div class="card-title"><span>🔔</span> إشعارات المتصفح</div>
+      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:12px">
+        اطلب إذن الإشعارات وجرب إرسال إشعارات تجريبية.
+      </p>
+      
+      <button class="btn btn-primary" onclick="requestNotificationPermission()" style="margin-bottom:12px">
+        🔔 طلب إذن الإشعارات
+      </button>
+      
+      <div class="notif-status">
+        <span class="status-dot" id="notifStatus"></span>
+        <span id="notifStatusText">حالة الإذن: جاري الفحص...</span>
+      </div>
+      
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-outline" onclick="testDeadlineNotification()" style="flex:1;min-width:140px">
+          ⏰ إشعار موعد
+        </button>
+        <button class="btn btn-outline" onclick="testReplyNotification()" style="flex:1;min-width:140px">
+          💬 إشعار رد
+        </button>
+      </div>
+      
+      <p style="color:rgba(255,255,255,0.4);font-size:0.8rem;margin-top:12px">
+        💡 ملاحظة: يجب الموافقة على الإشعارات من المتصفح أولاً
+      </p>
+    </div>
+
+    <!-- Feature 3: Quick Reactions -->
+    <div class="card">
+      <div class="card-title"><span>💬</span> ردود سريعة على التعليقات</div>
+      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:12px">
+        جرب إضافة ردود سريعة (إيموجي) على التعليق أدناه:
+      </p>
+      
+      <!-- Demo Comment -->
+      <div class="comment-box">
+        <div class="comment-meta">
+          <strong>أحمد محمد</strong>
+          <span>منذ 5 دقائق</span>
+        </div>
+        <div class="comment-text">
+          تقرير ممتاز! 🎓 استفدت كثيراً من الشرح، هل يمكن إضافة أمثلة أكثر على الاستعلامات المعقدة؟
+        </div>
+        
+        <!-- Quick Reactions -->
+        <div class="quick-reactions" id="quickReactions">
+          <!-- سيتم ملؤها بالجافاسكريبت -->
+        </div>
+        
+        <!-- Reactions Count -->
+        <div class="reactions-count" id="reactionsCount" style="margin-top:10px">
+          <!-- سيتم ملؤها بالجافاسكريبت -->
+        </div>
+      </div>
+      
+      <p style="color:rgba(255,255,255,0.4);font-size:0.8rem;margin-top:12px">
+        💡 اضغط على أي إيموجي لإضافة رد سريع • يتم حفظ الردود محلياً
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="header focus-hide" style="margin-top:20px">
+      <p style="font-size:0.85rem">
+        ✅ جميع الميزات تعمل بدون سيرفر • البيانات تحفظ في <code>localStorage</code>
+      </p>
+      <button class="btn btn-outline" onclick="resetAll()" style="margin-top:10px">
+        🔄 إعادة تعيين الاختبار
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    // ===== UI HELPERS =====
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => Array.from(document.querySelectorAll(s));
+    
+    function showToast(msg, type = 'success') {
+      const toast = $('#toast');
+      $('#toast-icon').textContent = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+      $('#toast-text').textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ===== SOUND EFFECTS (Web Audio API) =====
+    function playSound(type) {
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        switch(type) {
+          case 'click':
+            oscillator.frequency.value = 800;
+            gainNode.gain.value = 0.1;
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.05);
+            break;
+          case 'success':
+            oscillator.frequency.value = 1200;
+            gainNode.gain.value = 0.15;
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.1);
+            break;
+          case 'error':
+            oscillator.frequency.value = 400;
+            gainNode.gain.value = 0.15;
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.15);
+            break;
+        }
+      } catch(e) { console.log('Sound error:', e); }
+    }
+
+    // ===== FEATURE 1: FOCUS MODE =====
+    function toggleFocusMode() {
+      playSound('click');
+      document.body.classList.toggle('focus-mode');
+      localStorage.setItem('onx_focus_test', document.body.classList.contains('focus-mode'));
+      
+      const isFocus = document.body.classList.contains('focus-mode');
+      
+      // Update status
+      $('#focusStatus').className = 'status-dot' + (isFocus ? ' granted' : '');
+      $('#focusStatusText').textContent = `الوضع الحالي: ${isFocus ? '🎯 تركيز' : 'عادي'}`;
+      
+      // Show/hide indicator
+      $('#focusIndicator').classList.toggle('active', isFocus);
+      
+      showToast(isFocus ? 'وضع التركيز مفعل 🎯' : 'وضع التركيز معطل', 'info');
+    }
+
+    function initFocusMode() {
+      const saved = localStorage.getItem('onx_focus_test') === 'true';
+      if(saved) {
+        document.body.classList.add('focus-mode');
+        $('#focusStatus').className = 'status-dot granted';
+        $('#focusStatusText').textContent = 'الوضع الحالي: 🎯 تركيز';
+        $('#focusIndicator').classList.add('active');
+      }
+    }
+
+    // ===== FEATURE 2: PUSH NOTIFICATIONS =====
+    function updateNotificationStatus() {
+      const status = Notification.permission;
+      const dot = $('#notifStatus');
+      const text = $('#notifStatusText');
+      
+      dot.className = 'status-dot';
+      if(status === 'granted') {
+        dot.classList.add('granted');
+        text.textContent = 'حالة الإذن: ✅ مسموح';
+      } else if(status === 'denied') {
+        dot.classList.add('denied');
+        text.textContent = 'حالة الإذن: ❌ مرفوض';
+      } else {
+        text.textContent = 'حالة الإذن: ⏳ لم يُطلب بعد';
+      }
+    }
+
+    async function requestNotificationPermission() {
+      playSound('click');
+      if(!('Notification' in window)) {
+        showToast('المتصفح لا يدعم الإشعارات ❌', 'error');
+        return;
+      }
+      
+      const permission = await Notification.requestPermission();
+      updateNotificationStatus();
+      
+      if(permission === 'granted') {
+        showToast('تم السماح بالإشعارات 🔔', 'success');
+        playSound('success');
+      } else if(permission === 'denied') {
+        showToast('تم رفض الإشعارات - يمكن تفعيلها من إعدادات المتصفح', 'error');
+      } else {
+        showToast('في انتظار الموافقة...', 'info');
+      }
+    }
+
+    function testDeadlineNotification() {
+      if(Notification.permission !== 'granted') {
+        showToast('يجب السماح بالإشعارات أولاً 🔔', 'error');
+        playSound('error');
+        requestNotificationPermission();
+        return;
+      }
+      
+      playSound('success');
+      new Notification('⏰ تذكير بالتسليم', {
+        body: 'متبقي 3 ساعات على موعد التسليم',
+        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">⏰</text></svg>',
+        badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>'
+      });
+      showToast('تم إرسال إشعار تجريبي 🔔', 'success');
+    }
+
+    function testReplyNotification() {
+      if(Notification.permission !== 'granted') {
+        showToast('يجب السماح بالإشعارات أولاً 🔔', 'error');
+        playSound('error');
+        requestNotificationPermission();
+        return;
+      }
+      
+      playSound('success');
+      new Notification('💬 رد جديد', {
+        body: 'شخص ما رد على تعليقك: "شكراً لك!"',
+        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💬</text></svg>'
+      });
+      showToast('تم إرسال إشعار رد تجريبي 💬', 'success');
+    }
+
+    function initNotifications() {
+      if('Notification' in window) {
+        updateNotificationStatus();
+        // Auto-check every 2 seconds for demo
+        setInterval(updateNotificationStatus, 2000);
+      } else {
+        $('#notifStatusText').textContent = 'غير مدعوم في هذا المتصفح';
+      }
+    }
+
+    // ===== FEATURE 3: QUICK REACTIONS =====
+    const quickReactions = ['👍', '👏', '🔥', '💯', '❤️', '🎉', '✅', '🤔'];
+    let reactionsData = JSON.parse(localStorage.getItem('onx_reactions_test') || '{}');
+    
+    function renderQuickReactions() {
+      const container = $('#quickReactions');
+      container.innerHTML = quickReactions.map(emoji => `
+        <button class="reaction-btn" onclick="addReaction('${emoji}')" title="أضف ${emoji}">
+          ${emoji}
+        </button>
+      `).join('');
+    }
+    
+    function renderReactionsCount() {
+      const container = $('#reactionsCount');
+      const entries = Object.entries(reactionsData).filter(([_, count]) => count > 0);
+      
+      if(entries.length === 0) {
+        container.innerHTML = '<span style="color:rgba(255,255,255,0.4)">لا توجد ردود بعد</span>';
+        return;
+      }
+      
+      container.innerHTML = entries.map(([emoji, count]) => `
+        <span class="reaction-item">
+          ${emoji} <span style="color:rgba(255,255,255,0.6)">${count}</span>
+        </span>
+      `).join('');
+    }
+    
+    function addReaction(emoji) {
+      playSound('click');
+      reactionsData[emoji] = (reactionsData[emoji] || 0) + 1;
+      localStorage.setItem('onx_reactions_test', JSON.stringify(reactionsData));
+      renderReactionsCount();
+      
+      // Visual feedback
+      showToast(`تم إضافة ${emoji}`, 'success');
+      
+      // Animate the button
+      event.target.style.transform = 'scale(1.3)';
+      setTimeout(() => event.target.style.transform = '', 150);
+    }
+    
+    function initReactions() {
+      renderQuickReactions();
+      renderReactionsCount();
+    }
+
+    // ===== RESET FUNCTION =====
+    function resetAll() {
+      playSound('click');
+      localStorage.removeItem('onx_focus_test');
+      localStorage.removeItem('onx_reactions_test');
+      
+      document.body.classList.remove('focus-mode');
+      $('#focusStatus').className = 'status-dot';
+      $('#focusStatusText').textContent = 'الوضع الحالي: عادي';
+      $('#focusIndicator').classList.remove('active');
+      
+      reactionsData = {};
+      renderReactionsCount();
+      
+      showToast('تم إعادة تعيين الاختبار 🔄', 'success');
+    }
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', () => {
+      initFocusMode();
+      initNotifications();
+      initReactions();
+      
+      // Keyboard shortcuts for demo
+      document.addEventListener('keydown', (e) => {
+        if(e.ctrlKey && e.key === 'f') {
+          e.preventDefault();
+          toggleFocusMode();
+        }
+        if(e.ctrlKey && e.key === 'n') {
+          e.preventDefault();
+          testDeadlineNotification();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+
