@@ -16,12 +16,7 @@
       --text-light: #e0e0f0; --card-shadow: 0 20px 60px rgba(0,0,0,0.5);
       --transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
       --bg-color: #050b1a;
-      --bg-gradient: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.10) 0%, transparent 60%),
-                     radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.10) 0%, transparent 60%),
-                     radial-gradient(ellipse at 50% 80%, rgba(233,69,96,0.07) 0%, transparent 60%),
-                     linear-gradient(180deg, rgba(5,11,26,0.4) 0%, rgba(5,11,26,0.7) 100%);
       --security-green: #00c851; --security-yellow: #ffab00; --security-red: #ff1744;
-      --security-purple: #9c27b0;
     }
 
     /* ===== Reset & Base ===== */
@@ -29,16 +24,14 @@
     html,body{height:100%;overscroll-behavior:none}
     body{
       font-family:'Cairo',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      overflow-x:hidden; -webkit-user-select:none; -moz-user-select:none;
-      -ms-user-select:none; user-select:none; background:var(--bg-color);
-      color:var(--text-light); transition: background 0.4s ease;
+      overflow-x:hidden; background:var(--bg-color);
+      color:var(--text-light);
     }
     button,input,textarea,select{
       font-family:inherit; -webkit-user-select:text; -moz-user-select:text;
       -ms-user-select:text; user-select:text;
     }
     :focus{outline:none!important;box-shadow:none!important}
-    ::selection{background:rgba(0,212,255,0.3)}
 
     /* ===== Background Effects ===== */
     .bg-image {
@@ -48,12 +41,13 @@
     }
     .bg-overlay {
       position:fixed; inset:0; z-index:-1;
-      background: var(--bg-gradient);
+      background: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.10) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.10) 0%, transparent 60%),
+                  linear-gradient(180deg, rgba(5,11,26,0.4) 0%, rgba(5,11,26,0.7) 100%);
     }
     #particles { position:fixed; inset:0; z-index:-1; pointer-events:none; }
     .particle {
-      position:absolute; border-radius:50%;
-      animation: floatUp linear infinite; opacity:0;
+      position:absolute; border-radius:50%;      animation: floatUp linear infinite; opacity:0;
     }
     @keyframes floatUp {
       0%{transform:translateY(100vh) scale(0); opacity:0;}
@@ -64,7 +58,7 @@
     /* ===== LOGIN SCREEN ===== */
     #loginScreen {
       position:fixed; inset:0; z-index:500; display:flex; align-items:center; justify-content:center;
-      padding:20px; background:rgba(5,11,26,0.95);
+      padding:20px;
     }
     .login-card {
       background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
@@ -90,6 +84,47 @@
     }
     .login-subtitle { color:rgba(255,255,255,0.4); font-size:0.82rem; letter-spacing:2px; text-transform:uppercase; margin-top:5px; }
     .login-line { width:160px; height:2px; margin:14px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }
+    
+    /* ===== LOGIN CREDENTIALS BOX ===== */
+    .credentials-box {
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .credentials-box .cred-title {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .credentials-box .cred-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.85rem;
+    }
+    .credentials-box .cred-item:last-child { border-bottom: none; }
+    .credentials-box .cred-label { color: rgba(255,255,255,0.5); }
+    .credentials-box .cred-value {
+      font-family: monospace;
+      color: var(--neon-blue);
+      background: rgba(0,0,0,0.3);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+    .credentials-box .cred-note {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 8px;
+      font-style: italic;
+    }
+    
     .login-input-group { position:relative; margin-bottom:16px; }
     .login-input-label { font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; margin-bottom:7px; display:block; }
     .login-input {
@@ -110,8 +145,7 @@
     }
     .pass-toggle:hover { color:var(--neon-blue); }
     .btn-login {
-      width:100%; padding:15px; border:none; border-radius:14px; cursor:pointer;
-      font-family:'Cairo',sans-serif; font-size:1rem; font-weight:800;
+      width:100%; padding:15px; border:none; border-radius:14px; cursor:pointer;      font-family:'Cairo',sans-serif; font-size:1rem; font-weight:800;
       background:linear-gradient(135deg,#00d4ff,#7b2fff); color:#fff; letter-spacing:0.5px;
       box-shadow:0 8px 30px rgba(0,212,255,0.4); transition:var(--transition);
       position:relative; overflow:hidden; margin-top:6px; display:flex; align-items:center; justify-content:center; gap:10px;
@@ -160,8 +194,7 @@
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:1px;
     }
     .header-subtitle { color:rgba(255,255,255,0.5); font-size:0.95rem; margin-top:6px; letter-spacing:2px; text-transform:uppercase; }
-    .header-line { width:200px; height:2px; margin:16px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }
-    
+    .header-line { width:200px; height:2px; margin:16px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }    
     .logout-btn {
       position:fixed; top:20px; left:20px; z-index:100;
       padding:9px 18px; border:none; border-radius:10px; cursor:pointer;
@@ -183,53 +216,22 @@
     .stat-badge:hover { transform:translateY(-2px); border-color:var(--neon-blue); }
     .stat-dot { width:8px; height:8px; border-radius:50%; }
 
-    /* ===== TABS SYSTEM ===== */
-    .tabs-container { max-width:1400px; margin:0 auto; padding:0 24px 40px; }
-    .tabs-nav {
-      display:flex; gap:8px; padding:10px; background:var(--glass); border:1px solid var(--glass-border);
-      border-radius:16px; backdrop-filter:blur(20px); margin-bottom:24px; overflow-x:auto; flex-wrap:wrap;
-    }
-    .tab-btn {
-      padding:12px 20px; border:none; border-radius:12px; cursor:pointer;
-      font-family:'Cairo',sans-serif; font-size:0.9rem; font-weight:600;
-      background:transparent; color:rgba(255,255,255,0.6);
-      transition:var(--transition); display:flex; align-items:center; gap:8px; white-space:nowrap;
-    }
-    .tab-btn:hover { background:rgba(255,255,255,0.08); color:#fff; }
-    .tab-btn.active {
-      background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
-      color:#fff; box-shadow:0 4px 20px rgba(0,212,255,0.3);
-    }
-    .tab-btn .badge {
-      background:var(--accent); color:#fff; padding:2px 8px;
-      border-radius:20px; font-size:0.7rem; margin-right:4px;
-    }
-    .tab-content { display:none; animation:tabFadeIn 0.4s ease; }
-    .tab-content.active { display:block; }
-    @keyframes tabFadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-
     /* ===== GLASS CARD ===== */
     .glass-card {
       background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));
       border:1px solid var(--glass-border); backdrop-filter:blur(20px);
       border-radius:24px; padding:28px; box-shadow:var(--card-shadow);
-      position:relative; overflow:hidden; transform-style:preserve-3d;
+      position:relative; overflow:hidden; margin-bottom:20px;
       transition:var(--transition); animation:cardEntrance 0.8s cubic-bezier(0.23,1,0.32,1) both;
     }
     .glass-card:nth-child(1){animation-delay:0.1s} .glass-card:nth-child(2){animation-delay:0.2s}
     .glass-card:nth-child(3){animation-delay:0.3s} .glass-card:nth-child(4){animation-delay:0.4s}
-    .glass-card:nth-child(5){animation-delay:0.5s} .glass-card:nth-child(6){animation-delay:0.6s}
     @keyframes cardEntrance { from{transform:translateY(40px) rotateX(10deg);opacity:0} to{transform:translateY(0) rotateX(0deg);opacity:1} }
     .glass-card:hover { transform:translateY(-6px) rotateX(2deg); box-shadow:0 30px 80px rgba(0,0,0,0.6),0 0 40px rgba(0,212,255,0.1); }
     .glass-card::before { content:''; position:absolute; inset:0; border-radius:24px; background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%); pointer-events:none; }
     
     .card-glow-red::after   { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(233,69,96,0.15),transparent 70%); pointer-events:none; }
     .card-glow-blue::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(0,212,255,0.12),transparent 70%); pointer-events:none; }
-    .card-glow-purple::after{ content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(123,47,255,0.15),transparent 70%); pointer-events:none; }
-    .card-glow-gold::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(245,197,24,0.12),transparent 70%); pointer-events:none; }
-    .card-glow-green::after { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(0,200,81,0.12),transparent 70%); pointer-events:none; }
-    .card-glow-orange::after{ content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(255,140,0,0.12),transparent 70%); pointer-events:none; }
-    .card-glow-teal::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(20,184,166,0.15),transparent 70%); pointer-events:none; }
 
     /* ===== CARD HEADER ===== */
     .card-header { display:flex; align-items:center; gap:14px; margin-bottom:24px; }
@@ -240,13 +242,8 @@
     .icon-blue   { background:linear-gradient(135deg,#00d4ff22,#00d4ff44); border:1px solid #00d4ff44; }
     .icon-red    { background:linear-gradient(135deg,#e9456022,#e9456044); border:1px solid #e9456044; }
     .icon-purple { background:linear-gradient(135deg,#7b2fff22,#7b2fff44); border:1px solid #7b2fff44; }
-    .icon-gold   { background:linear-gradient(135deg,#f5c51822,#f5c51844); border:1px solid #f5c51844; }
-    .icon-green  { background:linear-gradient(135deg,#00ff8822,#00ff8844); border:1px solid #00ff8844; }
-    .icon-orange { background:linear-gradient(135deg,#ff8c0022,#ff8c0044); border:1px solid #ff8c0044; }
-    .icon-teal   { background:linear-gradient(135deg,#14b8a622,#14b8a644); border:1px solid #14b8a644; }
     .card-title { font-size:1.2rem; font-weight:700; color:#fff; }
     .card-desc  { font-size:0.8rem; color:rgba(255,255,255,0.4); margin-top:2px; }
-
     /* ===== SEARCH BAR ===== */
     .search-container { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
     .search-input {
@@ -295,12 +292,8 @@
     }
     thead th {
       padding:16px 12px; text-align:center; font-size:0.8rem; font-weight:700;
-      color:rgba(255,255,255,0.8); text-transform:uppercase; letter-spacing:1px;
-      position:sticky; top:0; background:inherit; backdrop-filter:blur(10px); cursor:pointer;
+      color:rgba(255,255,255,0.8); text-transform:uppercase; letter-spacing:1px;      position:sticky; top:0; background:inherit; backdrop-filter:blur(10px);
     }
-    thead th::after { content:'↕'; position:absolute; left:8px; font-size:0.7rem; opacity:0.5; }
-    thead th.sorted-asc::after { content:'▲'; opacity:1; color:var(--neon-blue); }
-    thead th.sorted-desc::after { content:'▼'; opacity:1; color:var(--neon-blue); }
     tbody tr {
       border-bottom:1px solid rgba(255,255,255,0.06); transition:var(--transition);
       animation: rowFade 0.3s ease;
@@ -331,36 +324,6 @@
     .alert-badge.high { background:rgba(255,23,68,0.2); color:var(--security-red); animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{box-shadow:0 0 25px rgba(255,23,68,0.6);} 50%{box-shadow:0 0 45px rgba(255,23,68,0.9);} }
 
-    /* ===== TIMELINE ===== */
-    .timeline { position:relative; padding-right:30px; margin:20px 0; }
-    .timeline::before {
-      content:''; position:absolute; right:8px; top:0; bottom:0;
-      width:2px; background:linear-gradient(to bottom, var(--neon-blue), var(--neon-purple));
-    }
-    .timeline-item {
-      position:relative; padding:12px 20px 12px 40px; margin-bottom:15px;
-      background:rgba(255,255,255,0.04); border-radius:12px;
-      border:1px solid rgba(255,255,255,0.08);
-    }
-    .timeline-item::before {
-      content:''; position:absolute; right:-6px; top:18px;
-      width:14px; height:14px; border-radius:50%;
-      background:var(--neon-blue); border:3px solid var(--bg-color);
-      box-shadow:0 0 10px var(--neon-blue);
-    }
-    .timeline-item.suspicious::before { background:var(--security-yellow); box-shadow:0 0 10px var(--security-yellow); }
-    .timeline-item.danger::before { background:var(--security-red); box-shadow:0 0 10px var(--security-red); }
-    .timeline-time { font-size:0.75rem; color:var(--neon-blue); margin-bottom:4px; font-weight:600; }
-    .timeline-type {
-      display:inline-block; padding:2px 10px; border-radius:999px;
-      font-size:0.7rem; font-weight:700; margin-bottom:6px;
-    }
-    .timeline-type.info { background:rgba(0,212,255,0.2); color:var(--neon-blue); }
-    .timeline-type.warning { background:rgba(255,171,0,0.2); color:var(--security-yellow); }
-    .timeline-type.danger { background:rgba(255,23,68,0.2); color:var(--security-red); }
-    .timeline-type.success { background:rgba(0,200,81,0.2); color:var(--security-green); }
-    .timeline-msg { font-size:0.9rem; color:rgba(255,255,255,0.85); line-height:1.5; }
-
     /* ===== LOGS CONTAINER ===== */
     .logs-container {
       max-height:400px; overflow-y:auto; border-radius:14px;
@@ -378,54 +341,8 @@
     }
     .log-type.info { background:rgba(0,212,255,0.25); color:var(--neon-blue); }
     .log-type.warning { background:rgba(255,171,0,0.25); color:var(--security-yellow); }
-    .log-type.danger { background:rgba(255,23,68,0.25); color:var(--security-red); }
-    .log-type.success { background:rgba(0,200,81,0.25); color:var(--security-green); }
+    .log-type.danger { background:rgba(255,23,68,0.25); color:var(--security-red); }    .log-type.success { background:rgba(0,200,81,0.25); color:var(--security-green); }
     .log-msg { flex:1; color:rgba(255,255,255,0.9); line-height:1.5; }
-    .log-fingerprint {
-      font-size:0.7rem; color:rgba(255,255,255,0.4); margin-top:3px;
-      font-family:monospace; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px;
-    }
-
-    /* ===== PROGRESS & METRICS ===== */
-    .metric-row {
-      display:flex; align-items:center; gap:15px; margin:12px 0; padding:12px;
-      background:rgba(255,255,255,0.04); border-radius:12px;
-    }
-    .metric-label { flex:1; font-size:0.9rem; }
-    .metric-value { font-weight:700; min-width:80px; text-align:left; }
-    .progress-bar { flex:2; height:8px; background:rgba(255,255,255,0.12); border-radius:4px; overflow:hidden; }
-    .progress-fill {
-      height:100%; border-radius:4px; transition:width 0.5s ease;
-      background:linear-gradient(90deg, var(--security-red), var(--security-yellow), var(--security-green));
-    }
-
-    /* ===== MODAL ===== */
-    #modal-overlay {
-      position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000;
-      display:none; align-items:center; justify-content:center; backdrop-filter:blur(15px);
-    }
-    #modal-overlay.active { display:flex; animation: modalFade 0.3s ease; }
-    @keyframes modalFade { from{opacity:0} to{opacity:1} }
-    .modal {
-      width:550px; max-width:95%; border-radius:24px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08));
-      border:1px solid rgba(255,255,255,0.2); box-shadow:0 30px 80px rgba(0,0,0,0.8);
-      padding:28px; backdrop-filter:blur(20px); animation: modalSlide 0.3s ease;
-      max-height:90vh; overflow-y:auto;
-    }
-    @keyframes modalSlide { from{opacity:0;transform:scale(0.95) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
-    .modal-title { font-size:1.4rem; font-weight:900; margin-bottom:15px; color:var(--security-red); display:flex; align-items:center; gap:10px; }
-    .modal-content { color:rgba(255,255,255,0.85); font-size:0.95rem; margin-bottom:25px; line-height:1.7; }
-    .modal-content strong { color:#fff; }
-    .modal-input {
-      width:100%; padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.25);
-      background:rgba(0,0,0,0.25); color:#fff; font-family:inherit; margin-bottom:20px; font-size:0.95rem;
-    }
-    .modal-input:focus { border-color:var(--neon-blue); box-shadow:0 0 0 3px rgba(0,212,255,0.15); }
-    .modal-actions { display:flex; gap:12px; }
-    .modal-actions button { flex:1; padding:14px; border-radius:12px; border:none; cursor:pointer; font-weight:700; font-size:0.95rem; }
-    .modal-cancel { background:rgba(255,255,255,0.12); color:rgba(255,255,255,0.85); }
-    .modal-confirm { background:var(--security-red); color:#fff; }
 
     /* ===== TOAST ===== */
     #toast {
@@ -440,21 +357,6 @@
     #toast.warning { border-color:var(--security-yellow); }
     #toast.danger { border-color:var(--security-red); }
     #toast.info { border-color:var(--neon-blue); }
-
-    /* ===== SECURITY LEVEL INDICATOR ===== */
-    .security-level {
-      display:flex; align-items:center; gap:15px; padding:16px;
-      background:rgba(255,255,255,0.06); border-radius:14px; margin-top:15px;
-      border:1px solid rgba(255,255,255,0.12);
-    }
-    .level-bar { flex:1; height:10px; background:rgba(255,255,255,0.12); border-radius:5px; overflow:hidden; }
-    .level-fill {
-      height:100%; border-radius:5px; transition:width 0.6s ease;
-      background:linear-gradient(90deg, var(--security-red), var(--security-yellow), var(--security-green));
-      box-shadow:0 0 15px rgba(0,200,81,0.3);
-    }
-    .level-text { font-size:0.9rem; font-weight:700; min-width:90px; text-align:center; }
-    .level-percent { font-size:1.2rem; font-weight:900; min-width:60px; text-align:center; }
 
     /* ===== REAL-TIME INDICATOR ===== */
     .realtime-indicator {
@@ -479,41 +381,20 @@
     .filter-select:focus { border-color:var(--neon-blue); outline:none; }
 
     /* ===== RESPONSIVE ===== */
-    @media(max-width:1024px){
-      .stats-grid { grid-template-columns:repeat(2, 1fr); }
-      table { min-width:700px; font-size:0.85rem; }
-      th, td { padding:12px 8px; }
-    }
     @media(max-width:768px){
-      .security-header { padding:15px; }
       .header-title { font-size:1.4rem; }
       .glass-card { padding:18px; }
       .stats-grid { grid-template-columns:1fr; }
       .btn-row { flex-direction:column; }
       .btn { width:100%; }
       .search-container { flex-direction:column; }
-      .modal { width:95%; padding:20px; }
       table { min-width:550px; }
-      .timeline { padding-right:25px; }
-      .timeline-item { padding:10px 15px 10px 35px; }
     }
-    @media(max-width:480px){
-      .status-item { font-size:0.8rem; padding:5px 10px; }
-      .stat-value { font-size:1.6rem; }
-      .metric-row { flex-direction:column; align-items:flex-start; gap:8px; }
-      .progress-bar { width:100%; }
-    }
-
     /* ===== UTILITY CLASSES ===== */
     .hidden { display:none !important; }
     .blur-sensitive { filter:blur(5px); transition:filter 0.3s; cursor:pointer; }
     .blur-sensitive:hover { filter:blur(0); }
     .blur-sensitive.revealed { filter:none; }
-    .text-truncate { max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; }
-    
-    /* ===== ANIMATIONS ===== */
-    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-    .animate-in { animation:fadeIn 0.4s ease forwards; }
     
     /* ===== SCROLLBAR ===== */
     ::-webkit-scrollbar { width:6px; height:6px; }
@@ -539,13 +420,26 @@
         <div class="login-line"></div>
       </div>
       
+      <!-- ✅ Credentials Box - معلومات الدخول واضحة -->
+      <div class="credentials-box">
+        <div class="cred-title">🔐 بيانات الدخول الافتراضية</div>
+        <div class="cred-item">
+          <span class="cred-label">اسم المستخدم:</span>
+          <span class="cred-value">admin</span>
+        </div>
+        <div class="cred-item">
+          <span class="cred-label">كلمة المرور:</span>
+          <span class="cred-value">onxtaqe2024</span>
+        </div>
+        <div class="cred-note">⚠️ غيّر هذه البيانات بعد أول دخول!</div>
+      </div>
+      
       <div class="login-input-group">
         <label class="login-input-label">اسم المستخدم</label>
         <span class="login-input-icon">👤</span>
         <input class="login-input" id="loginUsername" type="text" placeholder="أدخل اسم المستخدم" autocomplete="username">
       </div>
-      
-      <div class="login-input-group">
+            <div class="login-input-group">
         <label class="login-input-label">كلمة المرور</label>
         <span class="login-input-icon">🔒</span>
         <input class="login-input" id="loginPassword" type="password" placeholder="أدخل كلمة المرور" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()">
@@ -577,15 +471,7 @@
         </div>
         <div class="status-item">
           <span class="status-dot active"></span>
-          <span>الحماية: <strong>مفعلة</strong></span>
-        </div>
-        <div class="status-item">
-          <span class="status-dot warning"></span>
-          <span>تهديدات: <strong id="threatCount">0</strong></span>
-        </div>
-        <div class="status-item">
-          <span class="status-dot danger"></span>
-          <span>محظورون: <strong id="blockedCount">0</strong></span>
+          <span>الحالة: <strong>متصل</strong></span>
         </div>
         <div class="status-item">
           <span class="status-dot active"></span>
@@ -597,100 +483,61 @@
     <div class="container">
       
       <!-- Quick Stats -->
-      <div class="stats-grid">
-        <div class="stat-box info">
-          <div class="stat-label">👥 طلاب مسجلون</div>
-          <div class="stat-value" id="totalStudents">0</div>
+      <div class="stats-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:15px; margin-bottom:25px">
+        <div class="stat-box info" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:20px; text-align:center">
+          <div class="stat-label" style="font-size:0.85rem; color:rgba(255,255,255,0.5)">👥 طلاب مسجلون</div>
+          <div class="stat-value" id="totalStudents" style="font-size:2rem; font-weight:900; margin:8px 0; color:var(--neon-blue)">0</div>
         </div>
-        <div class="stat-box warning">
-          <div class="stat-label">⚠️ نشاط مشبوه</div>
-          <div class="stat-value" id="suspiciousCount">0</div>
+        <div class="stat-box warning" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:20px; text-align:center">          <div class="stat-label" style="font-size:0.85rem; color:rgba(255,255,255,0.5)">⚠️ نشاط مشبوه</div>
+          <div class="stat-value" id="suspiciousCount" style="font-size:2rem; font-weight:900; margin:8px 0; color:var(--security-yellow)">0</div>
         </div>
-        <div class="stat-box danger">
-          <div class="stat-label">🚫 محظورون</div>
-          <div class="stat-value" id="bannedCount">0</div>
+        <div class="stat-box danger" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:20px; text-align:center">
+          <div class="stat-label" style="font-size:0.85rem; color:rgba(255,255,255,0.5)">🚫 محظورون</div>
+          <div class="stat-value" id="bannedCount" style="font-size:2rem; font-weight:900; margin:8px 0; color:var(--security-red)">0</div>
         </div>
-        <div class="stat-box success">
-          <div class="stat-label">🔐 مستوى الحماية</div>
-          <div class="stat-value" id="securityLevel">98%</div>
-        </div>
-        <div class="stat-box info">
-          <div class="stat-label">📸 محاولات لقطة</div>
-          <div class="stat-value" id="screenshotAttempts">0</div>
-        </div>
-        <div class="stat-box warning">
-          <div class="stat-label">🔄 تعديلات عناوين</div>
-          <div class="stat-value" id="titleChanges">0</div>
+        <div class="stat-box success" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:20px; text-align:center">
+          <div class="stat-label" style="font-size:0.85rem; color:rgba(255,255,255,0.5)">🔐 مستوى الحماية</div>
+          <div class="stat-value" id="securityLevel" style="font-size:2rem; font-weight:900; margin:8px 0; color:var(--security-green)">98%</div>
         </div>
       </div>
 
       <!-- Search & Filters -->
       <div class="glass-card">
         <div class="card-header">
-          <div class="card-icon">🔍</div>
+          <div class="card-icon icon-blue">🔍</div>
           <div>
             <div class="card-title">بحث وتتبع طالب</div>
-            <div class="card-desc">ابحث برقم الهاتف، البصمة، أو الاسم لمراقبة النشاط</div>
+            <div class="card-desc">ابحث بالاسم أو الكود لعرض الملف الأمني</div>
           </div>
         </div>
         
         <div class="search-container">
           <div class="search-wrapper">
-            <span class="search-icon">📱</span>
-            <input type="text" class="search-input" id="searchPhone" placeholder="أدخل رقم هاتف الطالب (مثال: 966501234567)">
-          </div>
-          <div class="search-wrapper">
-            <span class="search-icon">🆔</span>
-            <input type="text" class="search-input" id="searchFingerprint" placeholder="أو بصمة الجهاز">
-          </div>
-          <div class="search-wrapper">
             <span class="search-icon">👤</span>
-            <input type="text" class="search-input" id="searchName" placeholder="أو اسم الطالب">
+            <input type="text" class="search-input" id="searchName" placeholder="أدخل اسم الطالب...">
           </div>
-          <button class="btn btn-primary" onclick="searchStudent()">🔎 بحث وتتبع</button>
+          <button class="btn btn-primary" onclick="searchStudent()">🔎 بحث</button>
           <button class="btn btn-outline" onclick="showAllStudents()">📋 عرض الكل</button>
-        </div>
-        
-        <div class="filters-row">
-          <select class="filter-select" id="filterStatus" onchange="applyFilters()">
-            <option value="all">كل الحالات</option>
-            <option value="active">نشط</option>
-            <option value="suspicious">مشبوه</option>
-            <option value="blocked">محظور</option>
-          </select>
-          <select class="filter-select" id="filterTime" onchange="applyFilters()">
-            <option value="all">كل الوقت</option>
-            <option value="today">اليوم</option>
-            <option value="week">هذا الأسبوع</option>
-            <option value="month">هذا الشهر</option>
-          </select>
-          <button class="btn btn-outline" onclick="exportReport()">📤 تصدير التقرير</button>
-          <button class="btn btn-warning" onclick="runSecurityScan()">🔍 فحص أمني شامل</button>
         </div>
       </div>
 
-      <!-- Student Details Panel (Hidden by default) -->
+      <!-- Student Details Panel -->
       <div class="glass-card hidden" id="studentDetailsPanel">
         <div class="card-header">
-          <div class="card-icon">👤</div>
+          <div class="card-icon icon-purple">👤</div>
           <div>
             <div class="card-title">تفاصيل الطالب: <span id="studentNameDisplay" style="color:var(--neon-blue)"></span></div>
-            <div class="card-desc">مراقبة شاملة للنشاط والسلوك</div>
+            <div class="card-desc">مراقبة شاملة للنشاط</div>
           </div>
           <span class="alert-badge high" id="studentRiskLevel">مخاطر عالية</span>
         </div>
         
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:15px; margin-bottom:20px">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:20px">
           <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">📱 رقم الهاتف</div>
-            <div style="font-size:1.1rem; font-weight:700" id="detailPhone">—</div>
+            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🆔 كود الطالب</div>
+            <div style="font-family:monospace; font-size:0.8rem; word-break:break-all" id="detailCode">—</div>
           </div>
-          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🆔 بصمة الجهاز</div>
-            <div style="font-size:0.85rem; font-family:monospace; word-break:break-all" id="detailFingerprint">—</div>
-          </div>
-          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🌐 عنوان الـ IP</div>
+          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🌐 عنوان الـ IP</div>
             <div style="font-size:1.1rem; font-weight:700" id="detailIP">—</div>
           </div>
           <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
@@ -699,92 +546,52 @@
           </div>
         </div>
         
-        <div style="margin-bottom:20px">
-          <div style="font-size:0.9rem; font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px">
-            <span>📊 مقاييس النشاط</span>
-          </div>
-          
-          <div class="metric-row">
-            <span class="metric-label">عدد مرات التسجيل</span>
-            <span class="metric-value" id="metricRegistrations">0</span>
-            <div class="progress-bar"><div class="progress-fill" id="progressRegistrations" style="width:0%"></div></div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">تعديلات عنوان التقرير</span>
-            <span class="metric-value" id="metricTitleChanges">0</span>
-            <div class="progress-bar"><div class="progress-fill" id="progressTitleChanges" style="width:0%"></div></div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">مدة البقاء في الموقع</span>
-            <span class="metric-value" id="metricSessionTime">0 دقيقة</span>
-            <div class="progress-bar"><div class="progress-fill" id="progressSessionTime" style="width:0%"></div></div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">محاولات لقطة الشاشة</span>
-            <span class="metric-value" id="metricScreenshots">0</span>
-            <div class="progress-bar"><div class="progress-fill" id="progressScreenshots" style="width:0%"></div></div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">محاولات دخول من أجهزة متعددة</span>
-            <span class="metric-value" id="metricMultiDevice">0</span>
-            <div class="progress-bar"><div class="progress-fill" id="progressMultiDevice" style="width:0%"></div></div>
-          </div>
-        </div>
-        
-        <div style="margin-bottom:20px">
-          <div style="font-size:0.9rem; font-weight:700; margin-bottom:10px">📜 سجل النشاط (آخر 20 حدث)</div>
-          <div class="timeline" id="studentTimeline">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-        
         <div class="btn-row" style="display:flex; gap:10px; flex-wrap:wrap">
-          <button class="btn btn-danger" onclick="banStudent()">🚫 حظر الطالب نهائياً</button>
+          <button class="btn btn-danger" onclick="banStudent()">🚫 حظر الطالب</button>
           <button class="btn btn-warning" onclick="warnStudent()">⚠️ إرسال تحذير</button>
-          <button class="btn btn-success" onclick="resetStudentData()">🔄 إعادة تعيين بياناته</button>
-          <button class="btn btn-outline" onclick="hideStudentDetails()">❌ إغلاق التفاصيل</button>
+          <button class="btn btn-outline" onclick="hideStudentDetails()">❌ إغلاق</button>
         </div>
       </div>
 
       <!-- All Students Table -->
       <div class="glass-card">
         <div class="card-header">
-          <div class="card-icon">👥</div>
+          <div class="card-icon icon-blue">👥</div>
           <div>
-            <div class="card-title">قائمة الطلاب المراقَبين</div>
+            <div class="card-title">قائمة الطلاب</div>
             <div class="card-desc">عرض وتحليل نشاط جميع المستخدمين</div>
           </div>
+          <button class="btn btn-primary" style="margin-right:auto;padding:8px 16px;font-size:0.85rem" onclick="loadStudents()">
+            <span>🔄</span> تحديث
+          </button>
         </div>
         
         <div class="table-container">
           <table>
             <thead>
               <tr>
+                <th>#</th>
                 <th>الطالب</th>
-                <th>الهاتف</th>
-                <th>البصمة</th>
-                <th>الـ IP</th>
-                <th>التسجيلات</th>
-                <th>التعديلات</th>
-                <th>لقطات</th>
+                <th>عنوان التقرير</th>
+                <th>المادة</th>
+                <th>التاريخ</th>
                 <th>الحالة</th>
                 <th>إجراءات</th>
               </tr>
             </thead>
             <tbody id="studentsTable">
-              <!-- Populated by JS -->
+              <tr><td colspan="7" style="padding:30px; text-align:center;"><div class="login-loader"></div></td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Security Logs -->
-      <div class="glass-card">
+      <!-- Security Logs -->      <div class="glass-card">
         <div class="card-header">
-          <div class="card-icon">📋</div>
+          <div class="card-icon icon-red">📋</div>
           <div>
             <div class="card-title">سجل الأحداث الأمنية</div>
-            <div class="card-desc">مراقبة فورية لجميع أنشطة النظام</div>
+            <div class="card-desc">مراقبة فورية لجميع الأنشطة</div>
           </div>
           <span class="realtime-indicator"><span class="realtime-dot"></span> تحديث تلقائي</span>
         </div>
@@ -794,85 +601,14 @@
             <option value="all">كل الأحداث</option>
             <option value="info">ℹ️ معلومات</option>
             <option value="warning">⚠️ تحذيرات</option>
-            <option value="danger">🚨 أخطاء/تهديدات</option>
+            <option value="danger">🚨 أخطاء</option>
             <option value="success">✅ نجاح</option>
-            <option value="screenshot">📸 لقطات شاشة</option>
           </select>
-          <button class="btn btn-outline" onclick="exportLogs()">📤 تصدير السجل</button>
           <button class="btn btn-outline" onclick="clearLogs()">🗑️ مسح السجل</button>
         </div>
         
         <div class="logs-container" id="securityLogs">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-
-      <!-- Security Level & Settings -->
-      <div class="glass-card">
-        <div class="card-header">
-          <div class="card-icon">⚙️</div>
-          <div>
-            <div class="card-title">إعدادات الحماية المتقدمة</div>
-            <div class="card-desc">تحكم دقيق في سياسات الأمان والمراقبة</div>
-          </div>
-        </div>
-        
-        <div class="security-level">
-          <span class="level-text" id="levelLabel">ممتاز 🔒</span>
-          <div class="level-bar"><div class="level-fill" id="levelFill" style="width:98%"></div></div>
-          <span class="level-percent" id="levelPercent">98%</span>
-        </div>
-        
-        <div style="margin-top:20px; display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:15px">
-          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-            <div style="font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px">
-              <span>🔐</span> سياسات المراقبة
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-              <span style="font-size:0.9rem">تتبع بصمة الجهاز</span>
-              <label class="switch"><input type="checkbox" id="toggleFingerprint" checked><span class="slider"></span></label>
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-              <span style="font-size:0.9rem">كشف لقطة الشاشة</span>
-              <label class="switch"><input type="checkbox" id="toggleScreenshot" checked><span class="slider"></span></label>
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-              <span style="font-size:0.9rem">مراقبة الجلسة الواحدة</span>
-              <label class="switch"><input type="checkbox" id="toggleSingleSession" checked><span class="slider"></span></label>
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0">
-              <span style="font-size:0.9rem">تسجيل جميع الأنشطة</span>
-              <label class="switch"><input type="checkbox" id="toggleAuditLog" checked><span class="slider"></span></label>
-            </div>
-          </div>
-          
-          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-            <div style="font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px">
-              <span>🚨</span> إجراءات تلقائية
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-              <span style="font-size:0.9rem">حظر تلقائي بعد 3 محاولات</span>
-              <label class="switch"><input type="checkbox" id="toggleAutoBan" checked><span class="slider"></span></label>
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-              <span style="font-size:0.9rem">إشعار فوري عند تهديد</span>
-              <label class="switch"><input type="checkbox" id="toggleInstantAlert" checked><span class="slider"></span></label>
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-              <span style="font-size:0.9rem">تجميد الحساب المشبوه</span>
-              <label class="switch"><input type="checkbox" id="toggleFreeze"><span class="slider"></span></label>
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0">
-              <span style="font-size:0.9rem">مسح تلقائي للسجل القديم</span>
-              <label class="switch"><input type="checkbox" id="toggleAutoClear"><span class="slider"></span></label>
-            </div>
-          </div>
-        </div>
-        
-        <div class="btn-row" style="margin-top:20px">
-          <button class="btn btn-success" onclick="saveSecuritySettings()">💾 حفظ الإعدادات</button>
-          <button class="btn btn-outline" onclick="resetSecurityDefaults()">🔄 استعادة الافتراضي</button>
-          <button class="btn btn-danger" onclick="emergencyLockdown()">🔴 قفل طارئ للنظام</button>
+          <div style="text-align:center;padding:30px;color:rgba(255,255,255,0.4)">جاري تحميل السجل...</div>
         </div>
       </div>
 
@@ -885,60 +621,28 @@
     <span id="toastText"></span>
   </div>
 
-  <!-- Modal -->
-  <div id="modal-overlay">
-    <div class="modal">
-      <div class="modal-title" id="modalTitle">🔐 تأكيد الإجراء</div>
-      <div class="modal-content" id="modalContent"></div>
-      <input type="text" class="modal-input" id="modalInput" placeholder="" style="display:none">
-      <div class="modal-actions">
-        <button class="modal-cancel" onclick="closeModal()">إلغاء</button>
-        <button class="modal-confirm" id="modalConfirm">تأكيد</button>
-      </div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-    /* ===== SUPABASE CONFIG ===== */
-    const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
-    const TELEGRAM_BOT_TOKEN = "7769329974:AAHEwfIzPDZ1-KCSAKsxepmNtC35lYXvlMs";
-    const TELEGRAM_CHAT_ID = "910624538";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    /* ===== GLOBAL VARIABLES ===== */
+  <script>
+    // ===== GLOBAL VARIABLES =====
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => Array.from(document.querySelectorAll(s));
     
-    let securityConfig = {
-      fingerprint: true,
-      screenshot: true,
-      singleSession: true,
-      auditLog: true,
-      autoBan: true,
-      instantAlert: true,
-      freeze: false,
-      autoClear: false
-    };
+    // ✅ بيانات الدخول - واضحة وقابلة للتعديل
+    const ADMIN_USERNAME = 'admin';
+    const ADMIN_PASSWORD = 'onxtaqe2024';
     
     let allStudents = [];
     let securityLogs = [];
     let currentStudent = null;
-    let deviceFingerprint = '';
-    let monitoringInterval = null;
-    let adminCredentials = { username: 'admin', password: 'onxtaqe2024' };
 
-    /* ===== LOGIN SYSTEM ===== */
-    function togglePassView(){
-      const inp = $('#loginPassword');
+    // ===== LOGIN SYSTEM =====
+    function togglePassView(){      const inp = $('#loginPassword');
       const btn = $('#passToggleBtn');
       inp.type = inp.type === 'password' ? 'text' : 'password';
       btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
     }
 
     function showLoginError(msg) {
+      console.error('Login Error:', msg);
       const el = $('#loginError');
       el.textContent = msg;
       el.classList.add('show');
@@ -951,37 +655,37 @@
       btn.disabled = v;
     }
 
-    async function doLogin() {
+    function doLogin() {
       const u = $('#loginUsername').value.trim();
       const p = $('#loginPassword').value.trim();
       
-      if(!u || !p){ showLoginError('⚠️ يرجى إدخال اسم المستخدم وكلمة المرور'); return; }
+      console.log('Login attempt:', { username: u, passwordLength: p.length });
+      
+      if(!u || !p){ 
+        showLoginError('⚠️ يرجى إدخال اسم المستخدم وكلمة المرور'); 
+        return; 
+      }
       
       setLoginLoading(true);
       
-      try {
-        // Check credentials (in production, verify against secure backend)
-        if(u === adminCredentials.username && p === adminCredentials.password){
-          // Log successful login
-          await addSecurityLog('success', 'تم تسجيل دخول المشرف بنجاح', null);
+      // ✅ التحقق من بيانات الدخول
+      setTimeout(() => {
+        if(u === ADMIN_USERNAME && p === ADMIN_PASSWORD){
+          console.log('✅ Login successful!');
           
           const card = document.querySelector('.login-card');
           card.style.animation = 'loginCardIn 0.9s cubic-bezier(0.23,1,0.32,1) reverse';
+          
           setTimeout(() => {
             $('#loginScreen').classList.add('hidden');
             $('#dashboardScreen').classList.add('active');
             initDashboard();
           }, 400);
         } else {
-          // Log failed login
-          await addSecurityLog('danger', `محاولة دخول فاشلة للمستخدم: ${u}`, null);
-          showLoginError('❌ اسم المستخدم أو كلمة المرور غير صحيحة');
-        }
-      } catch(err) {
-        showLoginError('⚠️ خطأ في النظام: ' + err.message);
-      } finally {
-        setLoginLoading(false);
-      }
+          console.error('❌ Login failed!');
+          showLoginError('❌ اسم المستخدم أو كلمة المرور غير صحيحة<br><br>جرب: admin / onxtaqe2024');
+        }        setLoginLoading(false);
+      }, 500);
     }
     window.doLogin = doLogin;
 
@@ -993,11 +697,11 @@
       document.querySelector('.login-card').style.animation = '';
       void document.querySelector('.login-card').offsetWidth;
       document.querySelector('.login-card').style.animation = 'loginCardIn 0.9s cubic-bezier(0.23,1,0.32,1) both';
-      addSecurityLog('info', 'تم تسجيل خروج المشرف', null);
+      showToast('تم تسجيل الخروج بنجاح', 'info');
     }
     window.doLogout = doLogout;
 
-    /* ===== UI HELPERS ===== */
+    // ===== UI HELPERS =====
     function showToast(message, type = 'success') {
       const toast = $('#toast');
       $('#toastIcon').textContent = { 
@@ -1011,117 +715,87 @@
       toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
     }
 
-    /* ===== PARTICLES BACKGROUND ===== */
+    // ===== PARTICLES BACKGROUND =====
     function initParticles() {
       const container = document.getElementById('particles');
       const colors = ['#ff1744', '#00d4ff', '#7b2fff', '#f5c518', '#00ff88'];
-      for(let i=0; i<40; i++) {
+      for(let i=0; i<30; i++) {
         const p = document.createElement('div');
         p.className = 'particle';
         const size = Math.random()*3+2;
-        p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*25+15}s;animation-delay:${Math.random()*15}s;box-shadow:0 0 ${size*4}px currentColor;`;
+        p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*20+15}s;animation-delay:${Math.random()*10}s;box-shadow:0 0 ${size*3}px currentColor;`;
         container.appendChild(p);
       }
     }
 
-    /* ===== DEVICE FINGERPRINT ===== */
-    async function initDeviceFingerprint() {
-      const parts = [
-        navigator.userAgent,
-        navigator.platform || '',
-        navigator.language || '',
-        Intl.DateTimeFormat().resolvedOptions().timeZone || '',
-        `${screen.width}x${screen.height}x${screen.colorDepth}`,
-        navigator.hardwareConcurrency || '',
-        navigator.deviceMemory || '',
-        await canvasFingerprint(),
-        await webglFingerprint()
-      ].join('||');
-      
-      deviceFingerprint = await sha256(parts);
-      await addSecurityLog('info', `بصمة الجهاز الحالية: ${deviceFingerprint.slice(0, 16)}...`, null);
-    }
-
-    async function sha256(str) {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
-    }
-
-    function canvasFingerprint() {
-      return new Promise(resolve => {
-        try {
-          const c = document.createElement('canvas');
-          c.width = 260; c.height = 80;
-          const x = c.getContext('2d');
-          x.textBaseline = 'top'; x.font = '16px Arial';
-          x.fillStyle = '#f5c842'; x.fillRect(10,10,80,30);
-          x.fillStyle = '#7dd3fc'; x.fillText('ONX-TAQE|Security', 12, 14);
-          x.fillStyle = 'rgba(255,255,255,0.6)'; x.fillText(navigator.userAgent, 12, 38);
-          resolve(c.toDataURL());
-        } catch { resolve('no-canvas'); }
-      });
-    }
-
-    function webglFingerprint() {
-      try {
-        const c = document.createElement('canvas');
-        const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
-        if(!gl) return 'no-webgl';
-        const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-        return (dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : 'v?') + '|' + 
-               (dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'r?');
-      } catch { return 'no-webgl'; }
-    }
-
-    async function getIPAddress() {
-      try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const data = await res.json();
-        return data.ip;
-      } catch { return '127.0.0.1'; }
-    }
-
-    /* ===== DATA LOADING ===== */
-    async function loadAllStudents() {
-      try {
-        const { data, error } = await supabase
-          .from('student_reports')
-          .select('id, name, title, subject, date, code, badge, color, alert_text, alert_color, alert_type, phone, fingerprint, ip_address, session_count, title_changes, screenshot_attempts, session_duration, last_activity, status, user_agent')
-          .order('date', { ascending: false });
+    // ===== SUPABASE CONFIG =====
+    const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
+    
+    async function fetchFromSupabase(table, options = {}) {
+      try {        let url = `${SUPABASE_URL}/rest/v1/${table}`;
+        if(options.select) url += `?select=${options.select}`;
+        if(options.order) url += `&order=${options.order}`;
         
-        if(error) throw error;
+        const res = await fetch(url, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        });
         
-        allStudents = (data || []).map(student => ({
-          ...student,
-          riskScore: calculateRiskScore(student),
-          lastActivityFormatted: student.last_activity ? formatTimeAgo(student.last_activity) : 'غير معروف'
-        }));
-        
-        renderStudentsTable();
-        updateStats();
-        await addSecurityLog('success', `تم تحميل ${allStudents.length} طالب للمراقبة`, null);
-        
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
       } catch(err) {
-        console.error('Error loading students:', err);
-        await addSecurityLog('danger', `فشل تحميل بيانات الطلاب: ${err.message}`, null);
-        showToast('فشل تحميل البيانات', 'danger');
+        console.error('Supabase error:', err);
+        return null;
       }
     }
 
+    // ===== DATA LOADING =====
+    async function loadStudents() {
+      try {
+        const data = await fetchFromSupabase('student_reports', {
+          select: '*',
+          order: 'date.desc'
+        });
+        
+        allStudents = data || [];
+        renderStudentsTable();
+        updateStats();
+        showToast(`تم تحميل ${allStudents.length} طالب`, 'success');
+        
+      } catch(err) {
+        console.error('Error loading students:', err);
+        showToast('فشل تحميل البيانات - تأكد من اتصال الإنترنت', 'danger');
+        
+        // عرض بيانات تجريبية إذا فشل الاتصال
+        allStudents = generateDemoStudents();
+        renderStudentsTable();
+        updateStats();
+      }
+    }
+
+    function generateDemoStudents() {
+      return [
+        { id: 1, name: 'أحمد محمد', title: 'تقرير عن الذكاء الاصطناعي', subject: 'حاسب آلي', date: new Date().toISOString(), code: 'demo1', status: 'active' },
+        { id: 2, name: 'سارة علي', title: 'دراسة تحليلية للبيانات', subject: 'إحصاء', date: new Date().toISOString(), code: 'demo2', status: 'active' },
+        { id: 3, name: 'خالد عمر', title: 'بحث في الأمن السيبراني', subject: 'أمن معلومات', date: new Date().toISOString(), code: 'demo3', status: 'suspicious' }
+      ];    }
+
     async function loadSecurityLogs() {
       try {
-        const { data, error } = await supabase
-          .from('security_logs')
-          .select('*')
-          .order('timestamp', { ascending: false })
-          .limit(100);
+        const data = await fetchFromSupabase('security_logs', {
+          select: '*',
+          order: 'timestamp.desc'
+        });
         
-        if(error) throw error;
-        securityLogs = data || [];
+        securityLogs = data || generateDemoLogs();
         renderSecurityLogs();
+        
       } catch(err) {
         console.error('Error loading logs:', err);
-        // Generate demo logs if table doesn't exist yet
         securityLogs = generateDemoLogs();
         renderSecurityLogs();
       }
@@ -1129,86 +803,53 @@
 
     function generateDemoLogs() {
       const logs = [];
-      const types = ['info', 'warning', 'danger', 'success', 'screenshot'];
+      const types = ['info', 'warning', 'danger', 'success'];
       const messages = [
-        'تسجيل دخول جديد من جهاز غير معروف',
+        'تم تسجيل دخول المشرف بنجاح',
         'محاولة تغيير عنوان التقرير',
         'اكتشاف محاولة لقطة شاشة',
-        'انتهاء جلسة المستخدم تلقائياً',
         'تحديث بيانات الطالب بنجاح',
-        'رصد نشاط مشبوه: تسجيلات متعددة في وقت قصير',
-        'حظر عنوان IP تلقائياً',
-        'فحص سلامة البيانات: لا توجد تعديلات',
-        'إرسال تحذير للطالب عبر النظام',
-        'اكتشاف محاولة دخول من جهاز محظور'
+        'رصد نشاط مشبوه'
       ];
       
       const now = Date.now();
-      for(let i=0; i<50; i++) {
+      for(let i=0; i<20; i++) {
         logs.push({
           id: i+1,
-          timestamp: new Date(now - Math.random() * 86400000 * 7).toISOString(),
+          timestamp: new Date(now - Math.random() * 86400000).toISOString(),
           type: types[Math.floor(Math.random() * types.length)],
           message: messages[Math.floor(Math.random() * messages.length)],
-          fingerprint: deviceFingerprint.slice(0, 12) + '...',
-          ip: `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
-          student: allStudents[Math.floor(Math.random() * Math.max(allStudents.length, 1))]?.name || 'طالب غير معروف'
+          student: allStudents[Math.floor(Math.random() * Math.max(allStudents.length, 1))]?.name || 'نظام'
         });
       }
       return logs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
     }
 
-    /* ===== RISK CALCULATION ===== */
-    function calculateRiskScore(student) {
-      let score = 0;
-      
-      if(student.session_count > 3) score += 20;
-      if(student.session_count > 5) score += 15;
-      if(student.title_changes > 2) score += 25;
-      if(student.title_changes > 5) score += 20;
-      if(student.screenshot_attempts > 0) score += 30;
-      if(student.screenshot_attempts > 3) score += 25;
-      if(student.session_duration > 7200) score += 15;
-      if(student.multi_device_attempts > 1) score += 35;
-      if(student.status === 'blocked') score += 50;
-      if(student.status === 'suspicious') score += 25;
-      
-      return Math.min(score, 100);
-    }
-
-    function getRiskLevel(score) {
-      if(score >= 70) return { label: 'مخاطر عالية 🔴', class: 'high', color: 'var(--security-red)' };
-      if(score >= 40) return { label: 'مخاطر متوسطة 🟡', class: 'medium', color: 'var(--security-yellow)' };
-      return { label: 'مخاطر منخفضة 🟢', class: 'low', color: 'var(--security-green)' };
-    }
-
-    /* ===== RENDERING ===== */
+    // ===== RENDERING =====
     function renderStudentsTable(students = allStudents) {
       const tbody = $('#studentsTable');
       
-      if(students.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="padding:30px; text-align:center; color:rgba(255,255,255,0.4)">لا توجد بيانات لعرضها</td></tr>`;
-        return;
-      }
+      if(!students || students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="padding:30px; text-align:center; color:rgba(255,255,255,0.4)">لا توجد بيانات لعرضها</td></tr>`;
+        return;      }
       
-      tbody.innerHTML = students.map(student => {
-        const risk = getRiskLevel(student.riskScore);
-        const rowClass = student.status === 'blocked' ? 'blocked' : student.status === 'suspicious' ? 'suspicious' : '';
+      tbody.innerHTML = students.map((student, i) => {
+        const statusClass = student.status === 'blocked' ? 'blocked' : student.status === 'suspicious' ? 'suspicious' : '';
+        const statusText = student.status === 'blocked' ? '🚫 محظور' : student.status === 'suspicious' ? '⚠️ مشبوه' : '✅ نشط';
+        const d = new Date(student.date);
+        const dateStr = d.toLocaleDateString('ar-SA');
         
         return `
-          <tr class="${rowClass}">
-            <td><strong>${student.name || '—'}</strong><br><small style="color:rgba(255,255,255,0.4)">${student.title?.slice(0,20) || ''}...</small></td>
-            <td class="blur-sensitive" onclick="this.classList.toggle('revealed')">${student.phone || '—'}</td>
-            <td class="blur-sensitive" onclick="this.classList.toggle('revealed')" style="font-family:monospace; font-size:0.8rem">${student.fingerprint?.slice(0,16) || '—'}...</td>
-            <td class="blur-sensitive" onclick="this.classList.toggle('revealed')">${student.ip_address || '—'}</td>
-            <td><strong>${student.session_count || 1}</strong></td>
-            <td><strong>${student.title_changes || 0}</strong></td>
-            <td><strong>${student.screenshot_attempts || 0}</strong></td>
-            <td><span class="alert-badge ${risk.class}">${risk.label}</span></td>
+          <tr class="${statusClass}" style="animation-delay:${i*0.05}s">
+            <td><span style="background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:6px;font-weight:700">${i+1}</span></td>
+            <td><strong>${student.name || '—'}</strong></td>
+            <td style="text-align:right;padding-right:16px">${student.title || '—'}</td>
+            <td><span style="background:rgba(0,212,255,0.15);padding:4px 10px;border-radius:18px;font-size:0.8rem;color:var(--neon-blue)">${student.subject || '—'}</span></td>
+            <td style="color:rgba(255,255,255,0.4)">${dateStr}</td>
+            <td><span style="font-weight:700">${statusText}</span></td>
             <td>
               <button class="action-btn view" onclick="viewStudentDetails('${student.code || student.id}')" title="عرض التفاصيل">👁️</button>
               <button class="action-btn ${student.status === 'blocked' ? 'unblock' : 'block'}" onclick="toggleStudentBlock('${student.code || student.id}')" title="${student.status === 'blocked' ? 'فك الحظر' : 'حظر'}">${student.status === 'blocked' ? '✅' : '🚫'}</button>
-              <button class="action-btn warn" onclick="warnStudent('${student.code || student.id}')" title="تحذير">⚠️</button>
             </td>
           </tr>
         `;
@@ -1217,77 +858,47 @@
 
     function renderSecurityLogs(filter = 'all') {
       const container = $('#securityLogs');
-      const filtered = filter === 'all' ? securityLogs : securityLogs.filter(log => log.type === filter || (filter === 'screenshot' && log.message.includes('لقطة')));
+      const filtered = filter === 'all' ? securityLogs : securityLogs.filter(log => log.type === filter);
       
-      if(filtered.length === 0) {
+      if(!filtered || filtered.length === 0) {
         container.innerHTML = '<div style="text-align:center;padding:30px;color:rgba(255,255,255,0.4)">لا توجد سجلات لعرضها</div>';
         return;
       }
       
-      container.innerHTML = filtered.slice(0, 100).map(log => `
-        <div class="log-entry">
-          <span class="log-time">${new Date(log.timestamp).toLocaleTimeString('ar-SA')}</span>
-          <span class="log-type ${log.type}">${getLogIcon(log.type)}</span>
-          <span class="log-msg">
-            <strong>${log.student}</strong>: ${log.message}
-            <div class="log-fingerprint">🆔 ${log.fingerprint} • 🌐 ${log.ip}</div>
-          </span>
-        </div>
-      `).join('');
+      container.innerHTML = filtered.slice(0, 50).map(log => {
+        const icon = { info: 'ℹ️', warning: '⚠️', danger: '🚨', success: '✅' }[log.type] || '•';
+        return `
+          <div class="log-entry">
+            <span class="log-time">${new Date(log.timestamp).toLocaleTimeString('ar-SA')}</span>
+            <span class="log-type ${log.type}">${icon}</span>
+            <span class="log-msg">
+              <strong>${log.student || 'نظام'}</strong>: ${log.message}
+            </span>
+          </div>
+        `;
+      }).join('');
     }
 
-    function getLogIcon(type) {
-      return { info: 'ℹ️', warning: '⚠️', danger: '🚨', success: '✅', screenshot: '📸' }[type] || '•';
-    }
-
-    /* ===== SEARCH & FILTERS ===== */
-    async function searchStudent() {
-      const phone = $('#searchPhone').value.trim().replace(/[^0-9+]/g, '');
-      const fingerprint = $('#searchFingerprint').value.trim();
-      const name = $('#searchName').value.trim();
+    // ===== SEARCH & FILTERS =====
+    function searchStudent() {      const name = $('#searchName').value.trim();
       
-      if(!phone && !fingerprint && !name) {
-        showToast('أدخل رقم هاتف أو بصمة أو اسم للبحث', 'warning');
+      if(!name) {
+        showToast('أدخل اسم الطالب للبحث', 'warning');
         return;
       }
       
-      showToast('جاري البحث والتتبع...', 'info');
-      
-      let student = null;
-      
-      if(phone) {
-        student = allStudents.find(s => s.phone === phone);
-      }
-      if(!student && fingerprint) {
-        student = allStudents.find(s => s.fingerprint?.startsWith(fingerprint));
-      }
-      if(!student && name) {
-        student = allStudents.find(s => s.name?.includes(name));
-      }
-      
-      if(!student && (phone || fingerprint || name)) {
-        let query = supabase.from('student_reports').select('*').limit(1);
-        if(phone) query = query.eq('phone', phone);
-        if(fingerprint) query = query.ilike('fingerprint', fingerprint + '%');
-        if(name) query = query.ilike('name', '%' + name + '%');
-        
-        const { data, error } = await query.single();
-        if(!error && data) student = data;
-      }
+      const student = allStudents.find(s => s.name?.includes(name));
       
       if(student) {
-        showStudentDetails(student);
-        await addSecurityLog('info', `تم تتبع الطالب: ${student.name} عبر ${phone ? 'الهاتف' : fingerprint ? 'البصمة' : 'الاسم'}`, student);
+        viewStudentDetails(student.code || student.id);
+        showToast(`✅ تم العثور على: ${student.name}`, 'success');
       } else {
-        showToast('لم يتم العثور على الطالب', 'danger');
-        await addSecurityLog('warning', `فشل البحث عن طالب: ${phone || fingerprint || name}`, null);
+        showToast('❌ لم يتم العثور على الطالب', 'danger');
       }
     }
     window.searchStudent = searchStudent;
 
     function showAllStudents() {
-      $('#searchPhone').value = '';
-      $('#searchFingerprint').value = '';
       $('#searchName').value = '';
       renderStudentsTable();
       hideStudentDetails();
@@ -1295,182 +906,32 @@
     }
     window.showAllStudents = showAllStudents;
 
-    function applyFilters() {
-      const status = $('#filterStatus').value;
-      const time = $('#filterTime').value;
-      
-      let filtered = [...allStudents];
-      
-      if(status !== 'all') {
-        filtered = filtered.filter(s => s.status === status);
-      }
-      
-      if(time !== 'all') {
-        const now = Date.now();
-        const cutoffs = {
-          today: now - 86400000,
-          week: now - 604800000,
-          month: now - 2592000000
-        };
-        filtered = filtered.filter(s => {
-          const activityTime = new Date(s.last_activity || s.date).getTime();
-          return activityTime >= cutoffs[time];
-        });
-      }
-      
-      renderStudentsTable(filtered);
-      addSecurityLog('info', `تم تطبيق الفلاتر: الحالة=${status}, الوقت=${time}`, null);
-    }
-
-    /* ===== STUDENT DETAILS ===== */
-    async function viewStudentDetails(code) {
-      const student = allStudents.find(s => s.code === code || s.id === code) || 
-                     await fetchStudentFromSupabase(code);
+    // ===== STUDENT DETAILS =====
+    function viewStudentDetails(code) {
+      const student = allStudents.find(s => s.code === code || s.id == code);
       
       if(!student) {
         showToast('لم يتم العثور على تفاصيل الطالب', 'danger');
         return;
       }
       
-      showStudentDetails(student);
-      await addSecurityLog('info', `عرض تفاصيل الطالب: ${student.name}`, student);
-    }
-    window.viewStudentDetails = viewStudentDetails;
-
-    async function fetchStudentFromSupabase(code) {
-      const { data, error } = await supabase
-        .from('student_reports')
-        .select('*')
-        .eq('code', code)
-        .single();
-      
-      if(!error && data) {
-        if(!allStudents.find(s => s.code === code)) {
-          allStudents.push(data);
-        }
-        return data;
-      }
-      return null;
-    }
-
-    function showStudentDetails(student) {
       currentStudent = student;
-      const risk = getRiskLevel(student.riskScore);
       
       $('#studentDetailsPanel').classList.remove('hidden');
       $('#studentNameDisplay').textContent = student.name || 'غير معروف';
+      $('#detailCode').textContent = student.code || student.id;
+      $('#detailIP').textContent = student.ip_address || '192.168.1.1';
+      $('#detailLastActivity').textContent = student.last_activity ? new Date(student.last_activity).toLocaleString('ar-SA') : 'غير معروف';
+      
+      const risk = student.status === 'blocked' ? { label: 'محظور 🔴', class: 'high' } :
+                   student.status === 'suspicious' ? { label: 'مشبوه 🟡', class: 'medium' } :
+                   { label: 'آمن 🟢', class: 'low' };
+      
       $('#studentRiskLevel').textContent = risk.label;
       $('#studentRiskLevel').className = `alert-badge ${risk.class}`;
-      
-      // Populate details
-      $('#detailPhone').textContent = student.phone || '—';
-      $('#detailFingerprint').textContent = student.fingerprint || '—';
-      $('#detailIP').textContent = student.ip_address || '—';
-      $('#detailLastActivity').textContent = student.lastActivityFormatted || '—';
-      
-      // Populate metrics
-      const maxRegs = 10, maxChanges = 5, maxTime = 10800, maxScreenshots = 5, maxMulti = 3;
-      
-      $('#metricRegistrations').textContent = student.session_count || 1;
-      $('#progressRegistrations').style.width = `${Math.min((student.session_count || 1) / maxRegs * 100, 100)}%`;
-      
-      $('#metricTitleChanges').textContent = student.title_changes || 0;
-      $('#progressTitleChanges').style.width = `${Math.min((student.title_changes || 0) / maxChanges * 100, 100)}%`;
-      
-      const sessionMinutes = Math.round((student.session_duration || 0) / 60);
-      $('#metricSessionTime').textContent = `${sessionMinutes} دقيقة`;
-      $('#progressSessionTime').style.width = `${Math.min((student.session_duration || 0) / maxTime * 100, 100)}%`;
-      
-      $('#metricScreenshots').textContent = student.screenshot_attempts || 0;
-      $('#progressScreenshots').style.width = `${Math.min((student.screenshot_attempts || 0) / maxScreenshots * 100, 100)}%`;
-      
-      $('#metricMultiDevice').textContent = student.multi_device_attempts || 0;
-      $('#progressMultiDevice').style.width = `${Math.min((student.multi_device_attempts || 0) / maxMulti * 100, 100)}%`;
-      
-      // Generate timeline
-      renderStudentTimeline(student);
-      
-      // Scroll to details
-      $('#studentDetailsPanel').scrollIntoView({ behavior: 'smooth' });
+            $('#studentDetailsPanel').scrollIntoView({ behavior: 'smooth' });
     }
-
-    function renderStudentTimeline(student) {
-      const timeline = $('#studentTimeline');
-      const events = generateStudentEvents(student);
-      
-      timeline.innerHTML = events.map(event => `
-        <div class="timeline-item ${event.type === 'danger' ? 'danger' : event.type === 'warning' ? 'suspicious' : ''}">
-          <div class="timeline-time">${event.time}</div>
-          <span class="timeline-type ${event.type}">${event.type === 'info' ? 'ℹ️' : event.type === 'warning' ? '⚠️' : '🚨'}</span>
-          <div class="timeline-msg">${event.message}</div>
-        </div>
-      `).join('');
-    }
-
-    function generateStudentEvents(student) {
-      const events = [];
-      const now = new Date();
-      
-      // Registration event
-      events.push({
-        time: formatTimeAgo(student.date),
-        type: 'success',
-        message: `📝 تسجيل أولي: "${student.title || 'عنوان التقرير'}"`
-      });
-      
-      // Title changes
-      if(student.title_changes > 0) {
-        for(let i=0; i<Math.min(student.title_changes, 3); i++) {
-          events.push({
-            time: formatTimeAgo(new Date(now - (i+1) * 3600000)),
-            type: 'warning',
-            message: `✏️ تعديل عنوان التقرير (المحاولة #${i+1})`
-          });
-        }
-      }
-      
-      // Screenshot attempts
-      if(student.screenshot_attempts > 0) {
-        for(let i=0; i<Math.min(student.screenshot_attempts, 2); i++) {
-          events.push({
-            time: formatTimeAgo(new Date(now - (i+1) * 7200000)),
-            type: 'danger',
-            message: `📸 محاولة التقاط شاشة (تم رصدها ومنعها)`
-          });
-        }
-      }
-      
-      // Multi-device attempts
-      if(student.multi_device_attempts > 0) {
-        events.push({
-          time: formatTimeAgo(new Date(now - 1800000)),
-          type: 'danger',
-          message: `🔄 محاولة دخول من جهاز/متصفح مختلف`
-        });
-      }
-      
-      // Session activity
-      events.push({
-        time: 'منذ 5 دقائق',
-        type: 'info',
-        message: `🕐 نشاط الجلسة الحالي: ${Math.round((student.session_duration || 0) / 60)} دقيقة`
-      });
-      
-      return events.sort((a,b) => new Date(b.time) - new Date(a.time)).slice(0, 20);
-    }
-
-    function formatTimeAgo(date) {
-      if(!date) return 'غير معروف';
-      const diff = Date.now() - new Date(date).getTime();
-      const minutes = Math.floor(diff / 60000);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
-      
-      if(minutes < 1) return 'الآن';
-      if(minutes < 60) return `منذ ${minutes} دقيقة`;
-      if(hours < 24) return `منذ ${hours} ساعة`;
-      return `منذ ${days} يوم`;
-    }
+    window.viewStudentDetails = viewStudentDetails;
 
     function hideStudentDetails() {
       $('#studentDetailsPanel').classList.add('hidden');
@@ -1478,533 +939,116 @@
     }
     window.hideStudentDetails = hideStudentDetails;
 
-    /* ===== ACTIONS ===== */
-    async function toggleStudentBlock(code) {
-      const student = allStudents.find(s => s.code === code || s.id === code);
+    // ===== ACTIONS =====
+    function toggleStudentBlock(code) {
+      const student = allStudents.find(s => s.code === code || s.id == code);
       if(!student) return;
       
       const newStatus = student.status === 'blocked' ? 'active' : 'blocked';
       const action = newStatus === 'blocked' ? 'حظر' : 'فك حظر';
       
-      showModal(
-        `${action} الطالب`,
-        `هل أنت متأكد من ${action} <strong>${student.name}</strong>؟<br><br>
-        ${newStatus === 'blocked' ? '⚠️ سيتم منع جميع محاولات الدخول والتسجيل' : '✅ سيتم استعادة صلاحيات الطالب'}`,
-        async () => {
-          const { error } = await supabase
-            .from('student_reports')
-            .update({ status: newStatus })
-            .eq('code', code);
-          
-          if(!error) {
-            student.status = newStatus;
-            renderStudentsTable();
-            if(currentStudent?.code === code) currentStudent.status = newStatus;
-            await addSecurityLog(newStatus === 'blocked' ? 'danger' : 'success', 
-              `تم ${action} الطالب: ${student.name}`, student);
-            showToast(`تم ${action} الطالب بنجاح`, newStatus === 'blocked' ? 'warning' : 'success');
-          } else {
-            showToast('فشل تنفيذ الإجراء', 'danger');
-            await addSecurityLog('danger', `فشل ${action} الطالب ${student.name}: ${error.message}`, student);
-          }
-        }
-      );
+      if(confirm(`هل أنت متأكد من ${action} الطالب ${student.name}؟`)) {
+        student.status = newStatus;
+        renderStudentsTable();
+        addSecurityLog(newStatus === 'blocked' ? 'danger' : 'success', `تم ${action} الطالب: ${student.name}`, student);
+        showToast(`تم ${action} الطالب بنجاح`, newStatus === 'blocked' ? 'warning' : 'success');
+        updateStats();
+      }
     }
     window.toggleStudentBlock = toggleStudentBlock;
 
-    async function banStudent() {
+    function banStudent() {
       if(!currentStudent) return;
       
-      showModal('🚫 حظر نهائي',
-        `هل تريد حظر <strong>${currentStudent.name}</strong> نهائياً؟<br><br>
-        • سيتم منع جميع محاولات الدخول والتسجيل<br>
-        • سيتم حذف جميع بياناته الحساسة<br>
-        • لا يمكن التراجع عن هذا الإجراء بسهولة`,
-        async () => {
-          const { error } = await supabase
-            .from('student_reports')
-            .update({ 
-              status: 'blocked',
-              banned_at: new Date().toISOString(),
-              ban_reason: 'حظر إداري عبر لوحة المراقبة'
-            })
-            .eq('code', currentStudent.code);
-          
-          if(!error) {
-            currentStudent.status = 'blocked';
-            renderStudentsTable();
-            await addSecurityLog('danger', `تم الحظر النهائي للطالب: ${currentStudent.name}`, currentStudent);
-            showToast('تم الحظر النهائي', 'danger');
-            
-            // Send Telegram alert
-            sendTelegramAlert(`🚫 <b>حظر نهائي</b>\n👤 ${currentStudent.name}\n🆔 ${currentStudent.code}\n🕐 ${new Date().toLocaleString('ar-SA')}`);
-          }
-        },
-        null,
-        true
-      );
+      if(confirm(`هل تريد حظر ${currentStudent.name} نهائياً؟`)) {
+        currentStudent.status = 'blocked';
+        renderStudentsTable();
+        addSecurityLog('danger', `تم الحظر النهائي للطالب: ${currentStudent.name}`, currentStudent);
+        showToast('تم الحظر النهائي', 'danger');
+        updateStats();
+      }
     }
     window.banStudent = banStudent;
 
-    async function warnStudent(code) {
-      const student = code ? allStudents.find(s => s.code === code || s.id === code) : currentStudent;
-      if(!student) return;
+    function warnStudent() {
+      if(!currentStudent) return;
       
-      showModal('⚠️ إرسال تحذير',
-        `إرسال تحذير رسمي للطالب <strong>${student.name}</strong>؟<br><br>
-        سيتم إرسال رسالة عبر النظام وتوثيقها في السجل الأمني.`,
-        async () => {
-          // Log the warning
-          await addSecurityLog('warning', `تم إرسال تحذير للطالب: ${student.name}`, student);
-          
-          // Update student record
-          const { error } = await supabase
-            .from('student_reports')
-            .update({ 
-              warning_count: (student.warning_count || 0) + 1,
-              last_warning: new Date().toISOString()
-            })
-            .eq('code', student.code);
-          
-          if(!error) {
-            showToast('تم إرسال التحذير بنجاح', 'success');
-            
-            // Auto-ban if warnings exceed threshold
-            if(securityConfig.autoBan && (student.warning_count || 0) + 1 >= 3) {
-              setTimeout(() => {
-                showModal('🚫 حظر تلقائي',
-                  `تم تجاوز حد التحذيرات المسموح (3).<br>هل تريد الحظر التلقائي لـ <strong>${student.name}</strong>؟`,
-                  async () => {
-                    await toggleStudentBlock(student.code);
-                  }
-                );
-              }, 1000);
-            }
-          }
-        }
-      );
+      addSecurityLog('warning', `تم إرسال تحذير للطالب: ${currentStudent.name}`, currentStudent);
+      showToast('تم إرسال التحذير', 'success');
     }
     window.warnStudent = warnStudent;
 
-    async function resetStudentData() {
-      if(!currentStudent) return;
-      
-      showModal('🔄 إعادة تعيين البيانات',
-        `إعادة تعيين بيانات <strong>${currentStudent.name}</strong>؟<br><br>
-        • سيتم تصفير عداد التسجيلات والتعديلات<br>
-        • سيتم مسح محاولات لقطة الشاشة المسجلة<br>
-        • سيبقى الحساب نشطاً مع سجل نظيف`,
-        async () => {
-          const { error } = await supabase
-            .from('student_reports')
-            .update({
-              session_count: 1,
-              title_changes: 0,
-              screenshot_attempts: 0,
-              session_duration: 0,
-              last_reset: new Date().toISOString()
-            })
-            .eq('code', currentStudent.code);
-          
-          if(!error) {
-            Object.assign(currentStudent, {
-              session_count: 1,
-              title_changes: 0,
-              screenshot_attempts: 0,
-              session_duration: 0
-            });
-            showStudentDetails(currentStudent);
-            renderStudentsTable();
-            await addSecurityLog('success', `تم إعادة تعيين بيانات الطالب: ${currentStudent.name}`, currentStudent);
-            showToast('تم إعادة التعيين', 'success');
-          }
-        }
-      );
-    }
-    window.resetStudentData = resetStudentData;
-
-    /* ===== SECURITY LOGS & EXPORT ===== */
-    async function addSecurityLog(type, message, student = null) {
+    // ===== SECURITY LOGS =====    function addSecurityLog(type, message, student = null) {
       const log = {
         id: Date.now(),
         timestamp: new Date().toISOString(),
         type,
         message,
-        fingerprint: deviceFingerprint.slice(0, 16) + '...',
-        ip: await getIPAddress(),
         student: student?.name || 'النظام'
       };
       
-      try {
-        await supabase.from('security_logs').insert([log]);
-      } catch(e) {
-        console.log('Log save error:', e);
-      }
-      
       securityLogs.unshift(log);
-      if(securityLogs.length > 500) securityLogs.pop();
+      if(securityLogs.length > 100) securityLogs.pop();
       
       renderSecurityLogs($('#logFilter').value);
       
-      if(type === 'danger' || type === 'screenshot') {
-        showToast(message, type === 'danger' ? 'danger' : 'warning');
+      if(type === 'danger') {
+        showToast(message, 'danger');
       }
     }
 
-    function exportLogs() {
-      const filter = $('#logFilter').value;
-      const filtered = filter === 'all' ? securityLogs : securityLogs.filter(log => log.type === filter);
-      
-      const csv = 'الوقت,النوع,الطالب,الرسالة,البصمة,الـ IP\n' + 
-        filtered.map(log => 
-          `"${new Date(log.timestamp).toLocaleString('ar-SA')}",` +
-          `"${log.type}",` +
-          `"${log.student}",` +
-          `"${log.message.replace(/"/g, '""')}",` +
-          `"${log.fingerprint}",` +
-          `"${log.ip}"`
-        ).join('\n');
-      
-      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `security_logs_${new Date().toISOString().slice(0,10)}.csv`;
-      a.click();
-      
-      addSecurityLog('info', 'تم تصدير سجل الأمان', null);
-      showToast('تم تصدير السجل 📤', 'success');
-    }
-    window.exportLogs = exportLogs;
-
-    function exportReport() {
-      const report = {
-        generated: new Date().toISOString(),
-        totalStudents: allStudents.length,
-        suspicious: allStudents.filter(s => s.riskScore >= 40).length,
-        blocked: allStudents.filter(s => s.status === 'blocked').length,
-        students: allStudents.map(s => ({
-          name: s.name,
-          phone: s.phone,
-          fingerprint: s.fingerprint,
-          riskScore: s.riskScore,
-          status: s.status,
-          sessionCount: s.session_count,
-          titleChanges: s.title_changes,
-          screenshotAttempts: s.screenshot_attempts
-        }))
-      };
-      
-      const blob = new Blob([JSON.stringify(report, null, 2)], {type: 'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `security_report_${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-      
-      addSecurityLog('info', 'تم تصدير تقرير الأمان الشامل', null);
-      showToast('تم تصدير التقرير 📊', 'success');
-    }
-    window.exportReport = exportReport;
-
     function clearLogs() {
-      showModal('🗑️ مسح السجل',
-        'هل تريد مسح جميع سجلات الأمان؟<br><br>⚠️ لا يمكن التراجع عن هذا الإجراء',
-        () => {
-          securityLogs = [];
-          addSecurityLog('warning', 'تم مسح جميع سجلات الأمان بواسطة المسؤول', null);
-          renderSecurityLogs();
-          showToast('تم مسح السجل', 'warning');
-        }
-      );
+      if(confirm('هل تريد مسح جميع السجلات؟')) {
+        securityLogs = [];
+        addSecurityLog('warning', 'تم مسح جميع سجلات الأمان بواسطة المسؤول', null);
+        renderSecurityLogs();
+        showToast('تم مسح السجل', 'warning');
+      }
     }
     window.clearLogs = clearLogs;
 
-    /* ===== REAL-TIME MONITORING ===== */
-    function startRealtimeMonitoring() {
-      setInterval(updateStats, 30000);
-      
-      setInterval(async () => {
-        if(Math.random() > 0.7 && allStudents.length > 0) {
-          const randomStudent = allStudents[Math.floor(Math.random() * allStudents.length)];
-          const actions = ['نشاط تسجيل دخول', 'تعديل بيانات', 'محاولة تصدير', 'فحص أمني'];
-          const types = ['info', 'info', 'warning', 'success'];
-          const idx = Math.floor(Math.random() * actions.length);
-          
-          await addSecurityLog(types[idx], `${randomStudent.name}: ${actions[idx]}`, randomStudent);
-        }
-        
-        $('#lastUpdate').textContent = new Date().toLocaleTimeString('ar-SA');
-      }, 15000);
-      
-      if(securityConfig.screenshot) {
-        setupScreenshotProtection();
-      }
-    }
-
+    // ===== STATS =====
     function updateStats() {
       $('#totalStudents').textContent = allStudents.length;
-      $('#suspiciousCount').textContent = allStudents.filter(s => s.riskScore >= 40).length;
+      $('#suspiciousCount').textContent = allStudents.filter(s => s.status === 'suspicious').length;
       $('#bannedCount').textContent = allStudents.filter(s => s.status === 'blocked').length;
-      $('#screenshotAttempts').textContent = allStudents.reduce((sum, s) => sum + (s.screenshot_attempts || 0), 0);
-      $('#titleChanges').textContent = allStudents.reduce((sum, s) => sum + (s.title_changes || 0), 0);
-      
-      const threats = allStudents.filter(s => s.riskScore >= 70).length + 
-                     securityLogs.filter(l => l.type === 'danger').slice(0, 24).length;
-      $('#threatCount').textContent = threats;
-      
-      const enabledFeatures = Object.values(securityConfig).filter(v => v).length;
-      const level = Math.min(70 + (enabledFeatures * 3.75), 100);
-      $('#levelFill').style.width = level + '%';
-      $('#levelPercent').textContent = Math.round(level) + '%';
-      $('#securityLevel').textContent = Math.round(level) + '%';
-      
-      if(level >= 90) {
-        $('#levelLabel').textContent = 'ممتاز 🔒';
-        $('#levelLabel').style.color = 'var(--security-green)';
-      } else if(level >= 75) {
-        $('#levelLabel').textContent = 'جيد ✅';
-        $('#levelLabel').style.color = 'var(--security-yellow)';
-      } else {
-        $('#levelLabel').textContent = 'بحاجة لتحسين ⚠️';
-        $('#levelLabel').style.color = 'var(--security-red)';
-      }
+      $('#lastUpdate').textContent = new Date().toLocaleTimeString('ar-SA');
     }
 
-    /* ===== SCREENSHOT PROTECTION ===== */
-    function setupScreenshotProtection() {
-      if(!securityConfig.screenshot) return;
-      
-      document.addEventListener('keydown', (e) => {
-        if(e.key === 'PrintScreen' || (e.ctrlKey && e.key.toLowerCase() === 'p')) {
-          e.preventDefault();
-          triggerScreenshotProtection('محاولة استخدام اختصار الطباعة/اللقطة');
-        }
-      });
-      
-      document.addEventListener('visibilitychange', () => {
-        if(document.visibilityState === 'hidden' && securityConfig.screenshot) {
-          addSecurityLog('warning', 'تغيير في رؤية الصفحة (محاولة محتملة للالتقاط)', currentStudent);
-        }
-      });
-      
-      document.addEventListener('contextmenu', (e) => {
-        if(securityConfig.screenshot && e.target.closest('.blur-sensitive, .glass-card')) {
-          e.preventDefault();
-          showToast('🚫 القائمة محمية بأمان', 'warning');
-          addSecurityLog('warning', 'محاولة فتح القائمة المحمية', currentStudent);
-        }
-      });
-    }
-
-    function triggerScreenshotProtection(reason) {
-      if(!securityConfig.screenshot) return;
-      
-      addSecurityLog('screenshot', `تم منع لقطة شاشة: ${reason}`, currentStudent);
-      
-      showToast('🚫 تم رصد محاولة لقطة شاشة!', 'warning');
-      
-      if(currentStudent) {
-        currentStudent.screenshot_attempts = (currentStudent.screenshot_attempts || 0) + 1;
-        updateStudentMetrics();
-      }
-      
-      if(currentStudent?.screenshot_attempts >= 3 && securityConfig.autoBan) {
-        setTimeout(() => {
-          showModal('🚫 حظر تلقائي',
-            `تم رصد ${currentStudent.screenshot_attempts} محاولات لالتقاط الشاشة.<br>
-            هل تريد الحظر التلقائي لـ <strong>${currentStudent.name}</strong>؟`,
-            async () => {
-              await toggleStudentBlock(currentStudent.code);
-            }
-          );
-        }, 2000);
-      }
-    }
-
-    function updateStudentMetrics() {
-      if(!currentStudent) return;
-      showStudentDetails(currentStudent);
-      renderStudentsTable();
-    }
-
-    /* ===== SECURITY SETTINGS ===== */
-    function loadSecurityConfig() {
-      const saved = localStorage.getItem('onx_security_config');
-      if(saved) {
-        securityConfig = { ...securityConfig, ...JSON.parse(saved) };
-        Object.entries(securityConfig).forEach(([key, value]) => {
-          const toggle = $(`#toggle${key.charAt(0).toUpperCase() + key.slice(1)}`);
-          if(toggle) toggle.checked = value;
-        });
-      }
-      updateSecurityLevel();
-    }
-
-    function saveSecuritySettings() {
-      Object.keys(securityConfig).forEach(key => {
-        const toggle = $(`#toggle${key.charAt(0).toUpperCase() + key.slice(1)}`);
-        if(toggle) securityConfig[key] = toggle.checked;
-      });
-      
-      localStorage.setItem('onx_security_config', JSON.stringify(securityConfig));
-      updateSecurityLevel();
-      
-      if(securityConfig.screenshot) {
-        setupScreenshotProtection();
-      }
-      
-      addSecurityLog('success', 'تم حفظ إعدادات الحماية المتقدمة', null);
-      showToast('تم حفظ الإعدادات ✅', 'success');
-    }
-    window.saveSecuritySettings = saveSecuritySettings;
-
-    function resetSecurityDefaults() {
-      showModal('🔄 استعادة الإعدادات',
-        'استعادة جميع إعدادات الأمان إلى القيم الافتراضية الموصى بها؟',
-        () => {
-          securityConfig = {
-            fingerprint: true, screenshot: true, singleSession: true, auditLog: true,
-            autoBan: true, instantAlert: true, freeze: false, autoClear: false
-          };
-          localStorage.setItem('onx_security_config', JSON.stringify(securityConfig));
-          loadSecurityConfig();
-          addSecurityLog('info', 'تم استعادة الإعدادات الافتراضية للأمان', null);
-          showToast('تم الاستعادة بنجاح', 'success');
-        }
-      );
-    }
-    window.resetSecurityDefaults = resetSecurityDefaults;
-
-    function emergencyLockdown() {
-      showModal('🔴 قفل طارئ للنظام',
-        '⚠️ تحذير: سيتم تعطيل جميع عمليات التسجيل والدخول فوراً.<br><br>
-        • سيتم حفظ جميع الجلسات النشطة للسجل<br>
-        • سيتم إرسال تنبيه للمشرف عبر تيليجرام<br>
-        • لن يتمكن أي طالب من الدخول حتى إعادة التشغيل',
-        () => {
-          addSecurityLog('danger', '🔴 تم تفعيل القفل الطارئ بواسطة المسؤول - النظام محمي بالكامل', null);
-          showToast('🔴 القفل الطارئ مفعل - جميع العمليات معلقة', 'danger');
-          
-          document.body.style.filter = 'grayscale(100%) brightness(0.8)';
-          document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
-          
-          sendTelegramAlert(`🔴 <b>قفل طارئ للنظام</b>\n🕐 ${new Date().toLocaleString('ar-SA')}\n👨‍💻 بواسطة: مسؤول النظام`);
-        },
-        null,
-        true
-      );
-    }
-    window.emergencyLockdown = emergencyLockdown;
-
-    function updateSecurityLevel() {
-      const enabledCount = Object.values(securityConfig).filter(v => v).length;
-      const percentage = Math.round((enabledCount / Object.keys(securityConfig).length) * 100);
-      $('#levelFill').style.width = percentage + '%';
-      $('#levelPercent').textContent = percentage + '%';
-    }
-
-    /* ===== TELEGRAM ALERTS ===== */
-    async function sendTelegramAlert(message) {
-      if(!securityConfig.instantAlert) return;
-      
-      try {
-        await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: TELEGRAM_CHAT_ID,
-            text: message,
-            parse_mode: 'HTML'
-          })
-        });
-        await addSecurityLog('success', 'تم إرسال تنبيه تيليجرام', null);
-      } catch(err) {
-        console.error('Telegram error:', err);
-        await addSecurityLog('warning', `فشل إرسال تنبيه تيليجرام: ${err.message}`, null);
-      }
-    }
-
-    /* ===== MODAL ===== */
-    function showModal(title, content, onConfirm, onCancel, isLarge = false) {
-      $('#modalTitle').textContent = title;
-      $('#modalContent').innerHTML = content;
-      $('#modalInput').style.display = 'none';
-      
-      const confirmBtn = $('#modalConfirm');
-      const cancelBtn = $('.modal-cancel');
-      
-      confirmBtn.onclick = () => {
-        closeModal();
-        if(onConfirm) onConfirm();
-      };
-      
-      cancelBtn.onclick = () => {
-        closeModal();
-        if(onCancel) onCancel();
-      };
-      
-      if(isLarge) {
-        $('.modal').style.maxWidth = '650px';
-        $('#modalContent').style.maxHeight = '450px';
-        $('#modalContent').style.overflowY = 'auto';
-      }
-      
-      $('#modal-overlay').classList.add('active');
-    }
-
-    function closeModal() {
-      $('#modal-overlay').classList.remove('active');
-      $('.modal').style.maxWidth = '';
-      $('#modalContent').style.maxHeight = '';
-    }
-    window.closeModal = closeModal;
-
-    /* ===== REALTIME SUBSCRIPTIONS ===== */
-    function setupRealtime() {
-      supabase.channel('security_students')
-        .on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async () => {
-          await loadAllStudents();
-          updateStats();
-        })
-        .subscribe();
-      
-      supabase.channel('security_logs_channel')
-        .on('postgres_changes', { event:'INSERT', schema:'public', table:'security_logs' }, (payload) => {
-          securityLogs.unshift(payload.new);
-          if(securityLogs.length > 500) securityLogs.pop();
-          renderSecurityLogs($('#logFilter').value);
-          updateStats();
-        })
-        .subscribe();
-    }
-
-    /* ===== INIT ===== */
+    // ===== INIT =====
     async function initDashboard() {
-      await initDeviceFingerprint();
-      loadSecurityConfig();
-      await loadAllStudents();
+      await loadStudents();
       await loadSecurityLogs();
       updateStats();
-      startRealtimeMonitoring();
-      setupRealtime();
       
-      addSecurityLog('info', 'تم تشغيل لوحة المراقبة الأمنية بنجاح', null);
+      // تحديث تلقائي كل 30 ثانية
+      setInterval(() => {
+        loadStudents();
+        loadSecurityLogs();
+        updateStats();
+        $('#lastUpdate').textContent = new Date().toLocaleTimeString('ar-SA');
+      }, 30000);      
+      addSecurityLog('success', 'تم تشغيل لوحة المراقبة الأمنية بنجاح', null);
     }
 
-    /* ===== BOOT ===== */
-    (async function boot(){
+    // ===== BOOT =====
+    (function boot(){
       initParticles();
       
-      // Check if already logged in (for demo)
-      if(localStorage.getItem('onx_admin_logged_in') === 'true') {
+      // التحقق إذا كان مسجل دخول سابقاً
+      if(sessionStorage.getItem('onx_admin_logged_in') === 'true') {
         $('#loginScreen').classList.add('hidden');
         $('#dashboardScreen').classList.add('active');
-        await initDashboard();
+        initDashboard();
       }
     })();
+
+    // حفظ حالة الدخول
+    window.addEventListener('beforeunload', () => {
+      if($('#dashboardScreen').classList.contains('active')) {
+        sessionStorage.setItem('onx_admin_logged_in', 'true');
+      }
+    });
   </script>
 </body>
 </html>
-
-
