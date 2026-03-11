@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>🛡️ لوحة المراقبة الأمنية | ONX-TAQE SECURITY PRO</title>
+  <title>🛡️ نظام المراقبة الأمنية | ONX-TAQE SECURITY PRO</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   
   <style>
@@ -61,95 +61,198 @@
       100%{transform:translateY(-10vh) scale(1); opacity:0;}
     }
 
-    /* ===== SECURITY HEADER ===== */
-    .security-header {
-      text-align:center; padding:25px 20px 15px; position:relative;
-      background:linear-gradient(135deg, rgba(255,23,68,0.15), rgba(0,212,255,0.15));
-      border-bottom:1px solid rgba(255,23,68,0.4);
-      animation: headerGlow 3s ease-in-out infinite;
+    /* ===== LOGIN SCREEN ===== */
+    #loginScreen {
+      position:fixed; inset:0; z-index:500; display:flex; align-items:center; justify-content:center;
+      padding:20px; background:rgba(5,11,26,0.95);
     }
-    @keyframes headerGlow {
-      0%,100% { box-shadow: inset 0 0 20px rgba(255,23,68,0.2); }
-      50% { box-shadow: inset 0 0 40px rgba(0,212,255,0.3); }
+    .login-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+      border:1px solid rgba(255,255,255,0.18); backdrop-filter:blur(30px);
+      border-radius:28px; padding:44px 40px 36px; width:100%; max-width:420px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,212,255,0.08);
+      position:relative; overflow:hidden; animation: loginCardIn 0.9s cubic-bezier(0.23,1,0.32,1) both;
     }
-    .security-badge {
-      display:inline-flex; align-items:center; gap:8px;
-      padding:6px 16px; border-radius:999px;
-      background:linear-gradient(135deg, var(--security-red), var(--accent));
-      color:#fff; font-weight:700; font-size:0.85rem;
-      box-shadow:0 0 25px rgba(255,23,68,0.6);
-      animation: pulse 2s ease-in-out infinite;
+    @keyframes loginCardIn { from{transform:translateY(60px) scale(0.9);opacity:0} to{transform:translateY(0) scale(1);opacity:1} }
+    .login-card::before { content:''; position:absolute; inset:0; border-radius:28px; background:linear-gradient(135deg,rgba(255,255,255,0.08) 0%,transparent 55%); pointer-events:none; }
+    .login-top { text-align:center; margin-bottom:32px; }
+    .login-icon {
+      width:78px; height:78px; background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
+      border-radius:22px; display:inline-flex; align-items:center; justify-content:center; font-size:36px;
+      margin-bottom:16px; box-shadow:0 0 40px rgba(0,212,255,0.5),0 0 80px rgba(123,47,255,0.3);
+      animation:pulse-glow 3s ease-in-out infinite;
     }
-    @keyframes pulse { 0%,100%{box-shadow:0 0 25px rgba(255,23,68,0.6);} 50%{box-shadow:0 0 45px rgba(255,23,68,0.9);} }
-    .header-title {
-      font-size:1.8rem; font-weight:900; margin:15px 0 5px;
-      background:linear-gradient(135deg, var(--neon-red), var(--gold), var(--neon-blue), var(--neon-purple));
+    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 40px rgba(0,212,255,0.5),0 0 80px rgba(123,47,255,0.3);} 50%{box-shadow:0 0 60px rgba(0,212,255,0.9),0 0 120px rgba(123,47,255,0.6);} }
+    .login-title {
+      font-size:1.8rem; font-weight:900;
+      background:linear-gradient(135deg,#fff 0%,var(--neon-blue) 50%,var(--neon-purple) 100%);
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-      background-size: 400% 100%;
-      animation: gradientShift 4s ease infinite;
     }
-    @keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-    .header-subtitle { color:rgba(255,255,255,0.5); font-size:0.9rem; }
-    .security-status {
-      display:flex; justify-content:center; gap:15px; margin-top:15px; flex-wrap:wrap;
+    .login-subtitle { color:rgba(255,255,255,0.4); font-size:0.82rem; letter-spacing:2px; text-transform:uppercase; margin-top:5px; }
+    .login-line { width:160px; height:2px; margin:14px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }
+    .login-input-group { position:relative; margin-bottom:16px; }
+    .login-input-label { font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; margin-bottom:7px; display:block; }
+    .login-input {
+      width:100%; padding:14px 16px 14px 50px; background:rgba(255,255,255,0.07);
+      border:1px solid rgba(255,255,255,0.14); border-radius:14px; color:#fff;
+      font-family:'Cairo',sans-serif; font-size:0.97rem; transition:all 0.3s ease; outline:none; direction:rtl;
     }
-    .status-item {
-      display:flex; align-items:center; gap:6px; font-size:0.85rem;
-      padding:6px 14px; border-radius:10px; background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.1);
+    .login-input::placeholder { color:rgba(255,255,255,0.28); }
+    .login-input:focus {
+      border-color:var(--neon-blue); background:rgba(0,212,255,0.07);
+      box-shadow:0 0 0 3px rgba(0,212,255,0.12),0 4px 20px rgba(0,212,255,0.1);
     }
-    .status-dot { width:9px; height:9px; border-radius:50%; }
-    .status-dot.active { background:var(--security-green); box-shadow:0 0 12px var(--security-green); animation: pulseDot 1.5s infinite; }
-    .status-dot.warning { background:var(--security-yellow); box-shadow:0 0 12px var(--security-yellow); }
-    .status-dot.danger { background:var(--security-red); box-shadow:0 0 12px var(--security-red); animation: pulseDot 1s infinite; }
-    @keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:0.6} }
+    .login-input-icon { position:absolute; left:15px; top:50%; transform:translateY(-50%); font-size:19px; pointer-events:none; }
+    .pass-toggle {
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      cursor:pointer; font-size:18px; color:rgba(255,255,255,0.4); transition:color 0.2s;
+      user-select:none; background:none; border:none;
+    }
+    .pass-toggle:hover { color:var(--neon-blue); }
+    .btn-login {
+      width:100%; padding:15px; border:none; border-radius:14px; cursor:pointer;
+      font-family:'Cairo',sans-serif; font-size:1rem; font-weight:800;
+      background:linear-gradient(135deg,#00d4ff,#7b2fff); color:#fff; letter-spacing:0.5px;
+      box-shadow:0 8px 30px rgba(0,212,255,0.4); transition:var(--transition);
+      position:relative; overflow:hidden; margin-top:6px; display:flex; align-items:center; justify-content:center; gap:10px;
+    }
+    .btn-login::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.18),transparent); opacity:0; transition:opacity 0.3s; }
+    .btn-login:hover { transform:translateY(-3px) scale(1.02); box-shadow:0 14px 40px rgba(0,212,255,0.55); }
+    .btn-login:hover::before { opacity:1; }
+    .btn-login:active { transform:translateY(1px) scale(0.99); }
+    .login-error {
+      margin-top:14px; padding:11px 16px; border-radius:12px;
+      background:rgba(233,69,96,0.15); border:1px solid rgba(233,69,96,0.4);
+      color:#ff6b6b; font-size:0.88rem; font-weight:600; text-align:center;
+      opacity:0; transform:translateY(-8px); transition:var(--transition);
+    }
+    .login-error.show { opacity:1; transform:translateY(0); }
+    .login-loader {
+      display:inline-block; width:18px; height:18px;
+      border:2px solid rgba(255,255,255,0.25); border-top-color:#fff;
+      border-radius:50%; animation:spin 0.7s linear infinite;
+    }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .login-note {
+      text-align:center; margin-top:18px; font-size:0.75rem; color:rgba(255,255,255,0.28);
+      display:flex; align-items:center; justify-content:center; gap:6px;
+    }
 
-    /* ===== CONTAINER ===== */
-    .container { max-width:1400px; margin:0 auto; padding:20px; }
+    /* ===== DASHBOARD ===== */
+    #dashboardScreen { display:none; }
+    #dashboardScreen.active { display:block; }
+    #loginScreen.hidden { display:none !important; }
+    
+    .dashboard-header {
+      text-align:center; padding:40px 20px 20px; position:relative;
+      animation:slideDown 0.8s cubic-bezier(0.23,1,0.32,1) both;
+    }
+    @keyframes slideDown { from{transform:translateY(-60px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .header-icon {
+      width:80px; height:80px; background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
+      border-radius:24px; display:inline-flex; align-items:center; justify-content:center; font-size:36px;
+      margin-bottom:16px; box-shadow:0 0 40px rgba(0,212,255,0.5),0 0 80px rgba(123,47,255,0.3);
+      animation:pulse-glow 3s ease-in-out infinite;
+    }
+    .header-title {
+      font-size:2.5rem; font-weight:900;
+      background:linear-gradient(135deg,#fff 0%,var(--neon-blue) 50%,var(--neon-purple) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:1px;
+    }
+    .header-subtitle { color:rgba(255,255,255,0.5); font-size:0.95rem; margin-top:6px; letter-spacing:2px; text-transform:uppercase; }
+    .header-line { width:200px; height:2px; margin:16px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }
+    
+    .logout-btn {
+      position:fixed; top:20px; left:20px; z-index:100;
+      padding:9px 18px; border:none; border-radius:10px; cursor:pointer;
+      font-family:'Cairo',sans-serif; font-size:0.85rem; font-weight:700;
+      background:rgba(233,69,96,0.15); border:1px solid rgba(233,69,96,0.35);
+      color:#ff6b6b; backdrop-filter:blur(10px); transition:var(--transition);
+      display:flex; align-items:center; gap:6px;
+    }
+    .logout-btn:hover { background:rgba(233,69,96,0.3); transform:translateY(-2px); box-shadow:0 6px 20px rgba(233,69,96,0.3); }
+
+    /* ===== STATS BAR ===== */
+    .stats-bar { display:flex; justify-content:center; gap:20px; padding:10px 20px 20px; animation:fadeIn 1s 0.3s both; flex-wrap:wrap; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .stat-badge {
+      background:var(--glass); border:1px solid var(--glass-border); backdrop-filter:blur(10px);
+      padding:10px 20px; border-radius:50px; display:flex; align-items:center; gap:8px;
+      font-size:0.9rem; font-weight:600; transition:var(--transition);
+    }
+    .stat-badge:hover { transform:translateY(-2px); border-color:var(--neon-blue); }
+    .stat-dot { width:8px; height:8px; border-radius:50%; }
+
+    /* ===== TABS SYSTEM ===== */
+    .tabs-container { max-width:1400px; margin:0 auto; padding:0 24px 40px; }
+    .tabs-nav {
+      display:flex; gap:8px; padding:10px; background:var(--glass); border:1px solid var(--glass-border);
+      border-radius:16px; backdrop-filter:blur(20px); margin-bottom:24px; overflow-x:auto; flex-wrap:wrap;
+    }
+    .tab-btn {
+      padding:12px 20px; border:none; border-radius:12px; cursor:pointer;
+      font-family:'Cairo',sans-serif; font-size:0.9rem; font-weight:600;
+      background:transparent; color:rgba(255,255,255,0.6);
+      transition:var(--transition); display:flex; align-items:center; gap:8px; white-space:nowrap;
+    }
+    .tab-btn:hover { background:rgba(255,255,255,0.08); color:#fff; }
+    .tab-btn.active {
+      background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
+      color:#fff; box-shadow:0 4px 20px rgba(0,212,255,0.3);
+    }
+    .tab-btn .badge {
+      background:var(--accent); color:#fff; padding:2px 8px;
+      border-radius:20px; font-size:0.7rem; margin-right:4px;
+    }
+    .tab-content { display:none; animation:tabFadeIn 0.4s ease; }
+    .tab-content.active { display:block; }
+    @keyframes tabFadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
     /* ===== GLASS CARD ===== */
     .glass-card {
-      background:linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));
       border:1px solid var(--glass-border); backdrop-filter:blur(20px);
-      border-radius:22px; padding:24px; box-shadow:var(--card-shadow);
-      position:relative; overflow:hidden; margin-bottom:20px;
-      transition:var(--transition);
+      border-radius:24px; padding:28px; box-shadow:var(--card-shadow);
+      position:relative; overflow:hidden; transform-style:preserve-3d;
+      transition:var(--transition); animation:cardEntrance 0.8s cubic-bezier(0.23,1,0.32,1) both;
     }
-    .glass-card:hover { border-color:rgba(0,212,255,0.4); transform:translateY(-2px); }
-    .glass-card::before {
-      content:''; position:absolute; inset:0; border-radius:22px;
-      background:linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-      pointer-events:none;
-    }
-    .card-glow-security::after {
-      content:''; position:absolute; top:-50%; right:-30%; width:250px; height:250px;
-      border-radius:50%; background:radial-gradient(circle, rgba(255,23,68,0.2), transparent 70%);
-      pointer-events:none; animation: glowRotate 8s linear infinite;
-    }
-    @keyframes glowRotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .glass-card:nth-child(1){animation-delay:0.1s} .glass-card:nth-child(2){animation-delay:0.2s}
+    .glass-card:nth-child(3){animation-delay:0.3s} .glass-card:nth-child(4){animation-delay:0.4s}
+    .glass-card:nth-child(5){animation-delay:0.5s} .glass-card:nth-child(6){animation-delay:0.6s}
+    @keyframes cardEntrance { from{transform:translateY(40px) rotateX(10deg);opacity:0} to{transform:translateY(0) rotateX(0deg);opacity:1} }
+    .glass-card:hover { transform:translateY(-6px) rotateX(2deg); box-shadow:0 30px 80px rgba(0,0,0,0.6),0 0 40px rgba(0,212,255,0.1); }
+    .glass-card::before { content:''; position:absolute; inset:0; border-radius:24px; background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%); pointer-events:none; }
+    
+    .card-glow-red::after   { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(233,69,96,0.15),transparent 70%); pointer-events:none; }
+    .card-glow-blue::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(0,212,255,0.12),transparent 70%); pointer-events:none; }
+    .card-glow-purple::after{ content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(123,47,255,0.15),transparent 70%); pointer-events:none; }
+    .card-glow-gold::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(245,197,24,0.12),transparent 70%); pointer-events:none; }
+    .card-glow-green::after { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(0,200,81,0.12),transparent 70%); pointer-events:none; }
+    .card-glow-orange::after{ content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(255,140,0,0.12),transparent 70%); pointer-events:none; }
+    .card-glow-teal::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(20,184,166,0.15),transparent 70%); pointer-events:none; }
 
     /* ===== CARD HEADER ===== */
-    .card-header {
-      display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:15px;
-      border-bottom:1px solid rgba(255,255,255,0.1);
-    }
+    .card-header { display:flex; align-items:center; gap:14px; margin-bottom:24px; }
     .card-icon {
       width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center;
-      font-size:22px; flex-shrink:0; background:linear-gradient(135deg, var(--security-red), var(--accent));
-      box-shadow:0 0 20px rgba(255,23,68,0.4);
+      font-size:22px; flex-shrink:0;
     }
+    .icon-blue   { background:linear-gradient(135deg,#00d4ff22,#00d4ff44); border:1px solid #00d4ff44; }
+    .icon-red    { background:linear-gradient(135deg,#e9456022,#e9456044); border:1px solid #e9456044; }
+    .icon-purple { background:linear-gradient(135deg,#7b2fff22,#7b2fff44); border:1px solid #7b2fff44; }
+    .icon-gold   { background:linear-gradient(135deg,#f5c51822,#f5c51844); border:1px solid #f5c51844; }
+    .icon-green  { background:linear-gradient(135deg,#00ff8822,#00ff8844); border:1px solid #00ff8844; }
+    .icon-orange { background:linear-gradient(135deg,#ff8c0022,#ff8c0044); border:1px solid #ff8c0044; }
+    .icon-teal   { background:linear-gradient(135deg,#14b8a622,#14b8a644); border:1px solid #14b8a644; }
     .card-title { font-size:1.2rem; font-weight:700; color:#fff; }
-    .card-desc { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:2px; }
+    .card-desc  { font-size:0.8rem; color:rgba(255,255,255,0.4); margin-top:2px; }
 
     /* ===== SEARCH BAR ===== */
-    .search-container {
-      display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;
-    }
+    .search-container { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
     .search-input {
       flex:1; min-width:250px; padding:14px 20px 14px 50px;
       background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
-      border-radius:14px; color:#fff; font-family:'Cairo',sans-serif; font-size:1rem;
-      transition:var(--transition);
+      border-radius:14px; color:#fff; font-family:'Cairo',sans-serif; font-size:1rem; transition:var(--transition);
     }
     .search-input::placeholder { color:rgba(255,255,255,0.3); }
     .search-input:focus {
@@ -167,64 +270,25 @@
       padding:12px 20px; border:none; border-radius:12px; cursor:pointer;
       font-family:'Cairo',sans-serif; font-size:0.95rem; font-weight:700;
       position:relative; overflow:hidden; transition:var(--transition);
-      display:flex; align-items:center; justify-content:center; gap:8px;
-      min-width:120px;
+      display:flex; align-items:center; justify-content:center; gap:8px; min-width:120px;
     }
     .btn::before {
       content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
       opacity:0; transition:opacity 0.3s;
     }
     .btn:hover::before { opacity:1; }
-    .btn-primary {
-      background:linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-      color:#fff; box-shadow:0 6px 25px rgba(0,212,255,0.4);
-    }
-    .btn-danger {
-      background:linear-gradient(135deg, var(--security-red), #ff4444);
-      color:#fff; box-shadow:0 6px 25px rgba(255,23,68,0.4);
-    }
-    .btn-warning {
-      background:linear-gradient(135deg, var(--security-yellow), #ffcc00);
-      color:#000; box-shadow:0 6px 25px rgba(255,171,0,0.4);
-    }
-    .btn-success {
-      background:linear-gradient(135deg, var(--security-green), #00ff88);
-      color:#000; box-shadow:0 6px 25px rgba(0,200,81,0.4);
-    }
-    .btn-outline {
-      background:transparent; border:1px solid rgba(255,255,255,0.25);
-      color:rgba(255,255,255,0.85);
-    }
+    .btn-primary  { background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple)); color:#fff; box-shadow:0 6px 25px rgba(0,212,255,0.4); }
+    .btn-danger   { background:linear-gradient(135deg,var(--security-red),#ff4444); color:#fff; box-shadow:0 6px 25px rgba(255,23,68,0.4); }
+    .btn-warning  { background:linear-gradient(135deg,var(--security-yellow),#ffcc00); color:#000; box-shadow:0 6px 25px rgba(255,171,0,0.4); }
+    .btn-success  { background:linear-gradient(135deg,var(--security-green),#00ff88); color:#000; box-shadow:0 6px 25px rgba(0,200,81,0.4); }
+    .btn-outline  { background:transparent; border:1px solid rgba(255,255,255,0.25); color:rgba(255,255,255,0.85); }
     .btn:hover { transform:translateY(-3px); box-shadow:0 12px 40px rgba(0,0,0,0.5); }
     .btn:active { transform:translateY(1px); }
     .btn:disabled { opacity:0.5; cursor:not-allowed; transform:none !important; }
 
-    /* ===== STATS GRID ===== */
-    .stats-grid {
-      display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
-      gap:15px; margin-bottom:25px;
-    }
-    .stat-box {
-      background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12);
-      border-radius:16px; padding:20px; text-align:center;
-      transition:var(--transition); position:relative; overflow:hidden;
-    }
-    .stat-box::before {
-      content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-      opacity:0; transition:opacity 0.3s;
-    }
-    .stat-box:hover::before { opacity:1; }
-    .stat-box:hover { transform:translateY(-3px); border-color:rgba(0,212,255,0.4); }
-    .stat-value { font-size:2rem; font-weight:900; margin:8px 0; }
-    .stat-label { font-size:0.85rem; color:rgba(255,255,255,0.5); }
-    .stat-box.danger .stat-value { color:var(--security-red); }
-    .stat-box.warning .stat-value { color:var(--security-yellow); }
-    .stat-box.success .stat-value { color:var(--security-green); }
-    .stat-box.info .stat-value { color:var(--neon-blue); }
-
     /* ===== TABLE ===== */
     .table-container { overflow-x:auto; border-radius:16px; overflow:hidden; margin-top:10px; }
-    table { width:100%; border-collapse:collapse; min-width:800px; }
+    table { width:100%; border-collapse:collapse; min-width:900px; }
     thead tr {
       background:linear-gradient(135deg, rgba(255,23,68,0.2), rgba(0,212,255,0.2));
       border-bottom:2px solid rgba(255,255,255,0.15);
@@ -232,8 +296,11 @@
     thead th {
       padding:16px 12px; text-align:center; font-size:0.8rem; font-weight:700;
       color:rgba(255,255,255,0.8); text-transform:uppercase; letter-spacing:1px;
-      position:sticky; top:0; background:inherit; backdrop-filter:blur(10px);
+      position:sticky; top:0; background:inherit; backdrop-filter:blur(10px); cursor:pointer;
     }
+    thead th::after { content:'↕'; position:absolute; left:8px; font-size:0.7rem; opacity:0.5; }
+    thead th.sorted-asc::after { content:'▲'; opacity:1; color:var(--neon-blue); }
+    thead th.sorted-desc::after { content:'▼'; opacity:1; color:var(--neon-blue); }
     tbody tr {
       border-bottom:1px solid rgba(255,255,255,0.06); transition:var(--transition);
       animation: rowFade 0.3s ease;
@@ -243,6 +310,7 @@
     tbody tr.blocked { background:rgba(255,23,68,0.12); border-right:4px solid var(--security-red); }
     tbody tr.suspicious { background:rgba(255,171,0,0.08); border-right:4px solid var(--security-yellow); }
     td { padding:14px 12px; text-align:center; font-size:0.9rem; color:var(--text-light); }
+    
     .action-btn {
       padding:6px 12px; border-radius:8px; font-size:0.8rem; border:none;
       cursor:pointer; margin:2px; transition:0.2s; display:inline-flex; align-items:center; gap:4px;
@@ -253,10 +321,18 @@
     .action-btn.warn { background:rgba(255,171,0,0.2); color:var(--security-yellow); }
     .action-btn:hover { transform:scale(1.08); }
 
-    /* ===== TIMELINE ===== */
-    .timeline {
-      position:relative; padding-right:30px; margin:20px 0;
+    /* ===== ALERT BADGE ===== */
+    .alert-badge {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:5px 12px; border-radius:999px; font-size:0.8rem; font-weight:600;
     }
+    .alert-badge.low { background:rgba(0,200,81,0.2); color:var(--security-green); }
+    .alert-badge.medium { background:rgba(255,171,0,0.2); color:var(--security-yellow); }
+    .alert-badge.high { background:rgba(255,23,68,0.2); color:var(--security-red); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 25px rgba(255,23,68,0.6);} 50%{box-shadow:0 0 45px rgba(255,23,68,0.9);} }
+
+    /* ===== TIMELINE ===== */
+    .timeline { position:relative; padding-right:30px; margin:20px 0; }
     .timeline::before {
       content:''; position:absolute; right:8px; top:0; bottom:0;
       width:2px; background:linear-gradient(to bottom, var(--neon-blue), var(--neon-purple));
@@ -274,9 +350,7 @@
     }
     .timeline-item.suspicious::before { background:var(--security-yellow); box-shadow:0 0 10px var(--security-yellow); }
     .timeline-item.danger::before { background:var(--security-red); box-shadow:0 0 10px var(--security-red); }
-    .timeline-time {
-      font-size:0.75rem; color:var(--neon-blue); margin-bottom:4px; font-weight:600;
-    }
+    .timeline-time { font-size:0.75rem; color:var(--neon-blue); margin-bottom:4px; font-weight:600; }
     .timeline-type {
       display:inline-block; padding:2px 10px; border-radius:999px;
       font-size:0.7rem; font-weight:700; margin-bottom:6px;
@@ -312,15 +386,6 @@
       font-family:monospace; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px;
     }
 
-    /* ===== ALERT BADGE ===== */
-    .alert-badge {
-      display:inline-flex; align-items:center; gap:5px;
-      padding:5px 12px; border-radius:999px; font-size:0.8rem; font-weight:600;
-    }
-    .alert-badge.low { background:rgba(0,200,81,0.2); color:var(--security-green); }
-    .alert-badge.medium { background:rgba(255,171,0,0.2); color:var(--security-yellow); }
-    .alert-badge.high { background:rgba(255,23,68,0.2); color:var(--security-red); animation: pulse 2s infinite; }
-
     /* ===== PROGRESS & METRICS ===== */
     .metric-row {
       display:flex; align-items:center; gap:15px; margin:12px 0; padding:12px;
@@ -328,9 +393,7 @@
     }
     .metric-label { flex:1; font-size:0.9rem; }
     .metric-value { font-weight:700; min-width:80px; text-align:left; }
-    .progress-bar {
-      flex:2; height:8px; background:rgba(255,255,255,0.12); border-radius:4px; overflow:hidden;
-    }
+    .progress-bar { flex:2; height:8px; background:rgba(255,255,255,0.12); border-radius:4px; overflow:hidden; }
     .progress-fill {
       height:100%; border-radius:4px; transition:width 0.5s ease;
       background:linear-gradient(90deg, var(--security-red), var(--security-yellow), var(--security-green));
@@ -370,8 +433,7 @@
       background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25);
       padding:14px 24px; border-radius:999px; display:flex; gap:12px; align-items:center;
       box-shadow:0 20px 50px rgba(0,0,0,0.5); z-index:9999;
-      transition:transform 0.35s ease; backdrop-filter:blur(15px);
-      min-width:300px;
+      transition:transform 0.35s ease; backdrop-filter:blur(15px); min-width:300px;
     }
     #toast.show { transform:translateX(-50%) translateY(0); }
     #toast.success { border-color:var(--security-green); }
@@ -379,39 +441,13 @@
     #toast.danger { border-color:var(--security-red); }
     #toast.info { border-color:var(--neon-blue); }
 
-    /* ===== SCREENSHOT PROTECTION OVERLAY ===== */
-    #screenshotOverlay {
-      position:fixed; inset:0; background:rgba(0,0,0,0.97);
-      z-index:99999; display:none; align-items:center; justify-content:center;
-      flex-direction:column; gap:25px; animation: fadeIn 0.3s ease;
-    }
-    #screenshotOverlay.active { display:flex; }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    .screenshot-warning {
-      font-size:4rem; margin-bottom:15px; animation: shake 0.6s ease-in-out infinite;
-      text-shadow:0 0 30px var(--security-red);
-    }
-    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
-    .screenshot-text {
-      font-size:1.3rem; font-weight:700; color:var(--security-red);
-      text-align:center; max-width:450px; line-height:1.6;
-      text-shadow:0 0 20px rgba(255,23,68,0.5);
-    }
-    .screenshot-details {
-      font-size:0.85rem; color:rgba(255,255,255,0.6); margin-top:10px;
-      background:rgba(255,255,255,0.05); padding:12px 20px; border-radius:12px;
-      max-width:400px; text-align:center;
-    }
-
     /* ===== SECURITY LEVEL INDICATOR ===== */
     .security-level {
       display:flex; align-items:center; gap:15px; padding:16px;
       background:rgba(255,255,255,0.06); border-radius:14px; margin-top:15px;
       border:1px solid rgba(255,255,255,0.12);
     }
-    .level-bar {
-      flex:1; height:10px; background:rgba(255,255,255,0.12); border-radius:5px; overflow:hidden;
-    }
+    .level-bar { flex:1; height:10px; background:rgba(255,255,255,0.12); border-radius:5px; overflow:hidden; }
     .level-fill {
       height:100%; border-radius:5px; transition:width 0.6s ease;
       background:linear-gradient(90deg, var(--security-red), var(--security-yellow), var(--security-green));
@@ -431,11 +467,10 @@
       width:8px; height:8px; border-radius:50%; background:var(--security-green);
       animation: pulseDot 1s infinite;
     }
+    @keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:0.6} }
 
     /* ===== FILTERS ===== */
-    .filters-row {
-      display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;
-    }
+    .filters-row { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
     .filter-select {
       padding:10px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.15);
       background:rgba(255,255,255,0.08); color:#fff; font-family:inherit; font-size:0.85rem;
@@ -494,16 +529,360 @@
   <div class="bg-overlay"></div>
   <div id="particles"></div>
 
-  <!-- Screenshot Protection Overlay -->
-  <div id="screenshotOverlay">
-    <div class="screenshot-warning">🚫</div>
-    <div class="screenshot-text">تم رصد محاولة لالتقاط شاشة!<br>هذا الإجراء مسجل ومراقب بنظام الحماية</div>
-    <div class="screenshot-details">
-      <div>🕐 الوقت: <span id="screenshotTime"></span></div>
-      <div>🆔 البصمة: <span id="screenshotFingerprint"></span></div>
-      <div>🌐 الـ IP: <span id="screenshotIP"></span></div>
+  <!-- Login Screen -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <div class="login-top">
+        <div class="login-icon">🛡️</div>
+        <div class="login-title">نظام المراقبة الأمنية</div>
+        <div class="login-subtitle">ONX-TAQE SECURITY PRO • دخول المشرف</div>
+        <div class="login-line"></div>
+      </div>
+      
+      <div class="login-input-group">
+        <label class="login-input-label">اسم المستخدم</label>
+        <span class="login-input-icon">👤</span>
+        <input class="login-input" id="loginUsername" type="text" placeholder="أدخل اسم المستخدم" autocomplete="username">
+      </div>
+      
+      <div class="login-input-group">
+        <label class="login-input-label">كلمة المرور</label>
+        <span class="login-input-icon">🔒</span>
+        <input class="login-input" id="loginPassword" type="password" placeholder="أدخل كلمة المرور" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()">
+        <button class="pass-toggle" type="button" id="passToggleBtn" onclick="togglePassView()" title="إظهار/إخفاء">👁️</button>
+      </div>
+      
+      <button class="btn-login" id="loginBtn" onclick="doLogin()">
+        <span>🔐</span> دخول آمن إلى لوحة المراقبة
+      </button>
+      
+      <div class="login-error" id="loginError"></div>
+      <div class="login-note"><span>🔒</span><span>جميع محاولات الدخول مسجلة ومشفرة</span></div>
     </div>
-    <button class="btn btn-primary" onclick="closeScreenshotOverlay()">✓ فهمت، إغلاق</button>
+  </div>
+
+  <!-- Dashboard Screen -->
+  <div id="dashboardScreen">
+    <button class="logout-btn" onclick="doLogout()">🚪 خروج آمن</button>
+
+    <!-- Security Header -->
+    <div class="security-header">
+      <div class="security-badge">🛡️ نظام المراقبة النشط • ONX-TAQE SECURITY PRO</div>
+      <h1 class="header-title">لوحة المراقبة الأمنية المتكاملة</h1>
+      <p class="header-subtitle">مراقبة فورية • تتبع دقيق • حماية شاملة لبيانات الطلبة</p>
+      
+      <div class="security-status">
+        <div class="status-item">
+          <span class="realtime-indicator"><span class="realtime-dot"></span> مباشر</span>
+        </div>
+        <div class="status-item">
+          <span class="status-dot active"></span>
+          <span>الحماية: <strong>مفعلة</strong></span>
+        </div>
+        <div class="status-item">
+          <span class="status-dot warning"></span>
+          <span>تهديدات: <strong id="threatCount">0</strong></span>
+        </div>
+        <div class="status-item">
+          <span class="status-dot danger"></span>
+          <span>محظورون: <strong id="blockedCount">0</strong></span>
+        </div>
+        <div class="status-item">
+          <span class="status-dot active"></span>
+          <span>آخر تحديث: <strong id="lastUpdate">الآن</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat-box info">
+          <div class="stat-label">👥 طلاب مسجلون</div>
+          <div class="stat-value" id="totalStudents">0</div>
+        </div>
+        <div class="stat-box warning">
+          <div class="stat-label">⚠️ نشاط مشبوه</div>
+          <div class="stat-value" id="suspiciousCount">0</div>
+        </div>
+        <div class="stat-box danger">
+          <div class="stat-label">🚫 محظورون</div>
+          <div class="stat-value" id="bannedCount">0</div>
+        </div>
+        <div class="stat-box success">
+          <div class="stat-label">🔐 مستوى الحماية</div>
+          <div class="stat-value" id="securityLevel">98%</div>
+        </div>
+        <div class="stat-box info">
+          <div class="stat-label">📸 محاولات لقطة</div>
+          <div class="stat-value" id="screenshotAttempts">0</div>
+        </div>
+        <div class="stat-box warning">
+          <div class="stat-label">🔄 تعديلات عناوين</div>
+          <div class="stat-value" id="titleChanges">0</div>
+        </div>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-icon">🔍</div>
+          <div>
+            <div class="card-title">بحث وتتبع طالب</div>
+            <div class="card-desc">ابحث برقم الهاتف، البصمة، أو الاسم لمراقبة النشاط</div>
+          </div>
+        </div>
+        
+        <div class="search-container">
+          <div class="search-wrapper">
+            <span class="search-icon">📱</span>
+            <input type="text" class="search-input" id="searchPhone" placeholder="أدخل رقم هاتف الطالب (مثال: 966501234567)">
+          </div>
+          <div class="search-wrapper">
+            <span class="search-icon">🆔</span>
+            <input type="text" class="search-input" id="searchFingerprint" placeholder="أو بصمة الجهاز">
+          </div>
+          <div class="search-wrapper">
+            <span class="search-icon">👤</span>
+            <input type="text" class="search-input" id="searchName" placeholder="أو اسم الطالب">
+          </div>
+          <button class="btn btn-primary" onclick="searchStudent()">🔎 بحث وتتبع</button>
+          <button class="btn btn-outline" onclick="showAllStudents()">📋 عرض الكل</button>
+        </div>
+        
+        <div class="filters-row">
+          <select class="filter-select" id="filterStatus" onchange="applyFilters()">
+            <option value="all">كل الحالات</option>
+            <option value="active">نشط</option>
+            <option value="suspicious">مشبوه</option>
+            <option value="blocked">محظور</option>
+          </select>
+          <select class="filter-select" id="filterTime" onchange="applyFilters()">
+            <option value="all">كل الوقت</option>
+            <option value="today">اليوم</option>
+            <option value="week">هذا الأسبوع</option>
+            <option value="month">هذا الشهر</option>
+          </select>
+          <button class="btn btn-outline" onclick="exportReport()">📤 تصدير التقرير</button>
+          <button class="btn btn-warning" onclick="runSecurityScan()">🔍 فحص أمني شامل</button>
+        </div>
+      </div>
+
+      <!-- Student Details Panel (Hidden by default) -->
+      <div class="glass-card hidden" id="studentDetailsPanel">
+        <div class="card-header">
+          <div class="card-icon">👤</div>
+          <div>
+            <div class="card-title">تفاصيل الطالب: <span id="studentNameDisplay" style="color:var(--neon-blue)"></span></div>
+            <div class="card-desc">مراقبة شاملة للنشاط والسلوك</div>
+          </div>
+          <span class="alert-badge high" id="studentRiskLevel">مخاطر عالية</span>
+        </div>
+        
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:15px; margin-bottom:20px">
+          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
+            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">📱 رقم الهاتف</div>
+            <div style="font-size:1.1rem; font-weight:700" id="detailPhone">—</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
+            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🆔 بصمة الجهاز</div>
+            <div style="font-size:0.85rem; font-family:monospace; word-break:break-all" id="detailFingerprint">—</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
+            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🌐 عنوان الـ IP</div>
+            <div style="font-size:1.1rem; font-weight:700" id="detailIP">—</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
+            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🕐 آخر نشاط</div>
+            <div style="font-size:1.1rem; font-weight:700" id="detailLastActivity">—</div>
+          </div>
+        </div>
+        
+        <div style="margin-bottom:20px">
+          <div style="font-size:0.9rem; font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px">
+            <span>📊 مقاييس النشاط</span>
+          </div>
+          
+          <div class="metric-row">
+            <span class="metric-label">عدد مرات التسجيل</span>
+            <span class="metric-value" id="metricRegistrations">0</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressRegistrations" style="width:0%"></div></div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">تعديلات عنوان التقرير</span>
+            <span class="metric-value" id="metricTitleChanges">0</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressTitleChanges" style="width:0%"></div></div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">مدة البقاء في الموقع</span>
+            <span class="metric-value" id="metricSessionTime">0 دقيقة</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressSessionTime" style="width:0%"></div></div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">محاولات لقطة الشاشة</span>
+            <span class="metric-value" id="metricScreenshots">0</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressScreenshots" style="width:0%"></div></div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">محاولات دخول من أجهزة متعددة</span>
+            <span class="metric-value" id="metricMultiDevice">0</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressMultiDevice" style="width:0%"></div></div>
+          </div>
+        </div>
+        
+        <div style="margin-bottom:20px">
+          <div style="font-size:0.9rem; font-weight:700; margin-bottom:10px">📜 سجل النشاط (آخر 20 حدث)</div>
+          <div class="timeline" id="studentTimeline">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+        
+        <div class="btn-row" style="display:flex; gap:10px; flex-wrap:wrap">
+          <button class="btn btn-danger" onclick="banStudent()">🚫 حظر الطالب نهائياً</button>
+          <button class="btn btn-warning" onclick="warnStudent()">⚠️ إرسال تحذير</button>
+          <button class="btn btn-success" onclick="resetStudentData()">🔄 إعادة تعيين بياناته</button>
+          <button class="btn btn-outline" onclick="hideStudentDetails()">❌ إغلاق التفاصيل</button>
+        </div>
+      </div>
+
+      <!-- All Students Table -->
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-icon">👥</div>
+          <div>
+            <div class="card-title">قائمة الطلاب المراقَبين</div>
+            <div class="card-desc">عرض وتحليل نشاط جميع المستخدمين</div>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>الطالب</th>
+                <th>الهاتف</th>
+                <th>البصمة</th>
+                <th>الـ IP</th>
+                <th>التسجيلات</th>
+                <th>التعديلات</th>
+                <th>لقطات</th>
+                <th>الحالة</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTable">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Security Logs -->
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-icon">📋</div>
+          <div>
+            <div class="card-title">سجل الأحداث الأمنية</div>
+            <div class="card-desc">مراقبة فورية لجميع أنشطة النظام</div>
+          </div>
+          <span class="realtime-indicator"><span class="realtime-dot"></span> تحديث تلقائي</span>
+        </div>
+        
+        <div class="filters-row" style="margin-bottom:15px">
+          <select class="filter-select" id="logFilter" onchange="renderSecurityLogs()">
+            <option value="all">كل الأحداث</option>
+            <option value="info">ℹ️ معلومات</option>
+            <option value="warning">⚠️ تحذيرات</option>
+            <option value="danger">🚨 أخطاء/تهديدات</option>
+            <option value="success">✅ نجاح</option>
+            <option value="screenshot">📸 لقطات شاشة</option>
+          </select>
+          <button class="btn btn-outline" onclick="exportLogs()">📤 تصدير السجل</button>
+          <button class="btn btn-outline" onclick="clearLogs()">🗑️ مسح السجل</button>
+        </div>
+        
+        <div class="logs-container" id="securityLogs">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Security Level & Settings -->
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-icon">⚙️</div>
+          <div>
+            <div class="card-title">إعدادات الحماية المتقدمة</div>
+            <div class="card-desc">تحكم دقيق في سياسات الأمان والمراقبة</div>
+          </div>
+        </div>
+        
+        <div class="security-level">
+          <span class="level-text" id="levelLabel">ممتاز 🔒</span>
+          <div class="level-bar"><div class="level-fill" id="levelFill" style="width:98%"></div></div>
+          <span class="level-percent" id="levelPercent">98%</span>
+        </div>
+        
+        <div style="margin-top:20px; display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:15px">
+          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
+            <div style="font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px">
+              <span>🔐</span> سياسات المراقبة
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
+              <span style="font-size:0.9rem">تتبع بصمة الجهاز</span>
+              <label class="switch"><input type="checkbox" id="toggleFingerprint" checked><span class="slider"></span></label>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
+              <span style="font-size:0.9rem">كشف لقطة الشاشة</span>
+              <label class="switch"><input type="checkbox" id="toggleScreenshot" checked><span class="slider"></span></label>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
+              <span style="font-size:0.9rem">مراقبة الجلسة الواحدة</span>
+              <label class="switch"><input type="checkbox" id="toggleSingleSession" checked><span class="slider"></span></label>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0">
+              <span style="font-size:0.9rem">تسجيل جميع الأنشطة</span>
+              <label class="switch"><input type="checkbox" id="toggleAuditLog" checked><span class="slider"></span></label>
+            </div>
+          </div>
+          
+          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
+            <div style="font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px">
+              <span>🚨</span> إجراءات تلقائية
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
+              <span style="font-size:0.9rem">حظر تلقائي بعد 3 محاولات</span>
+              <label class="switch"><input type="checkbox" id="toggleAutoBan" checked><span class="slider"></span></label>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
+              <span style="font-size:0.9rem">إشعار فوري عند تهديد</span>
+              <label class="switch"><input type="checkbox" id="toggleInstantAlert" checked><span class="slider"></span></label>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
+              <span style="font-size:0.9rem">تجميد الحساب المشبوه</span>
+              <label class="switch"><input type="checkbox" id="toggleFreeze"><span class="slider"></span></label>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0">
+              <span style="font-size:0.9rem">مسح تلقائي للسجل القديم</span>
+              <label class="switch"><input type="checkbox" id="toggleAutoClear"><span class="slider"></span></label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="btn-row" style="margin-top:20px">
+          <button class="btn btn-success" onclick="saveSecuritySettings()">💾 حفظ الإعدادات</button>
+          <button class="btn btn-outline" onclick="resetSecurityDefaults()">🔄 استعادة الافتراضي</button>
+          <button class="btn btn-danger" onclick="emergencyLockdown()">🔴 قفل طارئ للنظام</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast">
+    <span id="toastIcon">✅</span>
+    <span id="toastText"></span>
   </div>
 
   <!-- Modal -->
@@ -517,321 +896,6 @@
         <button class="modal-confirm" id="modalConfirm">تأكيد</button>
       </div>
     </div>
-  </div>
-
-  <!-- Toast -->
-  <div id="toast">
-    <span id="toastIcon">✅</span>
-    <span id="toastText"></span>
-  </div>
-
-  <!-- Security Header -->
-  <div class="security-header">
-    <div class="security-badge">🛡️ نظام المراقبة النشط • ONX-TAQE SECURITY PRO</div>
-    <h1 class="header-title">لوحة المراقبة الأمنية المتكاملة</h1>
-    <p class="header-subtitle">مراقبة فورية • تتبع دقيق • حماية شاملة لبيانات الطلبة</p>
-    
-    <div class="security-status">
-      <div class="status-item">
-        <span class="realtime-indicator"><span class="realtime-dot"></span> مباشر</span>
-      </div>
-      <div class="status-item">
-        <span class="status-dot active"></span>
-        <span>الحماية: <strong>مفعلة</strong></span>
-      </div>
-      <div class="status-item">
-        <span class="status-dot warning"></span>
-        <span>تهديدات: <strong id="threatCount">0</strong></span>
-      </div>
-      <div class="status-item">
-        <span class="status-dot danger"></span>
-        <span>محظورون: <strong id="blockedCount">0</strong></span>
-      </div>
-      <div class="status-item">
-        <span class="status-dot active"></span>
-        <span>آخر تحديث: <strong id="lastUpdate">الآن</strong></span>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    
-    <!-- Quick Stats -->
-    <div class="stats-grid">
-      <div class="stat-box info">
-        <div class="stat-label">👥 طلاب مسجلون</div>
-        <div class="stat-value" id="totalStudents">0</div>
-      </div>
-      <div class="stat-box warning">
-        <div class="stat-label">⚠️ نشاط مشبوه</div>
-        <div class="stat-value" id="suspiciousCount">0</div>
-      </div>
-      <div class="stat-box danger">
-        <div class="stat-label">🚫 محظورون</div>
-        <div class="stat-value" id="bannedCount">0</div>
-      </div>
-      <div class="stat-box success">
-        <div class="stat-label">🔐 مستوى الحماية</div>
-        <div class="stat-value" id="securityLevel">98%</div>
-      </div>
-      <div class="stat-box info">
-        <div class="stat-label">📸 محاولات لقطة</div>
-        <div class="stat-value" id="screenshotAttempts">0</div>
-      </div>
-      <div class="stat-box warning">
-        <div class="stat-label">🔄 تعديلات عناوين</div>
-        <div class="stat-value" id="titleChanges">0</div>
-      </div>
-    </div>
-
-    <!-- Search & Filters -->
-    <div class="glass-card">
-      <div class="card-header">
-        <div class="card-icon">🔍</div>
-        <div>
-          <div class="card-title">بحث وتتبع طالب</div>
-          <div class="card-desc">ابحث برقم الهاتف، البصمة، أو الاسم لمراقبة النشاط</div>
-        </div>
-      </div>
-      
-      <div class="search-container">
-        <div class="search-wrapper">
-          <span class="search-icon">📱</span>
-          <input type="tel" class="search-input" id="searchPhone" placeholder="أدخل رقم هاتف الطالب (مثال: 966501234567)">
-        </div>
-        <div class="search-wrapper">
-          <span class="search-icon">🆔</span>
-          <input type="text" class="search-input" id="searchFingerprint" placeholder="أو بصمة الجهاز">
-        </div>
-        <button class="btn btn-primary" onclick="searchStudent()">🔎 بحث وتتبع</button>
-        <button class="btn btn-outline" onclick="showAllStudents()">📋 عرض الكل</button>
-      </div>
-      
-      <div class="filters-row">
-        <select class="filter-select" id="filterStatus" onchange="applyFilters()">
-          <option value="all">كل الحالات</option>
-          <option value="active">نشط</option>
-          <option value="suspicious">مشبوه</option>
-          <option value="blocked">محظور</option>
-        </select>
-        <select class="filter-select" id="filterTime" onchange="applyFilters()">
-          <option value="all">كل الوقت</option>
-          <option value="today">اليوم</option>
-          <option value="week">هذا الأسبوع</option>
-          <option value="month">هذا الشهر</option>
-        </select>
-        <button class="btn btn-outline" onclick="exportReport()">📤 تصدير التقرير</button>
-        <button class="btn btn-warning" onclick="runSecurityScan()">🔍 فحص أمني شامل</button>
-      </div>
-    </div>
-
-    <!-- Student Details Panel (Hidden by default) -->
-    <div class="glass-card hidden" id="studentDetailsPanel">
-      <div class="card-header">
-        <div class="card-icon">👤</div>
-        <div>
-          <div class="card-title">تفاصيل الطالب: <span id="studentNameDisplay" style="color:var(--neon-blue)"></span></div>
-          <div class="card-desc">مراقبة شاملة للنشاط والسلوك</div>
-        </div>
-        <span class="alert-badge high" id="studentRiskLevel">مخاطر عالية</span>
-      </div>
-      
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:15px; margin-bottom:20px">
-        <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-          <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">📱 رقم الهاتف</div>
-          <div style="font-size:1.1rem; font-weight:700" id="detailPhone">—</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-          <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🆔 بصمة الجهاز</div>
-          <div style="font-size:0.85rem; font-family:monospace; word-break:break-all" id="detailFingerprint">—</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-          <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🌐 عنوان الـ IP</div>
-          <div style="font-size:1.1rem; font-weight:700" id="detailIP">—</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-          <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🕐 آخر نشاط</div>
-          <div style="font-size:1.1rem; font-weight:700" id="detailLastActivity">—</div>
-        </div>
-      </div>
-      
-      <div style="margin-bottom:20px">
-        <div style="font-size:0.9rem; font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px">
-          <span>📊 مقاييس النشاط</span>
-        </div>
-        
-        <div class="metric-row">
-          <span class="metric-label">عدد مرات التسجيل</span>
-          <span class="metric-value" id="metricRegistrations">0</span>
-          <div class="progress-bar"><div class="progress-fill" id="progressRegistrations" style="width:0%"></div></div>
-        </div>
-        <div class="metric-row">
-          <span class="metric-label">تعديلات عنوان التقرير</span>
-          <span class="metric-value" id="metricTitleChanges">0</span>
-          <div class="progress-bar"><div class="progress-fill" id="progressTitleChanges" style="width:0%"></div></div>
-        </div>
-        <div class="metric-row">
-          <span class="metric-label">مدة البقاء في الموقع</span>
-          <span class="metric-value" id="metricSessionTime">0 دقيقة</span>
-          <div class="progress-bar"><div class="progress-fill" id="progressSessionTime" style="width:0%"></div></div>
-        </div>
-        <div class="metric-row">
-          <span class="metric-label">محاولات لقطة الشاشة</span>
-          <span class="metric-value" id="metricScreenshots">0</span>
-          <div class="progress-bar"><div class="progress-fill" id="progressScreenshots" style="width:0%"></div></div>
-        </div>
-        <div class="metric-row">
-          <span class="metric-label">محاولات دخول من أجهزة متعددة</span>
-          <span class="metric-value" id="metricMultiDevice">0</span>
-          <div class="progress-bar"><div class="progress-fill" id="progressMultiDevice" style="width:0%"></div></div>
-        </div>
-      </div>
-      
-      <div style="margin-bottom:20px">
-        <div style="font-size:0.9rem; font-weight:700; margin-bottom:10px">📜 سجل النشاط (آخر 20 حدث)</div>
-        <div class="timeline" id="studentTimeline">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-      
-      <div class="btn-row" style="display:flex; gap:10px; flex-wrap:wrap">
-        <button class="btn btn-danger" onclick="banStudent()">🚫 حظر الطالب نهائياً</button>
-        <button class="btn btn-warning" onclick="warnStudent()">⚠️ إرسال تحذير</button>
-        <button class="btn btn-success" onclick="resetStudentData()">🔄 إعادة تعيين بياناته</button>
-        <button class="btn btn-outline" onclick="hideStudentDetails()">❌ إغلاق التفاصيل</button>
-      </div>
-    </div>
-
-    <!-- All Students Table -->
-    <div class="glass-card">
-      <div class="card-header">
-        <div class="card-icon">👥</div>
-        <div>
-          <div class="card-title">قائمة الطلاب المراقَبين</div>
-          <div class="card-desc">عرض وتحليل نشاط جميع المستخدمين</div>
-        </div>
-      </div>
-      
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>الطالب</th>
-              <th>الهاتف</th>
-              <th>البصمة</th>
-              <th>الـ IP</th>
-              <th>التسجيلات</th>
-              <th>التعديلات</th>
-              <th>لقطات</th>
-              <th>الحالة</th>
-              <th>إجراءات</th>
-            </tr>
-          </thead>
-          <tbody id="studentsTable">
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Security Logs -->
-    <div class="glass-card">
-      <div class="card-header">
-        <div class="card-icon">📋</div>
-        <div>
-          <div class="card-title">سجل الأحداث الأمنية</div>
-          <div class="card-desc">مراقبة فورية لجميع أنشطة النظام</div>
-        </div>
-        <span class="realtime-indicator"><span class="realtime-dot"></span> تحديث تلقائي</span>
-      </div>
-      
-      <div class="filters-row" style="margin-bottom:15px">
-        <select class="filter-select" id="logFilter" onchange="renderSecurityLogs()">
-          <option value="all">كل الأحداث</option>
-          <option value="info">ℹ️ معلومات</option>
-          <option value="warning">⚠️ تحذيرات</option>
-          <option value="danger">🚨 أخطاء/تهديدات</option>
-          <option value="success">✅ نجاح</option>
-          <option value="screenshot">📸 لقطات شاشة</option>
-        </select>
-        <button class="btn btn-outline" onclick="exportLogs()">📤 تصدير السجل</button>
-        <button class="btn btn-outline" onclick="clearLogs()">🗑️ مسح السجل</button>
-      </div>
-      
-      <div class="logs-container" id="securityLogs">
-        <!-- Populated by JS -->
-      </div>
-    </div>
-
-    <!-- Security Level & Settings -->
-    <div class="glass-card">
-      <div class="card-header">
-        <div class="card-icon">⚙️</div>
-        <div>
-          <div class="card-title">إعدادات الحماية المتقدمة</div>
-          <div class="card-desc">تحكم دقيق في سياسات الأمان والمراقبة</div>
-        </div>
-      </div>
-      
-      <div class="security-level">
-        <span class="level-text" id="levelLabel">ممتاز 🔒</span>
-        <div class="level-bar"><div class="level-fill" id="levelFill" style="width:98%"></div></div>
-        <span class="level-percent" id="levelPercent">98%</span>
-      </div>
-      
-      <div style="margin-top:20px; display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:15px">
-        <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-          <div style="font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px">
-            <span>🔐</span> سياسات المراقبة
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-            <span style="font-size:0.9rem">تتبع بصمة الجهاز</span>
-            <label class="switch"><input type="checkbox" id="toggleFingerprint" checked><span class="slider"></span></label>
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-            <span style="font-size:0.9rem">كشف لقطة الشاشة</span>
-            <label class="switch"><input type="checkbox" id="toggleScreenshot" checked><span class="slider"></span></label>
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-            <span style="font-size:0.9rem">مراقبة الجلسة الواحدة</span>
-            <label class="switch"><input type="checkbox" id="toggleSingleSession" checked><span class="slider"></span></label>
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0">
-            <span style="font-size:0.9rem">تسجيل جميع الأنشطة</span>
-            <label class="switch"><input type="checkbox" id="toggleAuditLog" checked><span class="slider"></span></label>
-          </div>
-        </div>
-        
-        <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-          <div style="font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px">
-            <span>🚨</span> إجراءات تلقائية
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-            <span style="font-size:0.9rem">حظر تلقائي بعد 3 محاولات</span>
-            <label class="switch"><input type="checkbox" id="toggleAutoBan" checked><span class="slider"></span></label>
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-            <span style="font-size:0.9rem">إشعار فوري عند تهديد</span>
-            <label class="switch"><input type="checkbox" id="toggleInstantAlert" checked><span class="slider"></span></label>
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08)">
-            <span style="font-size:0.9rem">تجميد الحساب المشبوه</span>
-            <label class="switch"><input type="checkbox" id="toggleFreeze"><span class="slider"></span></label>
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; margin:8px 0; padding:8px 0">
-            <span style="font-size:0.9rem">مسح تلقائي للسجل القديم</span>
-            <label class="switch"><input type="checkbox" id="toggleAutoClear"><span class="slider"></span></label>
-          </div>
-        </div>
-      </div>
-      
-      <div class="btn-row" style="margin-top:20px">
-        <button class="btn btn-success" onclick="saveSecuritySettings()">💾 حفظ الإعدادات</button>
-        <button class="btn btn-outline" onclick="resetSecurityDefaults()">🔄 استعادة الافتراضي</button>
-        <button class="btn btn-danger" onclick="emergencyLockdown()">🔴 قفل طارئ للنظام</button>
-      </div>
-    </div>
-
   </div>
 
   <script type="module">
@@ -864,22 +928,88 @@
     let currentStudent = null;
     let deviceFingerprint = '';
     let monitoringInterval = null;
+    let adminCredentials = { username: 'admin', password: 'onxtaqe2024' };
 
-    /* ===== INIT ===== */
-    document.addEventListener('DOMContentLoaded', async () => {
-      initParticles();
-      await initDeviceFingerprint();
-      loadSecurityConfig();
-      await loadAllStudents();
-      await loadSecurityLogs();
-      updateStats();
-      startRealtimeMonitoring();
-      setupScreenshotProtection();
-      setupKeyboardShortcuts();
+    /* ===== LOGIN SYSTEM ===== */
+    function togglePassView(){
+      const inp = $('#loginPassword');
+      const btn = $('#passToggleBtn');
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+      btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+    }
+
+    function showLoginError(msg) {
+      const el = $('#loginError');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 4000);
+    }
+
+    function setLoginLoading(v) {
+      const btn = $('#loginBtn');
+      btn.innerHTML = v ? '<span class="login-loader"></span> جارٍ التحقق...' : '<span>🔐</span> دخول آمن إلى لوحة المراقبة';
+      btn.disabled = v;
+    }
+
+    async function doLogin() {
+      const u = $('#loginUsername').value.trim();
+      const p = $('#loginPassword').value.trim();
       
-      // Initial log
-      addSecurityLog('info', 'تم تشغيل لوحة المراقبة الأمنية بنجاح');
-    });
+      if(!u || !p){ showLoginError('⚠️ يرجى إدخال اسم المستخدم وكلمة المرور'); return; }
+      
+      setLoginLoading(true);
+      
+      try {
+        // Check credentials (in production, verify against secure backend)
+        if(u === adminCredentials.username && p === adminCredentials.password){
+          // Log successful login
+          await addSecurityLog('success', 'تم تسجيل دخول المشرف بنجاح', null);
+          
+          const card = document.querySelector('.login-card');
+          card.style.animation = 'loginCardIn 0.9s cubic-bezier(0.23,1,0.32,1) reverse';
+          setTimeout(() => {
+            $('#loginScreen').classList.add('hidden');
+            $('#dashboardScreen').classList.add('active');
+            initDashboard();
+          }, 400);
+        } else {
+          // Log failed login
+          await addSecurityLog('danger', `محاولة دخول فاشلة للمستخدم: ${u}`, null);
+          showLoginError('❌ اسم المستخدم أو كلمة المرور غير صحيحة');
+        }
+      } catch(err) {
+        showLoginError('⚠️ خطأ في النظام: ' + err.message);
+      } finally {
+        setLoginLoading(false);
+      }
+    }
+    window.doLogin = doLogin;
+
+    function doLogout(){
+      $('#dashboardScreen').classList.remove('active');
+      $('#loginScreen').classList.remove('hidden');
+      $('#loginUsername').value = '';
+      $('#loginPassword').value = '';
+      document.querySelector('.login-card').style.animation = '';
+      void document.querySelector('.login-card').offsetWidth;
+      document.querySelector('.login-card').style.animation = 'loginCardIn 0.9s cubic-bezier(0.23,1,0.32,1) both';
+      addSecurityLog('info', 'تم تسجيل خروج المشرف', null);
+    }
+    window.doLogout = doLogout;
+
+    /* ===== UI HELPERS ===== */
+    function showToast(message, type = 'success') {
+      const toast = $('#toast');
+      $('#toastIcon').textContent = { 
+        success: '✅', warning: '⚠️', danger: '🚨', info: 'ℹ️' 
+      }[type] || '•';
+      $('#toastText').textContent = message;
+      toast.className = type;
+      toast.classList.add('show');
+      
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
+    }
 
     /* ===== PARTICLES BACKGROUND ===== */
     function initParticles() {
@@ -909,7 +1039,7 @@
       ].join('||');
       
       deviceFingerprint = await sha256(parts);
-      addSecurityLog('info', `بصمة الجهاز الحالية: ${deviceFingerprint.slice(0, 16)}...`);
+      await addSecurityLog('info', `بصمة الجهاز الحالية: ${deviceFingerprint.slice(0, 16)}...`, null);
     }
 
     async function sha256(str) {
@@ -943,18 +1073,24 @@
       } catch { return 'no-webgl'; }
     }
 
+    async function getIPAddress() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        return data.ip;
+      } catch { return '127.0.0.1'; }
+    }
+
     /* ===== DATA LOADING ===== */
     async function loadAllStudents() {
       try {
-        // Fetch from student_reports table with security fields
         const { data, error } = await supabase
           .from('student_reports')
-          .select('id, name, title, subject, date, code, badge, color, alert_text, alert_color, alert_type, phone, fingerprint, ip_address, session_count, title_changes, screenshot_attempts, session_duration, last_activity, status')
+          .select('id, name, title, subject, date, code, badge, color, alert_text, alert_color, alert_type, phone, fingerprint, ip_address, session_count, title_changes, screenshot_attempts, session_duration, last_activity, status, user_agent')
           .order('date', { ascending: false });
         
         if(error) throw error;
         
-        // Enrich data with security metrics
         allStudents = (data || []).map(student => ({
           ...student,
           riskScore: calculateRiskScore(student),
@@ -963,23 +1099,31 @@
         
         renderStudentsTable();
         updateStats();
-        addSecurityLog('success', `تم تحميل ${allStudents.length} طالب للمراقبة`);
+        await addSecurityLog('success', `تم تحميل ${allStudents.length} طالب للمراقبة`, null);
         
       } catch(err) {
         console.error('Error loading students:', err);
-        addSecurityLog('danger', `فشل تحميل بيانات الطلاب: ${err.message}`);
+        await addSecurityLog('danger', `فشل تحميل بيانات الطلاب: ${err.message}`, null);
         showToast('فشل تحميل البيانات', 'danger');
       }
     }
 
     async function loadSecurityLogs() {
       try {
-        // In production, fetch from a security_logs table
-        // For demo, generate realistic logs
-        securityLogs = generateDemoLogs();
+        const { data, error } = await supabase
+          .from('security_logs')
+          .select('*')
+          .order('timestamp', { ascending: false })
+          .limit(100);
+        
+        if(error) throw error;
+        securityLogs = data || [];
         renderSecurityLogs();
       } catch(err) {
         console.error('Error loading logs:', err);
+        // Generate demo logs if table doesn't exist yet
+        securityLogs = generateDemoLogs();
+        renderSecurityLogs();
       }
     }
 
@@ -1008,7 +1152,7 @@
           message: messages[Math.floor(Math.random() * messages.length)],
           fingerprint: deviceFingerprint.slice(0, 12) + '...',
           ip: `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
-          student: allStudents[Math.floor(Math.random() * allStudents.length)]?.name || 'طالب غير معروف'
+          student: allStudents[Math.floor(Math.random() * Math.max(allStudents.length, 1))]?.name || 'طالب غير معروف'
         });
       }
       return logs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
@@ -1018,25 +1162,14 @@
     function calculateRiskScore(student) {
       let score = 0;
       
-      // Multiple registrations
       if(student.session_count > 3) score += 20;
       if(student.session_count > 5) score += 15;
-      
-      // Title changes
       if(student.title_changes > 2) score += 25;
       if(student.title_changes > 5) score += 20;
-      
-      // Screenshot attempts
       if(student.screenshot_attempts > 0) score += 30;
       if(student.screenshot_attempts > 3) score += 25;
-      
-      // Session duration (too long might indicate automation)
-      if(student.session_duration > 7200) score += 15; // > 2 hours
-      
-      // Multiple devices
+      if(student.session_duration > 7200) score += 15;
       if(student.multi_device_attempts > 1) score += 35;
-      
-      // Status
       if(student.status === 'blocked') score += 50;
       if(student.status === 'suspicious') score += 25;
       
@@ -1111,25 +1244,32 @@
     async function searchStudent() {
       const phone = $('#searchPhone').value.trim().replace(/[^0-9+]/g, '');
       const fingerprint = $('#searchFingerprint').value.trim();
+      const name = $('#searchName').value.trim();
       
-      if(!phone && !fingerprint) {
-        showToast('أدخل رقم هاتف أو بصمة للبحث', 'warning');
+      if(!phone && !fingerprint && !name) {
+        showToast('أدخل رقم هاتف أو بصمة أو اسم للبحث', 'warning');
         return;
       }
       
       showToast('جاري البحث والتتبع...', 'info');
       
-      // Search in local data first, then fetch from Supabase if needed
-      let student = allStudents.find(s => 
-        (phone && s.phone === phone) || 
-        (fingerprint && s.fingerprint?.startsWith(fingerprint))
-      );
+      let student = null;
       
-      if(!student && (phone || fingerprint)) {
-        // Fetch from Supabase
+      if(phone) {
+        student = allStudents.find(s => s.phone === phone);
+      }
+      if(!student && fingerprint) {
+        student = allStudents.find(s => s.fingerprint?.startsWith(fingerprint));
+      }
+      if(!student && name) {
+        student = allStudents.find(s => s.name?.includes(name));
+      }
+      
+      if(!student && (phone || fingerprint || name)) {
         let query = supabase.from('student_reports').select('*').limit(1);
         if(phone) query = query.eq('phone', phone);
         if(fingerprint) query = query.ilike('fingerprint', fingerprint + '%');
+        if(name) query = query.ilike('name', '%' + name + '%');
         
         const { data, error } = await query.single();
         if(!error && data) student = data;
@@ -1137,20 +1277,23 @@
       
       if(student) {
         showStudentDetails(student);
-        addSecurityLog('info', `تم تتبع الطالب: ${student.name} عبر ${phone ? 'الهاتف' : 'البصمة'}`);
+        await addSecurityLog('info', `تم تتبع الطالب: ${student.name} عبر ${phone ? 'الهاتف' : fingerprint ? 'البصمة' : 'الاسم'}`, student);
       } else {
         showToast('لم يتم العثور على الطالب', 'danger');
-        addSecurityLog('warning', `فشل البحث عن طالب: ${phone || fingerprint}`);
+        await addSecurityLog('warning', `فشل البحث عن طالب: ${phone || fingerprint || name}`, null);
       }
     }
+    window.searchStudent = searchStudent;
 
     function showAllStudents() {
       $('#searchPhone').value = '';
       $('#searchFingerprint').value = '';
+      $('#searchName').value = '';
       renderStudentsTable();
       hideStudentDetails();
       showToast('عرض جميع الطلاب', 'info');
     }
+    window.showAllStudents = showAllStudents;
 
     function applyFilters() {
       const status = $('#filterStatus').value;
@@ -1176,7 +1319,7 @@
       }
       
       renderStudentsTable(filtered);
-      addSecurityLog('info', `تم تطبيق الفلاتر: الحالة=${status}, الوقت=${time}`);
+      addSecurityLog('info', `تم تطبيق الفلاتر: الحالة=${status}, الوقت=${time}`, null);
     }
 
     /* ===== STUDENT DETAILS ===== */
@@ -1190,8 +1333,9 @@
       }
       
       showStudentDetails(student);
-      addSecurityLog('info', `عرض تفاصيل الطالب: ${student.name}`);
+      await addSecurityLog('info', `عرض تفاصيل الطالب: ${student.name}`, student);
     }
+    window.viewStudentDetails = viewStudentDetails;
 
     async function fetchStudentFromSupabase(code) {
       const { data, error } = await supabase
@@ -1201,7 +1345,9 @@
         .single();
       
       if(!error && data) {
-        allStudents.push(data);
+        if(!allStudents.find(s => s.code === code)) {
+          allStudents.push(data);
+        }
         return data;
       }
       return null;
@@ -1330,6 +1476,7 @@
       $('#studentDetailsPanel').classList.add('hidden');
       currentStudent = null;
     }
+    window.hideStudentDetails = hideStudentDetails;
 
     /* ===== ACTIONS ===== */
     async function toggleStudentBlock(code) {
@@ -1353,16 +1500,17 @@
             student.status = newStatus;
             renderStudentsTable();
             if(currentStudent?.code === code) currentStudent.status = newStatus;
-            addSecurityLog(newStatus === 'blocked' ? 'danger' : 'success', 
-              `تم ${action} الطالب: ${student.name}`);
+            await addSecurityLog(newStatus === 'blocked' ? 'danger' : 'success', 
+              `تم ${action} الطالب: ${student.name}`, student);
             showToast(`تم ${action} الطالب بنجاح`, newStatus === 'blocked' ? 'warning' : 'success');
           } else {
             showToast('فشل تنفيذ الإجراء', 'danger');
-            addSecurityLog('danger', `فشل ${action} الطالب ${student.name}: ${error.message}`);
+            await addSecurityLog('danger', `فشل ${action} الطالب ${student.name}: ${error.message}`, student);
           }
         }
       );
     }
+    window.toggleStudentBlock = toggleStudentBlock;
 
     async function banStudent() {
       if(!currentStudent) return;
@@ -1385,7 +1533,7 @@
           if(!error) {
             currentStudent.status = 'blocked';
             renderStudentsTable();
-            addSecurityLog('danger', `تم الحظر النهائي للطالب: ${currentStudent.name}`);
+            await addSecurityLog('danger', `تم الحظر النهائي للطالب: ${currentStudent.name}`, currentStudent);
             showToast('تم الحظر النهائي', 'danger');
             
             // Send Telegram alert
@@ -1396,6 +1544,7 @@
         true
       );
     }
+    window.banStudent = banStudent;
 
     async function warnStudent(code) {
       const student = code ? allStudents.find(s => s.code === code || s.id === code) : currentStudent;
@@ -1406,7 +1555,7 @@
         سيتم إرسال رسالة عبر النظام وتوثيقها في السجل الأمني.`,
         async () => {
           // Log the warning
-          addSecurityLog('warning', `تم إرسال تحذير للطالب: ${student.name}`);
+          await addSecurityLog('warning', `تم إرسال تحذير للطالب: ${student.name}`, student);
           
           // Update student record
           const { error } = await supabase
@@ -1435,6 +1584,7 @@
         }
       );
     }
+    window.warnStudent = warnStudent;
 
     async function resetStudentData() {
       if(!currentStudent) return;
@@ -1465,34 +1615,37 @@
             });
             showStudentDetails(currentStudent);
             renderStudentsTable();
-            addSecurityLog('success', `تم إعادة تعيين بيانات الطالب: ${currentStudent.name}`);
+            await addSecurityLog('success', `تم إعادة تعيين بيانات الطالب: ${currentStudent.name}`, currentStudent);
             showToast('تم إعادة التعيين', 'success');
           }
         }
       );
     }
+    window.resetStudentData = resetStudentData;
 
     /* ===== SECURITY LOGS & EXPORT ===== */
-    function addSecurityLog(type, message, student = null) {
+    async function addSecurityLog(type, message, student = null) {
       const log = {
         id: Date.now(),
         timestamp: new Date().toISOString(),
         type,
         message,
         fingerprint: deviceFingerprint.slice(0, 16) + '...',
-        ip: '127.0.0.1', // In production, get real IP
+        ip: await getIPAddress(),
         student: student?.name || 'النظام'
       };
       
-      securityLogs.unshift(log);
-      if(securityLogs.length > 500) securityLogs.pop(); // Keep last 500
+      try {
+        await supabase.from('security_logs').insert([log]);
+      } catch(e) {
+        console.log('Log save error:', e);
+      }
       
-      // Save to localStorage for persistence (in production, save to Supabase)
-      localStorage.setItem('onx_security_logs', JSON.stringify(securityLogs.slice(0, 100)));
+      securityLogs.unshift(log);
+      if(securityLogs.length > 500) securityLogs.pop();
       
       renderSecurityLogs($('#logFilter').value);
       
-      // Show toast for important logs
       if(type === 'danger' || type === 'screenshot') {
         showToast(message, type === 'danger' ? 'danger' : 'warning');
       }
@@ -1519,9 +1672,10 @@
       a.download = `security_logs_${new Date().toISOString().slice(0,10)}.csv`;
       a.click();
       
-      addSecurityLog('info', 'تم تصدير سجل الأمان');
+      addSecurityLog('info', 'تم تصدير سجل الأمان', null);
       showToast('تم تصدير السجل 📤', 'success');
     }
+    window.exportLogs = exportLogs;
 
     function exportReport() {
       const report = {
@@ -1548,47 +1702,43 @@
       a.download = `security_report_${new Date().toISOString().slice(0,10)}.json`;
       a.click();
       
-      addSecurityLog('info', 'تم تصدير تقرير الأمان الشامل');
+      addSecurityLog('info', 'تم تصدير تقرير الأمان الشامل', null);
       showToast('تم تصدير التقرير 📊', 'success');
     }
+    window.exportReport = exportReport;
 
     function clearLogs() {
       showModal('🗑️ مسح السجل',
         'هل تريد مسح جميع سجلات الأمان؟<br><br>⚠️ لا يمكن التراجع عن هذا الإجراء',
         () => {
           securityLogs = [];
-          localStorage.removeItem('onx_security_logs');
+          addSecurityLog('warning', 'تم مسح جميع سجلات الأمان بواسطة المسؤول', null);
           renderSecurityLogs();
-          addSecurityLog('warning', 'تم مسح جميع سجلات الأمان بواسطة المسؤول');
           showToast('تم مسح السجل', 'warning');
         }
       );
     }
+    window.clearLogs = clearLogs;
 
     /* ===== REAL-TIME MONITORING ===== */
     function startRealtimeMonitoring() {
-      // Update stats every 30 seconds
       setInterval(updateStats, 30000);
       
-      // Check for new logs from Supabase (in production)
       setInterval(async () => {
-        // In production: fetch new logs from Supabase
-        // For demo: add random activity
         if(Math.random() > 0.7 && allStudents.length > 0) {
           const randomStudent = allStudents[Math.floor(Math.random() * allStudents.length)];
           const actions = ['نشاط تسجيل دخول', 'تعديل بيانات', 'محاولة تصدير', 'فحص أمني'];
           const types = ['info', 'info', 'warning', 'success'];
           const idx = Math.floor(Math.random() * actions.length);
           
-          addSecurityLog(types[idx], `${randomStudent.name}: ${actions[idx]}`, randomStudent);
+          await addSecurityLog(types[idx], `${randomStudent.name}: ${actions[idx]}`, randomStudent);
         }
         
         $('#lastUpdate').textContent = new Date().toLocaleTimeString('ar-SA');
       }, 15000);
       
-      // Screenshot detection polling (basic)
       if(securityConfig.screenshot) {
-        setupScreenshotDetection();
+        setupScreenshotProtection();
       }
     }
 
@@ -1599,12 +1749,10 @@
       $('#screenshotAttempts').textContent = allStudents.reduce((sum, s) => sum + (s.screenshot_attempts || 0), 0);
       $('#titleChanges').textContent = allStudents.reduce((sum, s) => sum + (s.title_changes || 0), 0);
       
-      // Update threat count
       const threats = allStudents.filter(s => s.riskScore >= 70).length + 
                      securityLogs.filter(l => l.type === 'danger').slice(0, 24).length;
       $('#threatCount').textContent = threats;
       
-      // Update security level
       const enabledFeatures = Object.values(securityConfig).filter(v => v).length;
       const level = Math.min(70 + (enabledFeatures * 3.75), 100);
       $('#levelFill').style.width = level + '%';
@@ -1627,7 +1775,6 @@
     function setupScreenshotProtection() {
       if(!securityConfig.screenshot) return;
       
-      // Detect PrintScreen key
       document.addEventListener('keydown', (e) => {
         if(e.key === 'PrintScreen' || (e.ctrlKey && e.key.toLowerCase() === 'p')) {
           e.preventDefault();
@@ -1635,14 +1782,12 @@
         }
       });
       
-      // Detect visibility change (possible capture)
       document.addEventListener('visibilitychange', () => {
         if(document.visibilityState === 'hidden' && securityConfig.screenshot) {
           addSecurityLog('warning', 'تغيير في رؤية الصفحة (محاولة محتملة للالتقاط)', currentStudent);
         }
       });
       
-      // Disable right-click on sensitive areas
       document.addEventListener('contextmenu', (e) => {
         if(securityConfig.screenshot && e.target.closest('.blur-sensitive, .glass-card')) {
           e.preventDefault();
@@ -1652,40 +1797,18 @@
       });
     }
 
-    function setupScreenshotDetection() {
-      // Basic detection: monitor for rapid focus/blur which might indicate screenshot tools
-      let lastFocus = Date.now();
-      document.addEventListener('focus', () => { lastFocus = Date.now(); });
-      document.addEventListener('blur', () => {
-        if(Date.now() - lastFocus < 100 && securityConfig.screenshot) {
-          // Very rapid focus/blur might indicate screenshot tool
-          triggerScreenshotProtection('اكتشاف نشاط مشبوه (أداة محتملة للالتقاط)');
-        }
-      });
-    }
-
     function triggerScreenshotProtection(reason) {
       if(!securityConfig.screenshot) return;
       
-      // Log the attempt
       addSecurityLog('screenshot', `تم منع لقطة شاشة: ${reason}`, currentStudent);
       
-      // Show overlay
-      $('#screenshotTime').textContent = new Date().toLocaleString('ar-SA');
-      $('#screenshotFingerprint').textContent = deviceFingerprint.slice(0, 20) + '...';
-      $('#screenshotIP').textContent = '127.0.0.1'; // Get real IP in production
-      $('#screenshotOverlay').classList.add('active');
+      showToast('🚫 تم رصد محاولة لقطة شاشة!', 'warning');
       
-      // Blur sensitive content
-      $$('.blur-sensitive').forEach(el => el.style.filter = 'blur(10px)');
-      
-      // Increment counter for current student
       if(currentStudent) {
         currentStudent.screenshot_attempts = (currentStudent.screenshot_attempts || 0) + 1;
         updateStudentMetrics();
       }
       
-      // Auto-warn if multiple attempts
       if(currentStudent?.screenshot_attempts >= 3 && securityConfig.autoBan) {
         setTimeout(() => {
           showModal('🚫 حظر تلقائي',
@@ -1699,9 +1822,10 @@
       }
     }
 
-    function closeScreenshotOverlay() {
-      $('#screenshotOverlay').classList.remove('active');
-      $$('.blur-sensitive').forEach(el => el.style.filter = '');
+    function updateStudentMetrics() {
+      if(!currentStudent) return;
+      showStudentDetails(currentStudent);
+      renderStudentsTable();
     }
 
     /* ===== SECURITY SETTINGS ===== */
@@ -1709,7 +1833,6 @@
       const saved = localStorage.getItem('onx_security_config');
       if(saved) {
         securityConfig = { ...securityConfig, ...JSON.parse(saved) };
-        // Update toggle states
         Object.entries(securityConfig).forEach(([key, value]) => {
           const toggle = $(`#toggle${key.charAt(0).toUpperCase() + key.slice(1)}`);
           if(toggle) toggle.checked = value;
@@ -1719,7 +1842,6 @@
     }
 
     function saveSecuritySettings() {
-      // Save toggle states
       Object.keys(securityConfig).forEach(key => {
         const toggle = $(`#toggle${key.charAt(0).toUpperCase() + key.slice(1)}`);
         if(toggle) securityConfig[key] = toggle.checked;
@@ -1728,14 +1850,14 @@
       localStorage.setItem('onx_security_config', JSON.stringify(securityConfig));
       updateSecurityLevel();
       
-      // Re-initialize features if needed
       if(securityConfig.screenshot) {
         setupScreenshotProtection();
       }
       
-      addSecurityLog('success', 'تم حفظ إعدادات الحماية المتقدمة');
+      addSecurityLog('success', 'تم حفظ إعدادات الحماية المتقدمة', null);
       showToast('تم حفظ الإعدادات ✅', 'success');
     }
+    window.saveSecuritySettings = saveSecuritySettings;
 
     function resetSecurityDefaults() {
       showModal('🔄 استعادة الإعدادات',
@@ -1747,11 +1869,12 @@
           };
           localStorage.setItem('onx_security_config', JSON.stringify(securityConfig));
           loadSecurityConfig();
-          addSecurityLog('info', 'تم استعادة الإعدادات الافتراضية للأمان');
+          addSecurityLog('info', 'تم استعادة الإعدادات الافتراضية للأمان', null);
           showToast('تم الاستعادة بنجاح', 'success');
         }
       );
     }
+    window.resetSecurityDefaults = resetSecurityDefaults;
 
     function emergencyLockdown() {
       showModal('🔴 قفل طارئ للنظام',
@@ -1760,21 +1883,19 @@
         • سيتم إرسال تنبيه للمشرف عبر تيليجرام<br>
         • لن يتمكن أي طالب من الدخول حتى إعادة التشغيل',
         () => {
-          // In production: disable auth endpoints via Supabase Edge Function
-          addSecurityLog('danger', '🔴 تم تفعيل القفل الطارئ بواسطة المسؤول - النظام محمي بالكامل');
+          addSecurityLog('danger', '🔴 تم تفعيل القفل الطارئ بواسطة المسؤول - النظام محمي بالكامل', null);
           showToast('🔴 القفل الطارئ مفعل - جميع العمليات معلقة', 'danger');
           
-          // Visual feedback
           document.body.style.filter = 'grayscale(100%) brightness(0.8)';
           document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
           
-          // Send Telegram alert
           sendTelegramAlert(`🔴 <b>قفل طارئ للنظام</b>\n🕐 ${new Date().toLocaleString('ar-SA')}\n👨‍💻 بواسطة: مسؤول النظام`);
         },
         null,
         true
       );
     }
+    window.emergencyLockdown = emergencyLockdown;
 
     function updateSecurityLevel() {
       const enabledCount = Object.values(securityConfig).filter(v => v).length;
@@ -1797,14 +1918,14 @@
             parse_mode: 'HTML'
           })
         });
-        addSecurityLog('success', 'تم إرسال تنبيه تيليجرام');
+        await addSecurityLog('success', 'تم إرسال تنبيه تيليجرام', null);
       } catch(err) {
         console.error('Telegram error:', err);
-        addSecurityLog('warning', `فشل إرسال تنبيه تيليجرام: ${err.message}`);
+        await addSecurityLog('warning', `فشل إرسال تنبيه تيليجرام: ${err.message}`, null);
       }
     }
 
-    /* ===== MODAL & TOAST ===== */
+    /* ===== MODAL ===== */
     function showModal(title, content, onConfirm, onCancel, isLarge = false) {
       $('#modalTitle').textContent = title;
       $('#modalContent').innerHTML = content;
@@ -1837,72 +1958,51 @@
       $('.modal').style.maxWidth = '';
       $('#modalContent').style.maxHeight = '';
     }
-
-    function showToast(message, type = 'success') {
-      const toast = $('#toast');
-      $('#toastIcon').textContent = { 
-        success: '✅', warning: '⚠️', danger: '🚨', info: 'ℹ️' 
-      }[type] || '•';
-      $('#toastText').textContent = message;
-      toast.className = type;
-      toast.classList.add('show');
-      
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
-    }
-
-    /* ===== KEYBOARD SHORTCUTS ===== */
-    function setupKeyboardShortcuts() {
-      document.addEventListener('keydown', (e) => {
-        // Ctrl + Shift + L = Emergency Lockdown
-        if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'l') {
-          e.preventDefault();
-          emergencyLockdown();
-        }
-        // Ctrl + Shift + S = Screenshot test
-        if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 's') {
-          e.preventDefault();
-          triggerScreenshotProtection('اختبار يدوي عبر الاختصار');
-        }
-        // Ctrl + F = Focus search
-        if(e.ctrlKey && e.key.toLowerCase() === 'f') {
-          e.preventDefault();
-          $('#searchPhone').focus();
-        }
-        // Escape = Close modals/overlays
-        if(e.key === 'Escape') {
-          closeModal();
-          closeScreenshotOverlay();
-          hideStudentDetails();
-        }
-      });
-    }
-
-    /* ===== UTILITY FUNCTIONS ===== */
-    function updateStudentMetrics() {
-      if(!currentStudent) return;
-      showStudentDetails(currentStudent);
-      renderStudentsTable();
-    }
-
-    // Expose functions to global scope for onclick handlers
-    window.searchStudent = searchStudent;
-    window.showAllStudents = showAllStudents;
-    window.applyFilters = applyFilters;
-    window.viewStudentDetails = viewStudentDetails;
-    window.hideStudentDetails = hideStudentDetails;
-    window.toggleStudentBlock = toggleStudentBlock;
-    window.banStudent = banStudent;
-    window.warnStudent = warnStudent;
-    window.resetStudentData = resetStudentData;
-    window.exportLogs = exportLogs;
-    window.exportReport = exportReport;
-    window.clearLogs = clearLogs;
-    window.saveSecuritySettings = saveSecuritySettings;
-    window.resetSecurityDefaults = resetSecurityDefaults;
-    window.emergencyLockdown = emergencyLockdown;
-    window.closeScreenshotOverlay = closeScreenshotOverlay;
     window.closeModal = closeModal;
+
+    /* ===== REALTIME SUBSCRIPTIONS ===== */
+    function setupRealtime() {
+      supabase.channel('security_students')
+        .on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async () => {
+          await loadAllStudents();
+          updateStats();
+        })
+        .subscribe();
+      
+      supabase.channel('security_logs_channel')
+        .on('postgres_changes', { event:'INSERT', schema:'public', table:'security_logs' }, (payload) => {
+          securityLogs.unshift(payload.new);
+          if(securityLogs.length > 500) securityLogs.pop();
+          renderSecurityLogs($('#logFilter').value);
+          updateStats();
+        })
+        .subscribe();
+    }
+
+    /* ===== INIT ===== */
+    async function initDashboard() {
+      await initDeviceFingerprint();
+      loadSecurityConfig();
+      await loadAllStudents();
+      await loadSecurityLogs();
+      updateStats();
+      startRealtimeMonitoring();
+      setupRealtime();
+      
+      addSecurityLog('info', 'تم تشغيل لوحة المراقبة الأمنية بنجاح', null);
+    }
+
+    /* ===== BOOT ===== */
+    (async function boot(){
+      initParticles();
+      
+      // Check if already logged in (for demo)
+      if(localStorage.getItem('onx_admin_logged_in') === 'true') {
+        $('#loginScreen').classList.add('hidden');
+        $('#dashboardScreen').classList.add('active');
+        await initDashboard();
+      }
+    })();
   </script>
 </body>
 </html>
