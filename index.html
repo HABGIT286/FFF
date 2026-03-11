@@ -2,598 +2,1560 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>اختبار الميزات الجديدة | ONX-TAQE</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>🛡️ نظام الحماية | ONX-TAQE SECURITY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Cairo', sans-serif;
-      background: linear-gradient(135deg, #0f1e3d 0%, #1a2a4a 100%);
-      color: #e0e0f0;
-      min-height: 100vh;
-      padding: 20px;
-      transition: all 0.3s ease;
+    /* ===== CSS Variables ===== */
+    :root {
+      --primary: #0f1e3d; --secondary: #1a2a4a; --accent: #e94560;
+      --gold: #f5c518; --neon-blue: #00d4ff; --neon-purple: #7b2fff;
+      --neon-green: #00ff88; --neon-red: #ff4444; --neon-orange: #ff8c00;
+      --glass: rgba(255,255,255,0.07); --glass-border: rgba(255,255,255,0.15);
+      --text-light: #e0e0f0; --card-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      --transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+      --bg-color: #050b1a;
+      --bg-gradient: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.10) 0%, transparent 60%),
+                     radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.10) 0%, transparent 60%),
+                     radial-gradient(ellipse at 50% 80%, rgba(233,69,96,0.07) 0%, transparent 60%),
+                     linear-gradient(180deg, rgba(5,11,26,0.4) 0%, rgba(5,11,26,0.7) 100%);
+      --security-green: #00c851; --security-yellow: #ffab00; --security-red: #ff1744;
     }
-    
-    /* ===== FOCUS MODE STYLES ===== */
-    body.focus-mode {
-      background: #0a0f1a !important;
+
+    /* ===== Reset & Base ===== */
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;overscroll-behavior:none}
+    body{
+      font-family:'Cairo',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      overflow-x:hidden; -webkit-user-select:none; -moz-user-select:none;
+      -ms-user-select:none; user-select:none; background:var(--bg-color);
+      color:var(--text-light); transition: background 0.4s ease;
     }
-    body.focus-mode .focus-hide {
-      display: none !important;
+    button,input,textarea,select{
+      font-family:inherit; -webkit-user-select:text; -moz-user-select:text;
+      -ms-user-select:text; user-select:text;
     }
-    body.focus-mode .focus-only {
-      display: block !important;
-      animation: fadeIn 0.3s ease;
+    :focus{outline:none!important;box-shadow:none!important}
+    ::selection{background:rgba(0,212,255,0.3)}
+
+    /* ===== Background Effects ===== */
+    .bg-image {
+      position:fixed; inset:0; z-index:-2;
+      background: url('M.jpg') center center / cover no-repeat;
+      filter:brightness(0.2) saturate(1.5);
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    
+    .bg-overlay {
+      position:fixed; inset:0; z-index:-1;
+      background: var(--bg-gradient);    }
+    #particles { position:fixed; inset:0; z-index:-1; pointer-events:none; }
+    .particle {
+      position:absolute; border-radius:50%;
+      animation: floatUp linear infinite; opacity:0;
+    }
+    @keyframes floatUp {
+      0%{transform:translateY(100vh) scale(0); opacity:0;}
+      10%{opacity:0.6;} 90%{opacity:0.3;}
+      100%{transform:translateY(-10vh) scale(1); opacity:0;}
+    }
+
+    /* ===== SECURITY HEADER ===== */
+    .security-header {
+      text-align:center; padding:25px 20px 15px; position:relative;
+      background:linear-gradient(135deg, rgba(255,23,68,0.1), rgba(0,212,255,0.1));
+      border-bottom:1px solid rgba(255,23,68,0.3);
+    }
+    .security-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 16px; border-radius:999px;
+      background:linear-gradient(135deg, var(--security-red), var(--accent));
+      color:#fff; font-weight:700; font-size:0.85rem;
+      box-shadow:0 0 20px rgba(255,23,68,0.5);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 20px rgba(255,23,68,0.5);} 50%{box-shadow:0 0 40px rgba(255,23,68,0.8);} }
+    .header-title {
+      font-size:1.8rem; font-weight:900; margin:15px 0 5px;
+      background:linear-gradient(135deg, var(--neon-red), var(--gold), var(--neon-blue));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .header-subtitle { color:rgba(255,255,255,0.5); font-size:0.9rem; }
+    .security-status {
+      display:flex; justify-content:center; gap:20px; margin-top:15px; flex-wrap:wrap;
+    }
+    .status-item {
+      display:flex; align-items:center; gap:6px; font-size:0.85rem;
+      padding:6px 12px; border-radius:8px; background:rgba(255,255,255,0.05);
+    }
+    .status-dot { width:8px; height:8px; border-radius:50%; }
+    .status-dot.active { background:var(--security-green); box-shadow:0 0 10px var(--security-green); }
+    .status-dot.warning { background:var(--security-yellow); box-shadow:0 0 10px var(--security-yellow); }
+    .status-dot.danger { background:var(--security-red); box-shadow:0 0 10px var(--security-red); }
+
     /* ===== CONTAINER ===== */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    .container { max-width:1200px; margin:0 auto; padding:20px; }
+
+    /* ===== GLASS CARD ===== */
+    .glass-card {      background:linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border:1px solid var(--glass-border); backdrop-filter:blur(20px);
+      border-radius:22px; padding:24px; box-shadow:var(--card-shadow);
+      position:relative; overflow:hidden; margin-bottom:20px;
+      transition:var(--transition);
     }
+    .glass-card:hover { border-color:rgba(0,212,255,0.3); }
+    .glass-card::before {
+      content:''; position:absolute; inset:0; border-radius:22px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+      pointer-events:none;
+    }
+    .card-glow-security::after {
+      content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px;
+      border-radius:50%; background:radial-gradient(circle, rgba(255,23,68,0.15), transparent 70%);
+      pointer-events:none;
+    }
+
+    /* ===== CARD HEADER ===== */
+    .card-header {
+      display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:15px;
+      border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+    .card-icon {
+      width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+      font-size:20px; flex-shrink:0; background:linear-gradient(135deg, var(--security-red), var(--accent));
+    }
+    .card-title { font-size:1.1rem; font-weight:700; color:#fff; }
+    .card-desc { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:2px; }
+
+    /* ===== TOGGLE SWITCH ===== */
+    .toggle-container {
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:12px; padding:12px 0;
+    }
+    .toggle-info { flex:1; min-width:200px; }
+    .toggle-title { font-size:0.95rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:6px; }
+    .toggle-desc { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:2px; }
+    .toggle-badge {
+      font-size:0.7rem; padding:2px 8px; border-radius:999px;
+      background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.7);
+    }
+    .toggle-badge.active { background:rgba(0,200,81,0.2); color:var(--security-green); }
     
-    /* ===== HEADER ===== */
-    .header {
-      text-align: center;
-      padding: 20px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.1);
+    .switch { position:relative; display:inline-block; width:60px; height:32px; flex-shrink:0; }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider {
+      position:absolute; cursor:pointer; inset:0; background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.2); border-radius:32px; transition:var(--transition);
+    }    .slider:before {
+      content:''; position:absolute; width:22px; height:22px; border-radius:50%;
+      left:4px; top:4px; background:linear-gradient(135deg,#fff,#ccc);
+      box-shadow:0 2px 8px rgba(0,0,0,0.4); transition:var(--transition);
     }
-    .header h1 {
-      font-size: 1.5rem;
-      background: linear-gradient(135deg, #00d4ff, #7b2fff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
+    input:checked + .slider {
+      background:linear-gradient(135deg, var(--security-green), #00ff88);
+      border-color:var(--security-green); box-shadow:0 0 20px rgba(0,200,81,0.4);
     }
-    .header p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
-    
-    /* ===== CARD ===== */
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 20px;
-      backdrop-filter: blur(10px);
+    input:checked + .slider:before { transform:translateX(28px); background:#fff; }
+    input:not(:checked) + .slider {
+      background:linear-gradient(135deg, var(--security-red), #ff4444);
+      border-color:var(--security-red); box-shadow:0 0 20px rgba(255,23,68,0.3);
     }
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+
+    /* ===== INPUTS ===== */
+    .input-group { position:relative; margin-bottom:12px; }
+    .input-label {
+      font-size:0.7rem; font-weight:600; color:rgba(255,255,255,0.5);
+      text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; display:block;
     }
-    .card-title span { font-size: 1.3rem; }
-    
+    .styled-input {
+      width:100%; padding:12px 14px 12px 42px; background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12); border-radius:10px; color:#fff;
+      font-family:'Cairo',sans-serif; font-size:0.9rem; transition:var(--transition); outline:none;
+    }
+    .styled-input::placeholder { color:rgba(255,255,255,0.3); }
+    .styled-input:focus {
+      border-color:var(--neon-blue); background:rgba(0,212,255,0.06);
+      box-shadow:0 0 0 3px rgba(0,212,255,0.1);
+    }
+    .input-icon {
+      position:absolute; right:12px; top:50%; transform:translateY(-50%);
+      font-size:16px; pointer-events:none; color:rgba(255,255,255,0.4);
+    }
+
     /* ===== BUTTONS ===== */
+    .btn-row { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
     .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: 600;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.2);
-      color: rgba(255,255,255,0.8);
-    }
-    .btn-outline:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: #00d4ff;
+      padding:11px 16px; border:none; border-radius:10px; cursor:pointer;
+      font-family:'Cairo',sans-serif; font-size:0.9rem; font-weight:700;
+      position:relative; overflow:hidden; transition:var(--transition);
+      display:flex; align-items:center; justify-content:center; gap:6px;
     }
     .btn-primary {
-      background: linear-gradient(135deg, #00d4ff, #0077ff);
-      color: #fff;
+      background:linear-gradient(135deg, var(--security-green), #00ff88);
+      color:#000; box-shadow:0 6px 25px rgba(0,200,81,0.35);
     }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,212,255,0.3);
+    .btn-danger {
+      background:linear-gradient(135deg, var(--security-red), #ff4444);      color:#fff; box-shadow:0 6px 25px rgba(255,23,68,0.35);
     }
-    .btn:active { transform: translateY(1px); }
-    
+    .btn-warning {
+      background:linear-gradient(135deg, var(--security-yellow), #ffcc00);
+      color:#000; box-shadow:0 6px 25px rgba(255,171,0,0.35);
+    }
+    .btn-outline {
+      background:transparent; border:1px solid rgba(255,255,255,0.2);
+      color:rgba(255,255,255,0.8);
+    }
+    .btn:hover { transform:translateY(-2px); box-shadow:0 12px 35px rgba(0,0,0,0.4); }
+    .btn:active { transform:translateY(1px); }
+
+    /* ===== TABLE ===== */
+    .table-container { overflow-x:auto; border-radius:14px; overflow:hidden; }
+    table { width:100%; border-collapse:collapse; min-width:600px; }
+    thead tr {
+      background:linear-gradient(135deg, rgba(255,23,68,0.15), rgba(0,212,255,0.15));
+      border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+    thead th {
+      padding:14px 12px; text-align:center; font-size:0.75rem; font-weight:700;
+      color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:1px;
+    }
+    tbody tr {
+      border-bottom:1px solid rgba(255,255,255,0.05); transition:var(--transition);
+    }
+    tbody tr:hover { background:rgba(255,255,255,0.05); }
+    tbody tr.blocked { background:rgba(255,23,68,0.1); border-right:3px solid var(--security-red); }
+    td { padding:12px; text-align:center; font-size:0.85rem; color:var(--text-light); }
+    .action-btn {
+      padding:4px 10px; border-radius:6px; font-size:0.75rem; border:none;
+      cursor:pointer; margin:2px; transition:0.2s;
+    }
+    .action-btn.block { background:var(--security-red); color:#fff; }
+    .action-btn.unblock { background:var(--security-green); color:#000; }
+    .action-btn.view { background:rgba(0,212,255,0.2); color:var(--neon-blue); }
+    .action-btn:hover { transform:scale(1.05); }
+
+    /* ===== LOGS ===== */
+    .logs-container {
+      max-height:300px; overflow-y:auto; border-radius:12px;
+      background:rgba(0,0,0,0.2); padding:12px; font-family:monospace; font-size:0.8rem;
+    }
+    .log-entry {
+      padding:8px; border-bottom:1px solid rgba(255,255,255,0.05);
+      display:flex; align-items:flex-start; gap:10px;
+    }
+    .log-time { color:var(--neon-blue); font-size:0.75rem; min-width:80px; }
+    .log-type {      padding:2px 8px; border-radius:4px; font-size:0.7rem; font-weight:700;
+    }
+    .log-type.info { background:rgba(0,212,255,0.2); color:var(--neon-blue); }
+    .log-type.warning { background:rgba(255,171,0,0.2); color:var(--security-yellow); }
+    .log-type.danger { background:rgba(255,23,68,0.2); color:var(--security-red); }
+    .log-type.success { background:rgba(0,200,81,0.2); color:var(--security-green); }
+    .log-msg { flex:1; color:rgba(255,255,255,0.85); }
+
+    /* ===== ALERT BADGE ===== */
+    .alert-badge {
+      display:inline-flex; align-items:center; gap:4px;
+      padding:4px 10px; border-radius:999px; font-size:0.75rem; font-weight:600;
+    }
+    .alert-badge.low { background:rgba(0,200,81,0.15); color:var(--security-green); }
+    .alert-badge.medium { background:rgba(255,171,0,0.15); color:var(--security-yellow); }
+    .alert-badge.high { background:rgba(255,23,68,0.15); color:var(--security-red); animation: pulse 2s infinite; }
+
+    /* ===== STATS GRID ===== */
+    .stats-grid {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+      gap:12px; margin-bottom:20px;
+    }
+    .stat-box {
+      background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+      border-radius:12px; padding:16px; text-align:center;
+    }
+    .stat-value { font-size:1.8rem; font-weight:900; margin:5px 0; }
+    .stat-label { font-size:0.8rem; color:rgba(255,255,255,0.5); }
+    .stat-box.danger .stat-value { color:var(--security-red); }
+    .stat-box.warning .stat-value { color:var(--security-yellow); }
+    .stat-box.success .stat-value { color:var(--security-green); }
+
+    /* ===== SCREENSHOT PROTECTION OVERLAY ===== */
+    #screenshotOverlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.95);
+      z-index:99999; display:none; align-items:center; justify-content:center;
+      flex-direction:column; gap:20px;
+    }
+    #screenshotOverlay.active { display:flex; }
+    .screenshot-warning {
+      font-size:3rem; margin-bottom:10px; animation: shake 0.5s ease-in-out;
+    }
+    @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-10px);} 75%{transform:translateX(10px);} }
+    .screenshot-text {
+      font-size:1.2rem; font-weight:700; color:var(--security-red);
+      text-align:center; max-width:400px;
+    }
+
+    /* ===== MODAL ===== */
+    #modal-overlay {      position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:10000;
+      display:none; align-items:center; justify-content:center; backdrop-filter:blur(10px);
+    }
+    #modal-overlay.active { display:flex; }
+    .modal {
+      width:450px; max-width:92%; border-radius:20px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.16); box-shadow:0 25px 65px rgba(0,0,0,0.75);
+      padding:24px; backdrop-filter:blur(18px); animation: modalIn 0.26s ease;
+    }
+    @keyframes modalIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+    .modal-title { font-size:1.2rem; font-weight:900; margin-bottom:12px; color:var(--security-red); }
+    .modal-content { color:rgba(255,255,255,0.8); font-size:0.9rem; margin-bottom:20px; line-height:1.6; }
+    .modal-input {
+      width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.2);
+      background:rgba(0,0,0,0.2); color:#fff; font-family:inherit; margin-bottom:16px;
+    }
+    .modal-actions { display:flex; gap:10px; }
+    .modal-actions button { flex:1; padding:12px; border-radius:10px; border:none; cursor:pointer; font-weight:700; }
+    .modal-cancel { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.8); }
+    .modal-confirm { background:var(--security-red); color:#fff; }
+
     /* ===== TOAST ===== */
     #toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 12px 20px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 9999;
-      transition: transform 0.3s ease;
-      backdrop-filter: blur(10px);
+      position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(100px);
+      background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+      padding:12px 20px; border-radius:999px; display:flex; gap:10px; align-items:center;
+      box-shadow:0 18px 40px rgba(0,0,0,0.45); z-index:9999;
+      transition:transform 0.3s ease; backdrop-filter:blur(10px);
     }
-    #toast.show { transform: translateX(-50%) translateY(0); }
-    #toast span { font-size: 0.9rem; }
-    
-    /* ===== QUICK REACTIONS ===== */
-    .quick-reactions {
-      display: flex;
-      gap: 6px;
-      margin-top: 12px;
-      flex-wrap: wrap;
+    #toast.show { transform:translateX(-50%) translateY(0); }
+    #toast.success { border-color:var(--security-green); }
+    #toast.warning { border-color:var(--security-yellow); }
+    #toast.danger { border-color:var(--security-red); }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar {
+      height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden; margin:10px 0;
     }
-    .reaction-btn {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s;
+    .progress-fill {
+      height:100%; border-radius:3px; background:linear-gradient(90deg, var(--security-green), var(--neon-blue));
+      transition:width 0.3s ease;
     }
-    .reaction-btn:hover {
-      background: rgba(0,212,255,0.15);
-      border-color: #00d4ff;
-      transform: scale(1.1);
+
+    /* ===== SECURITY LEVEL INDICATOR ===== */
+    .security-level {
+      display:flex; align-items:center; gap:10px; padding:12px;
+      background:rgba(255,255,255,0.05); border-radius:12px; margin-top:12px;
     }
-    .reaction-btn:active { transform: scale(0.95); }
-    
-    /* ===== COMMENT BOX ===== */
-    .comment-box {
-      background: rgba(255,255,255,0.03);
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 12px;
+    .level-bar {      flex:1; height:8px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;
     }
-    .comment-text {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 12px;
+    .level-fill {
+      height:100%; border-radius:4px; transition:width 0.5s ease;
+      background:linear-gradient(90deg, var(--security-red), var(--security-yellow), var(--security-green));
     }
-    .comment-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 8px;
-    }
-    .reactions-count {
-      display: flex;
-      gap: 4px;
-      font-size: 0.85rem;
-    }
-    .reaction-item {
-      background: rgba(0,212,255,0.1);
-      padding: 2px 8px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    /* ===== NOTIFICATION STATUS ===== */
-    .notif-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 10px;
-      margin-top: 12px;
-      font-size: 0.85rem;
-    }
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #ff4444;
-    }
-    .status-dot.granted { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
-    .status-dot.denied { background: #ff6b6b; }
-    
-    /* ===== FOCUS MODE INDICATOR ===== */
-    .focus-indicator {
-      display: none;
-      text-align: center;
-      padding: 20px;
-      background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(123,47,255,0.1));
-      border-radius: 16px;
-      border: 1px solid rgba(0,212,255,0.3);
-      margin: 20px 0;
-    }
-    .focus-indicator.active { display: block; }
-    .focus-indicator h3 {
-      color: #00d4ff;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .focus-indicator p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
-    
-    /* ===== UTILS ===== */
-    .hidden { display: none !important; }
-    .divider {
-      height: 1px;
-      background: rgba(255,255,255,0.1);
-      margin: 20px 0;
-    }
-    
+    .level-text { font-size:0.85rem; font-weight:700; min-width:80px; text-align:center; }
+
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 600px) {
-      .container { padding: 10px; }
-      .header h1 { font-size: 1.3rem; }
-      .btn { width: 100%; justify-content: center; }
+    @media(max-width:768px){
+      .security-header { padding:15px; }
+      .header-title { font-size:1.4rem; }
+      .glass-card { padding:16px; }
+      .btn-row { flex-direction:column; }
+      .btn { width:100%; }
+      table { min-width:500px; font-size:0.8rem; }
+      th, td { padding:8px 6px; }
     }
+    @media(max-width:480px){
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+      .toggle-container { flex-direction:column; align-items:flex-start; }
+      .switch { width:52px; height:28px; }
+      .slider:before { width:18px; height:18px; }
+      input:checked + .slider:before { transform:translateX(24px); }
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .animate-in { animation:fadeIn 0.4s ease forwards; }
+    
+    /* ===== BLUR EFFECT FOR SENSITIVE DATA ===== */
+    .blur-sensitive {
+      filter:blur(4px); transition:filter 0.3s; cursor:pointer;
+    }
+    .blur-sensitive:hover { filter:blur(0); }
+    .blur-sensitive.revealed { filter:none; }
   </style>
 </head>
 <body>
 
-  <!-- Toast Notification -->
+  <!-- Background -->
+  <div class="bg-image"></div>
+  <div class="bg-overlay"></div>
+  <div id="particles"></div>
+
+  <!-- Screenshot Protection Overlay -->
+  <div id="screenshotOverlay">
+    <div class="screenshot-warning">🚫</div>
+    <div class="screenshot-text">تم اكتشاف محاولة لالتقاط شاشة!<br>هذا الإجراء محمي بنظام الأمان</div>
+    <button class="btn btn-primary" onclick="closeScreenshotOverlay()">فهمت</button>  </div>
+
+  <!-- Modal -->
+  <div id="modal-overlay">
+    <div class="modal">
+      <div class="modal-title" id="modalTitle">تأكيد الإجراء</div>
+      <div class="modal-content" id="modalContent"></div>
+      <input type="text" class="modal-input" id="modalInput" placeholder="" style="display:none">
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal()">إلغاء</button>
+        <button class="modal-confirm" id="modalConfirm">تأكيد</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
   <div id="toast">
-    <span id="toast-icon">✅</span>
-    <span id="toast-text"></span>
+    <span id="toastIcon">✅</span>
+    <span id="toastText"></span>
+  </div>
+
+  <!-- Security Header -->
+  <div class="security-header">
+    <div class="security-badge">🛡️ نظام الحماية النشط</div>
+    <h1 class="header-title">لوحة التحكم الأمنية</h1>
+    <p class="header-subtitle">ONX-TAQE SECURITY PANEL • حماية متكاملة للبيانات</p>
+    
+    <div class="security-status">
+      <div class="status-item">
+        <span class="status-dot active"></span>
+        <span>الحماية: <strong>مفعلة</strong></span>
+      </div>
+      <div class="status-item">
+        <span class="status-dot warning"></span>
+        <span>تهديدات: <strong id="threatCount">0</strong></span>
+      </div>
+      <div class="status-item">
+        <span class="status-dot danger"></span>
+        <span>محظورون: <strong id="blockedCount">0</strong></span>
+      </div>
+      <div class="status-item">
+        <span class="status-dot active"></span>
+        <span>آخر فحص: <strong id="lastScan">الآن</strong></span>
+      </div>
+    </div>
   </div>
 
   <div class="container">
     
-    <!-- Header -->
-    <div class="header focus-hide">
-      <h1>🧪 اختبار الميزات الجديدة</h1>
-      <p>ONX-TAQE PRO • جرب الميزات قبل إضافتها للكود الرئيسي</p>
-    </div>
-
-    <!-- Focus Mode Indicator (يظهر فقط في وضع التركيز) -->
-    <div class="focus-indicator focus-only" id="focusIndicator">
-      <h3>🎯 وضع التركيز مفعل</h3>
-      <p>تم إخفاء العناصر غير الضرورية للتركيز على المحتوى</p>
-      <button class="btn btn-outline" onclick="toggleFocusMode()" style="margin-top:12px">
-        ❌ الخروج من وضع التركيز
-      </button>
-    </div>
-
-    <!-- Feature 1: Focus Mode -->
-    <div class="card focus-hide">
-      <div class="card-title"><span>🎯</span> وضع التركيز (Focus Mode)</div>
-      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:12px">
-        يخفي العناصر الثانوية (الإحصائيات، الأزرار الجانبية) للتركيز على المحتوى الرئيسي.
-      </p>
-      <button class="btn btn-outline" onclick="toggleFocusMode()">
-        🎯 تفعيل/تعطيل وضع التركيز
-      </button>
-      <div class="notif-status" style="margin-top:12px">
-        <span class="status-dot" id="focusStatus"></span>
-        <span id="focusStatusText">الوضع الحالي: عادي</span>
+    <!-- Security Stats -->    <div class="stats-grid">
+      <div class="stat-box success">
+        <div class="stat-label">جلسات نشطة</div>
+        <div class="stat-value" id="activeSessions">1</div>
+      </div>
+      <div class="stat-box warning">
+        <div class="stat-label">محاولات مشبوهة</div>
+        <div class="stat-value" id="suspiciousAttempts">0</div>
+      </div>
+      <div class="stat-box danger">
+        <div class="stat-label">عناوين محظورة</div>
+        <div class="stat-value" id="blockedIPs">0</div>
+      </div>
+      <div class="stat-box success">
+        <div class="stat-label">مستوى الحماية</div>
+        <div class="stat-value" id="securityLevel">95%</div>
       </div>
     </div>
 
-    <!-- Feature 2: Push Notifications -->
-    <div class="card focus-hide">
-      <div class="card-title"><span>🔔</span> إشعارات المتصفح</div>
-      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:12px">
-        اطلب إذن الإشعارات وجرب إرسال إشعارات تجريبية.
-      </p>
-      
-      <button class="btn btn-primary" onclick="requestNotificationPermission()" style="margin-bottom:12px">
-        🔔 طلب إذن الإشعارات
-      </button>
-      
-      <div class="notif-status">
-        <span class="status-dot" id="notifStatus"></span>
-        <span id="notifStatusText">حالة الإذن: جاري الفحص...</span>
+    <!-- Security Level Indicator -->
+    <div class="glass-card">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <div>
+          <div class="card-title">مؤشر مستوى الحماية</div>
+          <div class="card-desc">مستوى الأمان الحالي بناءً على الإعدادات المفعلة</div>
+        </div>
       </div>
-      
-      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-        <button class="btn btn-outline" onclick="testDeadlineNotification()" style="flex:1;min-width:140px">
-          ⏰ إشعار موعد
-        </button>
-        <button class="btn btn-outline" onclick="testReplyNotification()" style="flex:1;min-width:140px">
-          💬 إشعار رد
-        </button>
+      <div class="security-level">
+        <span class="level-text" id="levelLabel">ممتاز 🔒</span>
+        <div class="level-bar"><div class="level-fill" id="levelFill" style="width:95%"></div></div>
+        <span style="font-size:0.8rem;color:rgba(255,255,255,0.5)">95/100</span>
       </div>
-      
-      <p style="color:rgba(255,255,255,0.4);font-size:0.8rem;margin-top:12px">
-        💡 ملاحظة: يجب الموافقة على الإشعارات من المتصفح أولاً
-      </p>
     </div>
 
-    <!-- Feature 3: Quick Reactions -->
-    <div class="card">
-      <div class="card-title"><span>💬</span> ردود سريعة على التعليقات</div>
-      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:12px">
-        جرب إضافة ردود سريعة (إيموجي) على التعليق أدناه:
-      </p>
+    <!-- ===== SECTION 1: Phone Blocking ===== -->
+    <div class="glass-card card-glow-security">
+      <div class="card-header">
+        <div class="card-icon">📱</div>
+        <div>
+          <div class="card-title">حظر الأجهزة برقم الهاتف</div>
+          <div class="card-desc">منع تسجيل أو دخول أجهزة محددة عبر رقم الهاتف</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="togglePhoneBlock" checked onchange="toggleFeature('phoneBlock', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
       
-      <!-- Demo Comment -->
-      <div class="comment-box">
-        <div class="comment-meta">
-          <strong>أحمد محمد</strong>
-          <span>منذ 5 دقائق</span>
+      <div class="input-group">        <label class="input-label">أدخل رقم الهاتف للحظر</label>
+        <span class="input-icon">📞</span>
+        <input class="styled-input" id="phoneInput" placeholder="مثال: 966501234567" type="tel" pattern="[0-9+]+">
+      </div>
+      
+      <div class="btn-row">
+        <button class="btn btn-danger" onclick="blockPhone()">🚫 حظر الرقم</button>
+        <button class="btn btn-outline" onclick="showBlockedPhones()">📋 عرض المحظورين</button>
+      </div>
+      
+      <div id="blockedPhonesList" style="margin-top:12px;display:none">
+        <!-- List will be populated by JS -->
+      </div>
+    </div>
+
+    <!-- ===== SECTION 2: IP Blocking ===== -->
+    <div class="glass-card card-glow-security">
+      <div class="card-header">
+        <div class="card-icon">🌐</div>
+        <div>
+          <div class="card-title">حظر عناوين IP</div>
+          <div class="card-desc">منع الوصول من عناوين شبكة محددة</div>
         </div>
-        <div class="comment-text">
-          تقرير ممتاز! 🎓 استفدت كثيراً من الشرح، هل يمكن إضافة أمثلة أكثر على الاستعلامات المعقدة؟
+        <label class="switch">
+          <input type="checkbox" id="toggleIPBlock" checked onchange="toggleFeature('ipBlock', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label">أدخل عنوان IP للحظر</label>
+        <span class="input-icon">🔢</span>
+        <input class="styled-input" id="ipInput" placeholder="مثال: 192.168.1.100" pattern="^(\d{1,3}\.){3}\d{1,3}$">
+      </div>
+      
+      <div class="btn-row">
+        <button class="btn btn-danger" onclick="blockIP()">🚫 حظر الـ IP</button>
+        <button class="btn btn-warning" onclick="autoDetectAndBlock()">🔍 كشف تلقائي</button>
+      </div>
+      
+      <div style="margin-top:12px;font-size:0.8rem;color:rgba(255,255,255,0.5)">
+        💡 عنوانك الحالي: <strong id="currentIP" class="blur-sensitive" onclick="this.classList.toggle('revealed')">جاري الكشف...</strong>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 3: User Management ===== -->
+    <div class="glass-card card-glow-security">
+      <div class="card-header">
+        <div class="card-icon">👥</div>
+        <div>          <div class="card-title">إدارة المستخدمين</div>
+          <div class="card-desc">عرض وحظر المستخدمين مع معلومات أجهزتهم</div>
         </div>
-        
-        <!-- Quick Reactions -->
-        <div class="quick-reactions" id="quickReactions">
-          <!-- سيتم ملؤها بالجافاسكريبت -->
+        <label class="switch">
+          <input type="checkbox" id="toggleUserManage" checked onchange="toggleFeature('userManage', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>المستخدم</th>
+              <th>الجهاز</th>
+              <th>الـ IP</th>
+              <th>الحالة</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="usersTable">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="refreshUsers()">🔄 تحديث القائمة</button>
+        <button class="btn btn-warning" onclick="exportUsers()">📤 تصدير القائمة</button>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 4: Single Session ===== -->
+    <div class="glass-card card-glow-security">
+      <div class="card-header">
+        <div class="card-icon">🔐</div>
+        <div>
+          <div class="card-title">جلسة واحدة فقط</div>
+          <div class="card-desc">منع التسجيل أو الدخول من أكثر من متصفح/جهاز</div>
         </div>
-        
-        <!-- Reactions Count -->
-        <div class="reactions-count" id="reactionsCount" style="margin-top:10px">
-          <!-- سيتم ملؤها بالجافاسكريبت -->
+        <label class="switch">
+          <input type="checkbox" id="toggleSingleSession" checked onchange="toggleFeature('singleSession', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:0.85rem">الجلسة الحالية</span>
+          <span class="alert-badge low" id="sessionStatus">✅ نشطة</span>        </div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.6)">
+          <div>🖥️ الجهاز: <strong id="currentDevice">جاري الكشف...</strong></div>
+          <div>🌐 المتصفح: <strong id="currentBrowser">جاري الكشف...</strong></div>
+          <div>🆙 آخر نشاط: <strong id="lastActivity">الآن</strong></div>
         </div>
       </div>
       
-      <p style="color:rgba(255,255,255,0.4);font-size:0.8rem;margin-top:12px">
-        💡 اضغط على أي إيموجي لإضافة رد سريع • يتم حفظ الردود محلياً
-      </p>
+      <div class="btn-row">
+        <button class="btn btn-danger" onclick="terminateAllSessions()">🔚 إنهاء كل الجلسات الأخرى</button>
+        <button class="btn btn-outline" onclick="viewActiveSessions()">👁️ عرض الجلسات النشطة</button>
+      </div>
     </div>
 
-    <!-- Footer -->
-    <div class="header focus-hide" style="margin-top:20px">
-      <p style="font-size:0.85rem">
-        ✅ جميع الميزات تعمل بدون سيرفر • البيانات تحفظ في <code>localStorage</code>
-      </p>
-      <button class="btn btn-outline" onclick="resetAll()" style="margin-top:10px">
-        🔄 إعادة تعيين الاختبار
-      </button>
+    <!-- ===== SECTION 5: Tamper Detection ===== -->
+    <div class="glass-card card-glow-security">
+      <div class="card-header">
+        <div class="card-icon">🔍</div>
+        <div>
+          <div class="card-title">كشف التلاعب بالبيانات</div>
+          <div class="card-desc">مراقبة ورصد أي تغييرات غير مصرح بها</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleTamperDetect" checked onchange="toggleFeature('tamperDetect', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="logs-container" id="tamperLogs">
+        <div class="log-entry">
+          <span class="log-time">12:34</span>
+          <span class="log-type success">✅</span>
+          <span class="log-msg">فحص سلامة البيانات - لا توجد تعديلات</span>
+        </div>
+      </div>
+      
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="runIntegrityCheck()">🔎 فحص السلامة الآن</button>
+        <button class="btn btn-outline" onclick="clearTamperLogs()">🗑️ مسح السجل</button>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 6: Suspicious Activity ===== -->
+    <div class="glass-card card-glow-security">
+      <div class="card-header">
+        <div class="card-icon">⚠️</div>
+        <div>
+          <div class="card-title">كشف النشاط المشبوه</div>
+          <div class="card-desc">تحديد ومحاولات التسجيل أو الدخول غير الطبيعية</div>
+        </div>        <label class="switch">
+          <input type="checkbox" id="toggleSuspiciousDetect" checked onchange="toggleFeature('suspiciousDetect', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px">
+        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px">
+          <div style="font-size:0.8rem;color:rgba(255,255,255,0.5)">محاولات سريعة</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--security-yellow)" id="rapidAttempts">0</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px">
+          <div style="font-size:0.8rem;color:rgba(255,255,255,0.5)">عناوين متعددة</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--security-red)" id="multiIP">0</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px">
+          <div style="font-size:0.8rem;color:rgba(255,255,255,0.5)">بيانات مكررة</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--security-orange)" id="duplicateData">0</div>
+        </div>
+      </div>
+      
+      <div class="btn-row">
+        <button class="btn btn-warning" onclick="runSuspiciousScan()">🔍 فحص النشاط الآن</button>
+        <button class="btn btn-outline" onclick="viewSuspiciousReport()">📊 عرض التقرير</button>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 7: Screenshot Protection ===== -->
+    <div class="glass-card card-glow-security">
+      <div class="card-header">
+        <div class="card-icon">📸</div>
+        <div>
+          <div class="card-title">منع لقطات الشاشة</div>
+          <div class="card-desc">حماية المحتوى من الالتقاط أو التسجيل</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleScreenshot" onchange="toggleFeature('screenshot', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div style="background:rgba(255,23,68,0.1);border:1px solid rgba(255,23,68,0.3);padding:12px;border-radius:10px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:1.2rem">⚠️</span>
+          <span style="font-size:0.9rem;font-weight:700">تنبيه: هذه الميزة قد لا تعمل في جميع المتصفحات</span>
+        </div>
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.6)">
+          • يتم كشف محاولات PrintScreen و Extensions للتقاط الشاشة<br>
+          • يتم تعتيم المحتوى عند اكتشاف محاولة الالتقاط<br>
+          • يتم تسجيل المحاولة في سجل الأمان        </p>
+      </div>
+      
+      <div class="btn-row">
+        <button class="btn btn-warning" onclick="testScreenshotProtection()">🧪 اختبار الحماية</button>
+        <button class="btn btn-outline" onclick="viewScreenshotLogs()">📜 عرض سجل المحاولات</button>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 8: Advanced Settings ===== -->
+    <div class="glass-card card-glow-security">
+      <div class="card-header">
+        <div class="card-icon">⚙️</div>
+        <div>
+          <div class="card-title">إعدادات متقدمة</div>
+          <div class="card-desc">تحكم دقيق في سياسات الأمان</div>
+        </div>
+      </div>
+      
+      <div class="toggle-container">
+        <div class="toggle-info">
+          <div class="toggle-title">🔒 تشفير البيانات <span class="toggle-badge">موصى به</span></div>
+          <div class="toggle-desc">تشفير جميع البيانات الحسابة قبل التخزين</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleEncryption" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="toggle-container">
+        <div class="toggle-info">
+          <div class="toggle-title">🕵️ تتبع البصمة الرقمية</div>
+          <div class="toggle-desc">إنشاء بصمة فريدة لكل جهاز لتتبعه</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleFingerprint" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="toggle-container">
+        <div class="toggle-info">
+          <div class="toggle-title">🚨 إشعارات فورية</div>
+          <div class="toggle-desc">إرسال تنبيه عند اكتشاف تهديد</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleAlerts" checked>
+          <span class="slider"></span>
+        </label>      </div>
+      
+      <div class="toggle-container">
+        <div class="toggle-info">
+          <div class="toggle-title">📝 سجل التدقيق الكامل</div>
+          <div class="toggle-desc">تسجيل كل إجراء لأغراض المراجعة</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleAuditLog" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="btn-row" style="margin-top:20px">
+        <button class="btn btn-primary" onclick="saveAdvancedSettings()">💾 حفظ الإعدادات</button>
+        <button class="btn btn-outline" onclick="resetToDefaults()">🔄 استعادة الافتراضي</button>
+        <button class="btn btn-danger" onclick="emergencyLockdown()">🔴 قفل طارئ</button>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 9: Security Logs ===== -->
+    <div class="glass-card card-glow-security">
+      <div class="card-header">
+        <div class="card-icon">📋</div>
+        <div>
+          <div class="card-title">سجل الأحداث الأمنية</div>
+          <div class="card-desc">عرض جميع أنشطة النظام الأمنية</div>
+        </div>
+      </div>
+      
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <select class="styled-input" id="logFilter" style="flex:1;min-width:120px" onchange="filterLogs()">
+          <option value="all">كل الأحداث</option>
+          <option value="info">ℹ️ معلومات</option>
+          <option value="warning">⚠️ تحذيرات</option>
+          <option value="danger">🚨 أخطاء</option>
+          <option value="success">✅ نجاح</option>
+        </select>
+        <button class="btn btn-outline" onclick="exportLogs()">📤 تصدير</button>
+        <button class="btn btn-outline" onclick="clearLogs()">🗑️ مسح</button>
+      </div>
+      
+      <div class="logs-container" id="securityLogs" style="max-height:400px">
+        <!-- Populated by JS -->
+      </div>
     </div>
 
   </div>
 
-  <script>
-    // ===== UI HELPERS =====
+  <script>    // ===== GLOBAL VARIABLES =====
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => Array.from(document.querySelectorAll(s));
     
-    function showToast(msg, type = 'success') {
-      const toast = $('#toast');
-      $('#toast-icon').textContent = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
-      $('#toast-text').textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-    // ===== SOUND EFFECTS (Web Audio API) =====
-    function playSound(type) {
-      try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        switch(type) {
-          case 'click':
-            oscillator.frequency.value = 800;
-            gainNode.gain.value = 0.1;
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.05);
-            break;
-          case 'success':
-            oscillator.frequency.value = 1200;
-            gainNode.gain.value = 0.15;
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.1);
-            break;
-          case 'error':
-            oscillator.frequency.value = 400;
-            gainNode.gain.value = 0.15;
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.15);
-            break;
-        }
-      } catch(e) { console.log('Sound error:', e); }
-    }
-
-    // ===== FEATURE 1: FOCUS MODE =====
-    function toggleFocusMode() {
-      playSound('click');
-      document.body.classList.toggle('focus-mode');
-      localStorage.setItem('onx_focus_test', document.body.classList.contains('focus-mode'));
-      
-      const isFocus = document.body.classList.contains('focus-mode');
-      
-      // Update status
-      $('#focusStatus').className = 'status-dot' + (isFocus ? ' granted' : '');
-      $('#focusStatusText').textContent = `الوضع الحالي: ${isFocus ? '🎯 تركيز' : 'عادي'}`;
-      
-      // Show/hide indicator
-      $('#focusIndicator').classList.toggle('active', isFocus);
-      
-      showToast(isFocus ? 'وضع التركيز مفعل 🎯' : 'وضع التركيز معطل', 'info');
-    }
-
-    function initFocusMode() {
-      const saved = localStorage.getItem('onx_focus_test') === 'true';
-      if(saved) {
-        document.body.classList.add('focus-mode');
-        $('#focusStatus').className = 'status-dot granted';
-        $('#focusStatusText').textContent = 'الوضع الحالي: 🎯 تركيز';
-        $('#focusIndicator').classList.add('active');
-      }
-    }
-
-    // ===== FEATURE 2: PUSH NOTIFICATIONS =====
-    function updateNotificationStatus() {
-      const status = Notification.permission;
-      const dot = $('#notifStatus');
-      const text = $('#notifStatusText');
-      
-      dot.className = 'status-dot';
-      if(status === 'granted') {
-        dot.classList.add('granted');
-        text.textContent = 'حالة الإذن: ✅ مسموح';
-      } else if(status === 'denied') {
-        dot.classList.add('denied');
-        text.textContent = 'حالة الإذن: ❌ مرفوض';
-      } else {
-        text.textContent = 'حالة الإذن: ⏳ لم يُطلب بعد';
-      }
-    }
-
-    async function requestNotificationPermission() {
-      playSound('click');
-      if(!('Notification' in window)) {
-        showToast('المتصفح لا يدعم الإشعارات ❌', 'error');
-        return;
-      }
-      
-      const permission = await Notification.requestPermission();
-      updateNotificationStatus();
-      
-      if(permission === 'granted') {
-        showToast('تم السماح بالإشعارات 🔔', 'success');
-        playSound('success');
-      } else if(permission === 'denied') {
-        showToast('تم رفض الإشعارات - يمكن تفعيلها من إعدادات المتصفح', 'error');
-      } else {
-        showToast('في انتظار الموافقة...', 'info');
-      }
-    }
-
-    function testDeadlineNotification() {
-      if(Notification.permission !== 'granted') {
-        showToast('يجب السماح بالإشعارات أولاً 🔔', 'error');
-        playSound('error');
-        requestNotificationPermission();
-        return;
-      }
-      
-      playSound('success');
-      new Notification('⏰ تذكير بالتسليم', {
-        body: 'متبقي 3 ساعات على موعد التسليم',
-        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">⏰</text></svg>',
-        badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>'
-      });
-      showToast('تم إرسال إشعار تجريبي 🔔', 'success');
-    }
-
-    function testReplyNotification() {
-      if(Notification.permission !== 'granted') {
-        showToast('يجب السماح بالإشعارات أولاً 🔔', 'error');
-        playSound('error');
-        requestNotificationPermission();
-        return;
-      }
-      
-      playSound('success');
-      new Notification('💬 رد جديد', {
-        body: 'شخص ما رد على تعليقك: "شكراً لك!"',
-        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💬</text></svg>'
-      });
-      showToast('تم إرسال إشعار رد تجريبي 💬', 'success');
-    }
-
-    function initNotifications() {
-      if('Notification' in window) {
-        updateNotificationStatus();
-        // Auto-check every 2 seconds for demo
-        setInterval(updateNotificationStatus, 2000);
-      } else {
-        $('#notifStatusText').textContent = 'غير مدعوم في هذا المتصفح';
-      }
-    }
-
-    // ===== FEATURE 3: QUICK REACTIONS =====
-    const quickReactions = ['👍', '👏', '🔥', '💯', '❤️', '🎉', '✅', '🤔'];
-    let reactionsData = JSON.parse(localStorage.getItem('onx_reactions_test') || '{}');
+    let securityConfig = {
+      phoneBlock: true,
+      ipBlock: true,
+      userManage: true,
+      singleSession: true,
+      tamperDetect: true,
+      suspiciousDetect: true,
+      screenshot: false,
+      encryption: true,
+      fingerprint: true,
+      alerts: true,
+      auditLog: true
+    };
     
-    function renderQuickReactions() {
-      const container = $('#quickReactions');
-      container.innerHTML = quickReactions.map(emoji => `
-        <button class="reaction-btn" onclick="addReaction('${emoji}')" title="أضف ${emoji}">
-          ${emoji}
-        </button>
-      `).join('');
-    }
+    let blockedPhones = JSON.parse(localStorage.getItem('onx_blocked_phones') || '[]');
+    let blockedIPs = JSON.parse(localStorage.getItem('onx_blocked_ips') || '[]');
+    let users = JSON.parse(localStorage.getItem('onx_users') || '[]');
+    let securityLogs = JSON.parse(localStorage.getItem('onx_security_logs') || '[]');
+    let screenshotAttempts = JSON.parse(localStorage.getItem('onx_screenshot_attempts') || '[]');
     
-    function renderReactionsCount() {
-      const container = $('#reactionsCount');
-      const entries = Object.entries(reactionsData).filter(([_, count]) => count > 0);
-      
-      if(entries.length === 0) {
-        container.innerHTML = '<span style="color:rgba(255,255,255,0.4)">لا توجد ردود بعد</span>';
-        return;
-      }
-      
-      container.innerHTML = entries.map(([emoji, count]) => `
-        <span class="reaction-item">
-          ${emoji} <span style="color:rgba(255,255,255,0.6)">${count}</span>
-        </span>
-      `).join('');
-    }
-    
-    function addReaction(emoji) {
-      playSound('click');
-      reactionsData[emoji] = (reactionsData[emoji] || 0) + 1;
-      localStorage.setItem('onx_reactions_test', JSON.stringify(reactionsData));
-      renderReactionsCount();
-      
-      // Visual feedback
-      showToast(`تم إضافة ${emoji}`, 'success');
-      
-      // Animate the button
-      event.target.style.transform = 'scale(1.3)';
-      setTimeout(() => event.target.style.transform = '', 150);
-    }
-    
-    function initReactions() {
-      renderQuickReactions();
-      renderReactionsCount();
-    }
-
-    // ===== RESET FUNCTION =====
-    function resetAll() {
-      playSound('click');
-      localStorage.removeItem('onx_focus_test');
-      localStorage.removeItem('onx_reactions_test');
-      
-      document.body.classList.remove('focus-mode');
-      $('#focusStatus').className = 'status-dot';
-      $('#focusStatusText').textContent = 'الوضع الحالي: عادي';
-      $('#focusIndicator').classList.remove('active');
-      
-      reactionsData = {};
-      renderReactionsCount();
-      
-      showToast('تم إعادة تعيين الاختبار 🔄', 'success');
-    }
+    let deviceFingerprint = '';
+    let currentSessionId = '';
 
     // ===== INIT =====
-    document.addEventListener('DOMContentLoaded', () => {
-      initFocusMode();
-      initNotifications();
-      initReactions();
+    document.addEventListener('DOMContentLoaded', async () => {
+      initParticles();
+      await initDeviceFingerprint();
+      initSession();
+      loadConfig();
+      renderUsersTable();
+      renderSecurityLogs();
+      updateStats();
+      detectCurrentIP();
+      startSecurityMonitoring();
       
-      // Keyboard shortcuts for demo
-      document.addEventListener('keydown', (e) => {
-        if(e.ctrlKey && e.key === 'f') {
-          e.preventDefault();
-          toggleFocusMode();
+      // Screenshot protection listeners
+      setupScreenshotProtection();
+      
+      // Keyboard shortcuts
+      document.addEventListener('keydown', handleKeyboardShortcuts);
+    });
+
+    // ===== PARTICLES BACKGROUND =====
+    function initParticles() {
+      const container = document.getElementById('particles');
+      const colors = ['#ff1744', '#00d4ff', '#7b2fff', '#f5c518'];      for(let i=0; i<30; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random()*3+2;
+        p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*20+10}s;animation-delay:${Math.random()*10}s;box-shadow:0 0 ${size*3}px currentColor;`;
+        container.appendChild(p);
+      }
+    }
+
+    // ===== DEVICE FINGERPRINT =====
+    async function initDeviceFingerprint() {
+      const parts = [
+        navigator.userAgent,
+        navigator.platform || '',
+        navigator.language || '',
+        Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+        `${screen.width}x${screen.height}x${screen.colorDepth}`,
+        navigator.hardwareConcurrency || '',
+        navigator.deviceMemory || '',
+        await canvasFingerprint(),
+        await webglFingerprint()
+      ].join('||');
+      
+      deviceFingerprint = await sha256(parts);
+      currentSessionId = deviceFingerprint.slice(0, 16) + '-' + Date.now();
+      
+      $('#currentDevice').textContent = navigator.platform || 'غير معروف';
+      $('#currentBrowser').textContent = getBrowserName();
+      $('#lastActivity').textContent = 'الآن';
+      
+      addLog('info', `تم إنشاء بصمة الجهاز: ${deviceFingerprint.slice(0, 12)}...`);
+    }
+
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    function canvasFingerprint() {
+      return new Promise(resolve => {
+        try {
+          const c = document.createElement('canvas');
+          c.width = 260; c.height = 80;
+          const x = c.getContext('2d');
+          x.textBaseline = 'top'; x.font = '16px Arial';
+          x.fillStyle = '#f5c842'; x.fillRect(10,10,80,30);
+          x.fillStyle = '#7dd3fc'; x.fillText('ONX-TAQE|Security', 12, 14);
+          x.fillStyle = 'rgba(255,255,255,0.6)'; x.fillText(navigator.userAgent, 12, 38);
+          resolve(c.toDataURL());
+        } catch { resolve('no-canvas'); }      });
+    }
+
+    function webglFingerprint() {
+      try {
+        const c = document.createElement('canvas');
+        const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+        if(!gl) return 'no-webgl';
+        const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+        return (dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : 'v?') + '|' + 
+               (dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'r?');
+      } catch { return 'no-webgl'; }
+    }
+
+    function getBrowserName() {
+      const ua = navigator.userAgent;
+      if(ua.includes('Chrome')) return 'Chrome';
+      if(ua.includes('Firefox')) return 'Firefox';
+      if(ua.includes('Safari')) return 'Safari';
+      if(ua.includes('Edge')) return 'Edge';
+      return 'غير معروف';
+    }
+
+    // ===== SESSION MANAGEMENT =====
+    function initSession() {
+      const existingSession = localStorage.getItem('onx_active_session');
+      
+      if(securityConfig.singleSession && existingSession && existingSession !== currentSessionId) {
+        // Another session exists
+        showModal('جلسة أخرى نشطة', 'تم اكتشاف جلسة نشطة من جهاز آخر. هل تريد إنهاءها والمتابعة؟', () => {
+          localStorage.setItem('onx_active_session', currentSessionId);
+          addLog('warning', 'تم إنهاء الجلسة الأخرى وبدء جلسة جديدة');
+          showToast('تم تفعيل جلستك الحالية', 'success');
+        }, () => {
+          showToast('تم إلغاء العملية', 'info');
+        });
+      } else {
+        localStorage.setItem('onx_active_session', currentSessionId);
+      }
+      
+      // Update last activity
+      setInterval(() => {
+        localStorage.setItem('onx_last_activity', Date.now().toString());
+        $('#lastActivity').textContent = 'الآن';
+      }, 30000);
+    }
+
+    function terminateAllSessions() {
+      showModal('إنهاء جميع الجلسات', 'هل أنت متأكد؟ سيتم تسجيل خروج جميع المستخدمين من الأجهزة الأخرى.', () => {
+        localStorage.setItem('onx_active_session', currentSessionId);        addLog('warning', 'تم إنهاء جميع الجلسات الأخرى بواسطة المسؤول');
+        showToast('تم إنهاء الجلسات الأخرى', 'success');
+        updateStats();
+      });
+    }
+
+    function viewActiveSessions() {
+      const sessions = [{
+        id: currentSessionId,
+        device: navigator.platform,
+        browser: getBrowserName(),
+        ip: 'جاري الكشف...',
+        status: 'نشط (أنت)',
+        lastSeen: 'الآن'
+      }];
+      
+      showModal('الجلسات النشطة', sessions.map(s => 
+        `📱 ${s.device}<br>🌐 ${s.browser}<br>🔢 ${s.ip}<br>📊 ${s.status}<br>🕐 ${s.lastSeen}`
+      ).join('<hr style="margin:10px 0">'), null, null, true);
+    }
+
+    // ===== FEATURE TOGGLES =====
+    function toggleFeature(feature, enabled) {
+      securityConfig[feature] = enabled;
+      localStorage.setItem('onx_security_config', JSON.stringify(securityConfig));
+      updateSecurityLevel();
+      
+      const action = enabled ? 'تفعيل' : 'تعطيل';
+      addLog('info', `تم ${action} ميزة: ${feature}`);
+      showToast(`تم ${action} ${getFeatureName(feature)}`, enabled ? 'success' : 'info');
+      
+      // Special handling for screenshot protection
+      if(feature === 'screenshot' && enabled) {
+        setupScreenshotProtection();
+      }
+    }
+
+    function getFeatureName(key) {
+      const names = {
+        phoneBlock: 'حظر الهواتف',
+        ipBlock: 'حظر الـ IP',
+        userManage: 'إدارة المستخدمين',
+        singleSession: 'جلسة واحدة',
+        tamperDetect: 'كشف التلاعب',
+        suspiciousDetect: 'كشف المشبوه',
+        screenshot: 'منع لقطة الشاشة',
+        encryption: 'التشفير',
+        fingerprint: 'البصمة الرقمية',
+        alerts: 'الإشعارات',
+        auditLog: 'سجل التدقيق'      };
+      return names[key] || key;
+    }
+
+    function loadConfig() {
+      const saved = localStorage.getItem('onx_security_config');
+      if(saved) {
+        securityConfig = JSON.parse(saved);
+        // Update toggle states
+        Object.entries(securityConfig).forEach(([key, value]) => {
+          const toggle = $(`#toggle${key.charAt(0).toUpperCase() + key.slice(1)}`);
+          if(toggle) toggle.checked = value;
+        });
+      }
+      updateSecurityLevel();
+    }
+
+    function updateSecurityLevel() {
+      const enabledCount = Object.values(securityConfig).filter(v => v).length;
+      const total = Object.keys(securityConfig).length;
+      const percentage = Math.round((enabledCount / total) * 100);
+      
+      $('#levelFill').style.width = percentage + '%';
+      $('#securityLevel').textContent = percentage + '%';
+      
+      if(percentage >= 90) {
+        $('#levelLabel').textContent = 'ممتاز 🔒';
+        $('#levelLabel').style.color = 'var(--security-green)';
+      } else if(percentage >= 70) {
+        $('#levelLabel').textContent = 'جيد ✅';
+        $('#levelLabel').style.color = 'var(--security-yellow)';
+      } else {
+        $('#levelLabel').textContent = 'ضعيف ⚠️';
+        $('#levelLabel').style.color = 'var(--security-red)';
+      }
+    }
+
+    // ===== PHONE BLOCKING =====
+    function blockPhone() {
+      const phone = $('#phoneInput').value.trim().replace(/[^0-9+]/g, '');
+      if(!phone || phone.length < 10) {
+        showToast('أدخل رقم هاتف صحيح', 'error');
+        return;
+      }
+      
+      if(blockedPhones.includes(phone)) {
+        showToast('هذا الرقم محظور مسبقاً', 'warning');
+        return;
+      }
+            blockedPhones.push(phone);
+      localStorage.setItem('onx_blocked_phones', JSON.stringify(blockedPhones));
+      
+      addLog('danger', `تم حظر رقم الهاتف: ${phone}`);
+      showToast(`تم حظر ${phone} ✅`, 'success');
+      $('#phoneInput').value = '';
+      
+      showBlockedPhones();
+      updateStats();
+    }
+
+    function showBlockedPhones() {
+      const list = $('#blockedPhonesList');
+      if(blockedPhones.length === 0) {
+        list.style.display = 'none';
+        return;
+      }
+      
+      list.style.display = 'block';
+      list.innerHTML = `
+        <div style="font-size:0.85rem;margin-bottom:8px;color:rgba(255,255,255,0.7)">
+          الأرقام المحظورة (${blockedPhones.length}):
+        </div>
+        ${blockedPhones.map(p => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:rgba(255,23,68,0.1);border-radius:6px;margin-bottom:4px">
+            <span style="font-family:monospace">${p}</span>
+            <button class="action-btn unblock" onclick="unblockPhone('${p}')">فك الحظر</button>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    function unblockPhone(phone) {
+      blockedPhones = blockedPhones.filter(p => p !== phone);
+      localStorage.setItem('onx_blocked_phones', JSON.stringify(blockedPhones));
+      addLog('info', `تم فك حظر رقم الهاتف: ${phone}`);
+      showToast('تم فك الحظر', 'success');
+      showBlockedPhones();
+      updateStats();
+    }
+
+    // ===== IP BLOCKING =====
+    function blockIP() {
+      const ip = $('#ipInput').value.trim();
+      const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
+      
+      if(!ipRegex.test(ip)) {
+        showToast('أدخل عنوان IP صحيح (مثال: 192.168.1.1)', 'error');
+        return;
+      }      
+      if(blockedIPs.includes(ip)) {
+        showToast('هذا الـ IP محظور مسبقاً', 'warning');
+        return;
+      }
+      
+      blockedIPs.push(ip);
+      localStorage.setItem('onx_blocked_ips', JSON.stringify(blockedIPs));
+      
+      addLog('danger', `تم حظر عنوان IP: ${ip}`);
+      showToast(`تم حظر ${ip} ✅`, 'success');
+      $('#ipInput').value = '';
+      updateStats();
+    }
+
+    function autoDetectAndBlock() {
+      showModal('الكشف التلقائي', 'سيتم تحليل النشاط الحالي وحظر العناوين المشبوهة تلقائياً. هل تريد المتابعة؟', () => {
+        // Simulate detection
+        const suspiciousIPs = ['10.0.0.' + Math.floor(Math.random()*255), '192.168.1.' + Math.floor(Math.random()*255)];
+        let blocked = 0;
+        
+        suspiciousIPs.forEach(ip => {
+          if(!blockedIPs.includes(ip)) {
+            blockedIPs.push(ip);
+            blocked++;
+            addLog('warning', `تم حظر تلقائي: ${ip}`);
+          }
+        });
+        
+        localStorage.setItem('onx_blocked_ips', JSON.stringify(blockedIPs));
+        showToast(`تم حظر ${blocked} عنوان مشبوه 🎯`, 'success');
+        updateStats();
+      });
+    }
+
+    async function detectCurrentIP() {
+      try {
+        // Using a free IP API (for demo - in production use your backend)
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        $('#currentIP').textContent = data.ip;
+      } catch {
+        $('#currentIP').textContent = 'تعذر الكشف (استخدم VPN؟)';
+      }
+    }
+
+    // ===== USER MANAGEMENT =====
+    function renderUsersTable() {
+      const tbody = $('#usersTable');
+            if(users.length === 0) {
+        // Add demo users for testing
+        users = [
+          { id: 1, name: 'أحمد محمد', device: 'iPhone 14', ip: '192.168.1.10', status: 'نشط', fingerprint: 'a1b2c3...' },
+          { id: 2, name: 'سارة علي', device: 'Samsung S23', ip: '10.0.0.25', status: 'نشط', fingerprint: 'd4e5f6...' },
+          { id: 3, name: 'خالد عمر', device: 'Laptop', ip: '172.16.0.5', status: 'مشبوه', fingerprint: 'g7h8i9...' }
+        ];
+        localStorage.setItem('onx_users', JSON.stringify(users));
+      }
+      
+      tbody.innerHTML = users.map(u => `
+        <tr class="${u.status === 'محظور' ? 'blocked' : ''}">
+          <td><strong>${u.name}</strong></td>
+          <td>${u.device}</td>
+          <td class="blur-sensitive" onclick="this.classList.toggle('revealed')">${u.ip}</td>
+          <td>
+            <span class="alert-badge ${u.status === 'نشط' ? 'low' : u.status === 'مشبوه' ? 'medium' : 'high'}">
+              ${u.status}
+            </span>
+          </td>
+          <td>
+            <button class="action-btn view" onclick="viewUserDetails(${u.id})">👁️</button>
+            <button class="action-btn ${u.status === 'محظور' ? 'unblock' : 'block'}" onclick="toggleUserBlock(${u.id})">
+              ${u.status === 'محظور' ? '✅' : '🚫'}
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function viewUserDetails(userId) {
+      const user = users.find(u => u.id === userId);
+      if(!user) return;
+      
+      showModal('تفاصيل المستخدم', `
+        <strong>👤 الاسم:</strong> ${user.name}<br>
+        <strong>📱 الجهاز:</strong> ${user.device}<br>
+        <strong>🌐 الـ IP:</strong> ${user.ip}<br>
+        <strong>🔐 البصمة:</strong> ${user.fingerprint}<br>
+        <strong>📊 الحالة:</strong> ${user.status}<br>
+        <strong>🕐 آخر دخول:</strong> ${new Date().toLocaleString('ar-SA')}
+      `, null, null, true);
+    }
+
+    function toggleUserBlock(userId) {
+      const user = users.find(u => u.id === userId);
+      if(!user) return;
+      
+      user.status = user.status === 'محظور' ? 'نشط' : 'محظور';
+      localStorage.setItem('onx_users', JSON.stringify(users));      
+      const action = user.status === 'محظور' ? 'حظر' : 'فك حظر';
+      addLog(user.status === 'محظور' ? 'danger' : 'info', `تم ${action} المستخدم: ${user.name}`);
+      showToast(`تم ${action} ${user.name}`, user.status === 'محظور' ? 'warning' : 'success');
+      
+      renderUsersTable();
+      updateStats();
+    }
+
+    function refreshUsers() {
+      // In production, this would fetch from server
+      addLog('info', 'تم تحديث قائمة المستخدمين');
+      showToast('تم تحديث القائمة', 'success');
+      renderUsersTable();
+    }
+
+    function exportUsers() {
+      const csv = 'الاسم,الجهاز,الـ IP,الحالة,البصمة\n' + 
+        users.map(u => `${u.name},${u.device},${u.ip},${u.status},${u.fingerprint}`).join('\n');
+      
+      const blob = new Blob([csv], {type: 'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'users_export.csv'; a.click();
+      
+      addLog('info', 'تم تصدير قائمة المستخدمين');
+      showToast('تم التصدير بنجاح 📤', 'success');
+    }
+
+    // ===== TAMPER DETECTION =====
+    function runIntegrityCheck() {
+      addLog('info', 'بدء فحص سلامة البيانات...');
+      
+      // Simulate check
+      setTimeout(() => {
+        const issues = Math.random() > 0.9 ? ['تم اكتشاف تعديل في جدول التقارير'] : [];
+        
+        if(issues.length > 0) {
+          issues.forEach(issue => {
+            addLog('danger', issue);
+            showToast('⚠️ تم اكتشاف تعديلات!', 'danger');
+          });
+        } else {
+          addLog('success', 'فحص السلامة: لا توجد تعديلات');
+          showToast('✅ جميع البيانات سليمة', 'success');
         }
-        if(e.ctrlKey && e.key === 'n') {
+      }, 1500);
+    }
+
+    function clearTamperLogs() {      $('#tamperLogs').innerHTML = `
+        <div class="log-entry">
+          <span class="log-time">${new Date().toLocaleTimeString('ar-SA')}</span>
+          <span class="log-type info">🗑️</span>
+          <span class="log-msg">تم مسح سجل التلاعب</span>
+        </div>
+      `;
+      showToast('تم مسح السجل', 'info');
+    }
+
+    // ===== SUSPICIOUS ACTIVITY DETECTION =====
+    function runSuspiciousScan() {
+      addLog('info', 'بدء فحص النشاط المشبوه...');
+      
+      setTimeout(() => {
+        // Simulate detection results
+        const rapid = Math.floor(Math.random() * 3);
+        const multiIP = Math.floor(Math.random() * 2);
+        const duplicate = Math.floor(Math.random() * 2);
+        
+        $('#rapidAttempts').textContent = rapid;
+        $('#multiIP').textContent = multiIP;
+        $('#duplicateData').textContent = duplicate;
+        
+        if(rapid > 0) addLog('warning', `تم رصد ${rapid} محاولة تسجيل سريعة`);
+        if(multiIP > 0) addLog('danger', `تم رصد مستخدم من ${multiIP + 1} عناوين مختلفة`);
+        if(duplicate > 0) addLog('warning', `تم رصد ${duplicate} محاولة استخدام بيانات مكررة`);
+        
+        const total = rapid + multiIP + duplicate;
+        if(total > 0) {
+          showToast(`⚠️ تم رصد ${total} نشاط مشبوه`, 'warning');
+        } else {
+          showToast('✅ لا يوجد نشاط مشبوه', 'success');
+        }
+        
+        updateStats();
+      }, 2000);
+    }
+
+    function viewSuspiciousReport() {
+      showModal('تقرير النشاط المشبوه', `
+        <strong>📊 ملخص الفحص:</strong><br><br>
+        • محاولات التسجيل السريعة: <strong>${$('#rapidAttempts').textContent}</strong><br>
+        • عناوين IP متعددة لنفس المستخدم: <strong>${$('#multiIP').textContent}</strong><br>
+        • محاولات استخدام بيانات مكررة: <strong>${$('#duplicateData').textContent}</strong><br><br>
+        <strong>🔍 التوصيات:</strong><br>
+        ${$('#rapidAttempts').textContent > 0 ? '• تفعيل CAPTCHA للتسجيلات السريعة<br>' : ''}
+        ${$('#multiIP').textContent > 0 ? '• مراجعة حسابات المستخدمين متعددة الـ IP<br>' : ''}
+        ${$('#duplicateData').textContent > 0 ? '• تفعيل التحقق من تفرد البيانات<br>' : ''}
+        ${$('#rapidAttempts').textContent == 0 && $('#multiIP').textContent == 0 && $('#duplicateData').textContent == 0 ? '• لا توجد توصيات - النظام آمن ✅' : ''}      `, null, null, true);
+    }
+
+    // ===== SCREENSHOT PROTECTION =====
+    function setupScreenshotProtection() {
+      if(!securityConfig.screenshot) return;
+      
+      // Detect PrintScreen key
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
           e.preventDefault();
-          testDeadlineNotification();
+          triggerScreenshotProtection('محاولة استخدام PrintScreen');
         }
       });
-    });
+      
+      // Detect visibility change (possible capture)
+      document.addEventListener('visibilitychange', () => {
+        if(document.visibilityState === 'hidden' && securityConfig.screenshot) {
+          // Could be screenshot, log it
+          addLog('warning', 'تم اكتشاف تغيير في رؤية الصفحة (محاولة محتملة للالتقاط)');
+        }
+      });
+      
+      // Disable right-click (basic protection)
+      document.addEventListener('contextmenu', (e) => {
+        if(securityConfig.screenshot) {
+          e.preventDefault();
+          showToast('🚫 القائمة محمية', 'warning');
+        }
+      });
+    }
+
+    function triggerScreenshotProtection(reason) {
+      if(!securityConfig.screenshot) return;
+      
+      screenshotAttempts.push({
+        time: new Date().toISOString(),
+        reason: reason,
+        fingerprint: deviceFingerprint.slice(0, 16)
+      });
+      localStorage.setItem('onx_screenshot_attempts', JSON.stringify(screenshotAttempts));
+      
+      $('#screenshotOverlay').classList.add('active');
+      addLog('danger', `تم منع لقطة شاشة: ${reason}`);
+      
+      // Blur sensitive content
+      $$('.blur-sensitive').forEach(el => el.style.filter = 'blur(8px)');
+    }
+
+    function closeScreenshotOverlay() {      $('#screenshotOverlay').classList.remove('active');
+      $$('.blur-sensitive').forEach(el => el.style.filter = '');
+    }
+
+    function testScreenshotProtection() {
+      if(!securityConfig.screenshot) {
+        showToast('يجب تفعيل ميزة منع لقطات الشاشة أولاً', 'warning');
+        return;
+      }
+      triggerScreenshotProtection('اختبار يدوي');
+    }
+
+    function viewScreenshotLogs() {
+      if(screenshotAttempts.length === 0) {
+        showToast('لا توجد محاولات مسجلة', 'info');
+        return;
+      }
+      
+      showModal('سجل محاولات الالتقاط', 
+        screenshotAttempts.map(a => 
+          `🕐 ${new Date(a.time).toLocaleString('ar-SA')}<br>🔍 ${a.reason}<br>🆔 ${a.fingerprint}...`
+        ).join('<hr style="margin:10px 0">'), 
+        null, null, true
+      );
+    }
+
+    // ===== ADVANCED SETTINGS =====
+    function saveAdvancedSettings() {
+      securityConfig.encryption = $('#toggleEncryption').checked;
+      securityConfig.fingerprint = $('#toggleFingerprint').checked;
+      securityConfig.alerts = $('#toggleAlerts').checked;
+      securityConfig.auditLog = $('#toggleAuditLog').checked;
+      
+      localStorage.setItem('onx_security_config', JSON.stringify(securityConfig));
+      updateSecurityLevel();
+      addLog('success', 'تم حفظ الإعدادات المتقدمة');
+      showToast('تم حفظ الإعدادات ✅', 'success');
+    }
+
+    function resetToDefaults() {
+      showModal('استعادة الإعدادات', 'هل تريد استعادة جميع إعدادات الأمان إلى القيم الافتراضية؟', () => {
+        securityConfig = {
+          phoneBlock: true, ipBlock: true, userManage: true, singleSession: true,
+          tamperDetect: true, suspiciousDetect: true, screenshot: false,
+          encryption: true, fingerprint: true, alerts: true, auditLog: true
+        };
+        localStorage.setItem('onx_security_config', JSON.stringify(securityConfig));
+        loadConfig();
+        addLog('warning', 'تم استعادة الإعدادات الافتراضية');
+        showToast('تم الاستعادة بنجاح', 'success');      });
+    }
+
+    function emergencyLockdown() {
+      showModal('🔴 قفل طارئ', 'سيتم تعطيل جميع عمليات التسجيل والدخول فوراً. هل أنت متأكد؟', () => {
+        // In production: disable all auth endpoints
+        addLog('danger', '🔴 تم تفعيل القفل الطارئ بواسطة المسؤول');
+        showToast('🔴 القفل الطارئ مفعل - النظام محمي', 'danger');
+        document.body.style.filter = 'grayscale(100%) brightness(0.7)';
+      }, null, true);
+    }
+
+    // ===== SECURITY LOGS =====
+    function addLog(type, message) {
+      const entry = {
+        time: new Date().toLocaleTimeString('ar-SA'),
+        type: type,
+        message: message,
+        fingerprint: deviceFingerprint.slice(0, 12)
+      };
+      
+      securityLogs.unshift(entry);
+      if(securityLogs.length > 100) securityLogs.pop();
+      
+      localStorage.setItem('onx_security_logs', JSON.stringify(securityLogs));
+      renderSecurityLogs();
+    }
+
+    function renderSecurityLogs() {
+      const container = $('#securityLogs');
+      const filter = $('#logFilter').value;
+      
+      const filtered = filter === 'all' ? securityLogs : securityLogs.filter(l => l.type === filter);
+      
+      if(filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.4)">لا توجد سجلات</div>';
+        return;
+      }
+      
+      container.innerHTML = filtered.map(log => `
+        <div class="log-entry">
+          <span class="log-time">${log.time}</span>
+          <span class="log-type ${log.type}">${getLogIcon(log.type)}</span>
+          <span class="log-msg">${log.message}</span>
+        </div>
+      `).join('');
+    }
+
+    function getLogIcon(type) {
+      return { info: 'ℹ️', warning: '⚠️', danger: '🚨', success: '✅' }[type] || '•';    }
+
+    function filterLogs() {
+      renderSecurityLogs();
+    }
+
+    function exportLogs() {
+      const json = JSON.stringify(securityLogs, null, 2);
+      const blob = new Blob([json], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `security_logs_${Date.now()}.json`; a.click();
+      
+      addLog('info', 'تم تصدير سجل الأمان');
+      showToast('تم التصدير 📤', 'success');
+    }
+
+    function clearLogs() {
+      showModal('مسح السجل', 'هل تريد مسح جميع سجلات الأمان؟ لا يمكن التراجع عن هذا الإجراء.', () => {
+        securityLogs = [];
+        localStorage.setItem('onx_security_logs', '[]');
+        renderSecurityLogs();
+        addLog('warning', 'تم مسح جميع سجلات الأمان');
+        showToast('تم المسح', 'warning');
+      });
+    }
+
+    // ===== STATS & MONITORING =====
+    function updateStats() {
+      $('#activeSessions').textContent = '1';
+      $('#suspiciousAttempts').textContent = parseInt($('#rapidAttempts').textContent) + parseInt($('#multiIP').textContent);
+      $('#blockedCount').textContent = blockedIPs.length + blockedPhones.length + users.filter(u => u.status === 'محظور').length;
+      $('#blockedIPs').textContent = blockedIPs.length;
+      $('#lastScan').textContent = 'الآن';
+      
+      // Update threat level
+      const threats = parseInt($('#suspiciousAttempts').textContent);
+      if(threats > 5) {
+        $$('.status-dot.warning')[1].className = 'status-dot danger';
+      } else if(threats > 2) {
+        $$('.status-dot.warning')[1].className = 'status-dot warning';
+      } else {
+        $$('.status-dot.warning')[1].className = 'status-dot active';
+      }
+    }
+
+    function startSecurityMonitoring() {
+      // Periodic checks
+      setInterval(() => {
+        // Check for session timeout        const lastActivity = localStorage.getItem('onx_last_activity');
+        if(lastActivity && Date.now() - parseInt(lastActivity) > 1800000) { // 30 min
+          addLog('warning', 'انتهاء مهلة الجلسة - تسجيل خروج تلقائي');
+        }
+        
+        // Update last scan time
+        $('#lastScan').textContent = new Date().toLocaleTimeString('ar-SA');
+        
+        // Random suspicious activity simulation (for demo)
+        if(Math.random() > 0.95 && securityConfig.suspiciousDetect) {
+          $('#rapidAttempts').textContent = parseInt($('#rapidAttempts').textContent) + 1;
+          updateStats();
+        }
+      }, 60000);
+    }
+
+    // ===== MODAL & TOAST =====
+    function showModal(title, content, onConfirm, onCancel, isLarge = false) {
+      $('#modalTitle').textContent = title;
+      $('#modalContent').innerHTML = content;
+      $('#modalInput').style.display = 'none';
+      
+      const confirmBtn = $('#modalConfirm');
+      const cancelBtn = $('.modal-cancel');
+      
+      confirmBtn.onclick = () => {
+        closeModal();
+        if(onConfirm) onConfirm();
+      };
+      
+      cancelBtn.onclick = () => {
+        closeModal();
+        if(onCancel) onCancel();
+      };
+      
+      if(isLarge) {
+        $('.modal').style.maxWidth = '600px';
+        $('#modalContent').style.maxHeight = '400px';
+        $('#modalContent').style.overflowY = 'auto';
+      }
+      
+      $('#modal-overlay').classList.add('active');
+    }
+
+    function closeModal() {
+      $('#modal-overlay').classList.remove('active');
+      $('.modal').style.maxWidth = '';
+      $('#modalContent').style.maxHeight = '';
+    }
+    function showToast(message, type = 'success') {
+      const toast = $('#toast');
+      $('#toastIcon').textContent = { success: '✅', warning: '⚠️', danger: '🚨', info: 'ℹ️' }[type] || '•';
+      $('#toastText').textContent = message;
+      toast.className = type;
+      toast.classList.add('show');
+      
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ===== KEYBOARD SHORTCUTS =====
+    function handleKeyboardShortcuts(e) {
+      // Ctrl + Shift + L = Emergency Lockdown
+      if(e.ctrlKey && e.shiftKey && e.key === 'L') {
+        e.preventDefault();
+        emergencyLockdown();
+      }
+      // Ctrl + Shift + S = Screenshot test
+      if(e.ctrlKey && e.shiftKey && e.key === 'S') {
+        e.preventDefault();
+        testScreenshotProtection();
+      }
+      // Escape = Close modals
+      if(e.key === 'Escape') {
+        closeModal();
+        closeScreenshotOverlay();
+      }
+    }
+
+    // ===== UTILITY =====
+    function encryptData(data) {
+      if(!securityConfig.encryption) return data;
+      // Simple XOR encryption for demo (use proper encryption in production)
+      const key = 'ONX-TAQE-SEC';
+      return data.split('').map((c, i) => 
+        String.fromCharCode(c.charCodeAt(0) ^ key.charCodeAt(i % key.length))
+      ).join('');
+    }
   </script>
 </body>
 </html>
-
-
