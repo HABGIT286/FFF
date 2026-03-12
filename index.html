@@ -47,7 +47,8 @@
     }
     #particles { position:fixed; inset:0; z-index:-1; pointer-events:none; }
     .particle {
-      position:absolute; border-radius:50%;      animation: floatUp linear infinite; opacity:0;
+      position:absolute; border-radius:50%;
+      animation: floatUp linear infinite; opacity:0;
     }
     @keyframes floatUp {
       0%{transform:translateY(100vh) scale(0); opacity:0;}
@@ -85,46 +86,6 @@
     .login-subtitle { color:rgba(255,255,255,0.4); font-size:0.82rem; letter-spacing:2px; text-transform:uppercase; margin-top:5px; }
     .login-line { width:160px; height:2px; margin:14px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }
     
-    /* ===== LOGIN CREDENTIALS BOX ===== */
-    .credentials-box {
-      background: rgba(0,212,255,0.1);
-      border: 1px solid rgba(0,212,255,0.3);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .credentials-box .cred-title {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.6);      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .credentials-box .cred-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      font-size: 0.85rem;
-    }
-    .credentials-box .cred-item:last-child { border-bottom: none; }
-    .credentials-box .cred-label { color: rgba(255,255,255,0.5); }
-    .credentials-box .cred-value {
-      font-family: monospace;
-      color: var(--neon-blue);
-      background: rgba(0,0,0,0.3);
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-weight: 700;
-    }
-    .credentials-box .cred-note {
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.4);
-      margin-top: 8px;
-      font-style: italic;
-    }
-    
     .login-input-group { position:relative; margin-bottom:16px; }
     .login-input-label { font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; margin-bottom:7px; display:block; }
     .login-input {
@@ -145,7 +106,8 @@
     }
     .pass-toggle:hover { color:var(--neon-blue); }
     .btn-login {
-      width:100%; padding:15px; border:none; border-radius:14px; cursor:pointer;      font-family:'Cairo',sans-serif; font-size:1rem; font-weight:800;
+      width:100%; padding:15px; border:none; border-radius:14px; cursor:pointer;
+      font-family:'Cairo',sans-serif; font-size:1rem; font-weight:800;
       background:linear-gradient(135deg,#00d4ff,#7b2fff); color:#fff; letter-spacing:0.5px;
       box-shadow:0 8px 30px rgba(0,212,255,0.4); transition:var(--transition);
       position:relative; overflow:hidden; margin-top:6px; display:flex; align-items:center; justify-content:center; gap:10px;
@@ -194,7 +156,8 @@
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:1px;
     }
     .header-subtitle { color:rgba(255,255,255,0.5); font-size:0.95rem; margin-top:6px; letter-spacing:2px; text-transform:uppercase; }
-    .header-line { width:200px; height:2px; margin:16px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }    
+    .header-line { width:200px; height:2px; margin:16px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }
+    
     .logout-btn {
       position:fixed; top:20px; left:20px; z-index:100;
       padding:9px 18px; border:none; border-radius:10px; cursor:pointer;
@@ -244,6 +207,7 @@
     .icon-purple { background:linear-gradient(135deg,#7b2fff22,#7b2fff44); border:1px solid #7b2fff44; }
     .card-title { font-size:1.2rem; font-weight:700; color:#fff; }
     .card-desc  { font-size:0.8rem; color:rgba(255,255,255,0.4); margin-top:2px; }
+
     /* ===== SEARCH BAR ===== */
     .search-container { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
     .search-input {
@@ -292,7 +256,8 @@
     }
     thead th {
       padding:16px 12px; text-align:center; font-size:0.8rem; font-weight:700;
-      color:rgba(255,255,255,0.8); text-transform:uppercase; letter-spacing:1px;      position:sticky; top:0; background:inherit; backdrop-filter:blur(10px);
+      color:rgba(255,255,255,0.8); text-transform:uppercase; letter-spacing:1px;
+      position:sticky; top:0; background:inherit; backdrop-filter:blur(10px);
     }
     tbody tr {
       border-bottom:1px solid rgba(255,255,255,0.06); transition:var(--transition);
@@ -341,7 +306,8 @@
     }
     .log-type.info { background:rgba(0,212,255,0.25); color:var(--neon-blue); }
     .log-type.warning { background:rgba(255,171,0,0.25); color:var(--security-yellow); }
-    .log-type.danger { background:rgba(255,23,68,0.25); color:var(--security-red); }    .log-type.success { background:rgba(0,200,81,0.25); color:var(--security-green); }
+    .log-type.danger { background:rgba(255,23,68,0.25); color:var(--security-red); }
+    .log-type.success { background:rgba(0,200,81,0.25); color:var(--security-green); }
     .log-msg { flex:1; color:rgba(255,255,255,0.9); line-height:1.5; }
 
     /* ===== TOAST ===== */
@@ -390,6 +356,7 @@
       .search-container { flex-direction:column; }
       table { min-width:550px; }
     }
+
     /* ===== UTILITY CLASSES ===== */
     .hidden { display:none !important; }
     .blur-sensitive { filter:blur(5px); transition:filter 0.3s; cursor:pointer; }
@@ -420,26 +387,13 @@
         <div class="login-line"></div>
       </div>
       
-      <!-- ✅ Credentials Box - معلومات الدخول واضحة -->
-      <div class="credentials-box">
-        <div class="cred-title">🔐 بيانات الدخول الافتراضية</div>
-        <div class="cred-item">
-          <span class="cred-label">اسم المستخدم:</span>
-          <span class="cred-value">admin</span>
-        </div>
-        <div class="cred-item">
-          <span class="cred-label">كلمة المرور:</span>
-          <span class="cred-value">onxtaqe2024</span>
-        </div>
-        <div class="cred-note">⚠️ غيّر هذه البيانات بعد أول دخول!</div>
-      </div>
-      
       <div class="login-input-group">
         <label class="login-input-label">اسم المستخدم</label>
         <span class="login-input-icon">👤</span>
         <input class="login-input" id="loginUsername" type="text" placeholder="أدخل اسم المستخدم" autocomplete="username">
       </div>
-            <div class="login-input-group">
+      
+      <div class="login-input-group">
         <label class="login-input-label">كلمة المرور</label>
         <span class="login-input-icon">🔒</span>
         <input class="login-input" id="loginPassword" type="password" placeholder="أدخل كلمة المرور" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()">
@@ -451,7 +405,7 @@
       </button>
       
       <div class="login-error" id="loginError"></div>
-      <div class="login-note"><span>🔒</span><span>جميع محاولات الدخول مسجلة ومشفرة</span></div>
+      <div class="login-note"><span>🔒</span><span>يتم جلب بيانات الدخول من خادم آمن</span></div>
     </div>
   </div>
 
@@ -488,7 +442,8 @@
           <div class="stat-label" style="font-size:0.85rem; color:rgba(255,255,255,0.5)">👥 طلاب مسجلون</div>
           <div class="stat-value" id="totalStudents" style="font-size:2rem; font-weight:900; margin:8px 0; color:var(--neon-blue)">0</div>
         </div>
-        <div class="stat-box warning" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:20px; text-align:center">          <div class="stat-label" style="font-size:0.85rem; color:rgba(255,255,255,0.5)">⚠️ نشاط مشبوه</div>
+        <div class="stat-box warning" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:20px; text-align:center">
+          <div class="stat-label" style="font-size:0.85rem; color:rgba(255,255,255,0.5)">⚠️ نشاط مشبوه</div>
           <div class="stat-value" id="suspiciousCount" style="font-size:2rem; font-weight:900; margin:8px 0; color:var(--security-yellow)">0</div>
         </div>
         <div class="stat-box danger" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:20px; text-align:center">
@@ -537,7 +492,8 @@
             <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🆔 كود الطالب</div>
             <div style="font-family:monospace; font-size:0.8rem; word-break:break-all" id="detailCode">—</div>
           </div>
-          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🌐 عنوان الـ IP</div>
+          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
+            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🌐 عنوان الـ IP</div>
             <div style="font-size:1.1rem; font-weight:700" id="detailIP">—</div>
           </div>
           <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
@@ -586,7 +542,8 @@
         </div>
       </div>
 
-      <!-- Security Logs -->      <div class="glass-card">
+      <!-- Security Logs -->
+      <div class="glass-card">
         <div class="card-header">
           <div class="card-icon icon-red">📋</div>
           <div>
@@ -621,25 +578,33 @@
     <span id="toastText"></span>
   </div>
 
-  <script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
     // ===== GLOBAL VARIABLES =====
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => Array.from(document.querySelectorAll(s));
     
-    // ✅ بيانات الدخول - واضحة وقابلة للتعديل
-    const ADMIN_USERNAME = 'admin';
-    const ADMIN_PASSWORD = 'onxtaqe2024';
+    // ✅ رابط بيانات الدخول من GitHub Gist Raw
+    const CREDS_URL = "https://gist.githubusercontent.com/HABGIT286/675ff47c78ff90ac39a07f349b8af32e/raw/2f6ecbcb632f4a10716aa8a742c7e5a1263d2479/SS";
+    
+    // ===== SUPABASE CONFIG =====
+    const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     
     let allStudents = [];
     let securityLogs = [];
     let currentStudent = null;
 
     // ===== LOGIN SYSTEM =====
-    function togglePassView(){      const inp = $('#loginPassword');
+    function togglePassView(){
+      const inp = $('#loginPassword');
       const btn = $('#passToggleBtn');
       inp.type = inp.type === 'password' ? 'text' : 'password';
       btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
     }
+    window.togglePassView = togglePassView;
 
     function showLoginError(msg) {
       console.error('Login Error:', msg);
@@ -655,7 +620,18 @@
       btn.disabled = v;
     }
 
-    function doLogin() {
+    // ✅ دالة تحليل بيانات الاعتماد من الرابط الخام
+    function parseCreds(raw) {
+      const um = raw.match(/【S】(.+?)【S】/);
+      const pm = raw.match(/【P】(.+?)【P】/);
+      return { 
+        username: um ? um[1].trim() : null, 
+        password: pm ? pm[1].trim() : null 
+      };
+    }
+
+    // ✅ دالة تسجيل الدخول عبر الرابط الخام
+    async function doLogin() {
       const u = $('#loginUsername').value.trim();
       const p = $('#loginPassword').value.trim();
       
@@ -668,10 +644,27 @@
       
       setLoginLoading(true);
       
-      // ✅ التحقق من بيانات الدخول
-      setTimeout(() => {
-        if(u === ADMIN_USERNAME && p === ADMIN_PASSWORD){
+      try {
+        // ✅ جلب بيانات الاعتماد من الرابط الخام
+        const res = await fetch(CREDS_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        if(!res.ok) throw new Error('فشل تحميل بيانات الاعتماد');
+        
+        const raw = await res.text();
+        console.log('Raw credentials:', raw);
+        
+        const creds = parseCreds(raw);
+        console.log('Parsed credentials:', creds);
+        
+        if(!creds.username || !creds.password){ 
+          showLoginError('❌ تعذّر قراءة بيانات الاعتماد'); 
+          return; 
+        }
+        
+        if(u === creds.username && p === creds.password){
           console.log('✅ Login successful!');
+          
+          // تسجيل دخول ناجح في السجل
+          await addSecurityLog('success', 'تم تسجيل دخول المشرف بنجاح', null);
           
           const card = document.querySelector('.login-card');
           card.style.animation = 'loginCardIn 0.9s cubic-bezier(0.23,1,0.32,1) reverse';
@@ -683,9 +676,17 @@
           }, 400);
         } else {
           console.error('❌ Login failed!');
-          showLoginError('❌ اسم المستخدم أو كلمة المرور غير صحيحة<br><br>جرب: admin / onxtaqe2024');
-        }        setLoginLoading(false);
-      }, 500);
+          showLoginError('❌ اسم المستخدم أو كلمة المرور غير صحيحة');
+          
+          // تسجيل محاولة دخول فاشلة
+          await addSecurityLog('danger', `محاولة دخول فاشلة للمستخدم: ${u}`, null);
+        }
+      } catch(err) {
+        console.error('Login error:', err);
+        showLoginError('⚠️ خطأ في الاتصال: ' + err.message);
+      } finally {
+        setLoginLoading(false);
+      }
     }
     window.doLogin = doLogin;
 
@@ -728,38 +729,15 @@
       }
     }
 
-    // ===== SUPABASE CONFIG =====
-    const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
-    
-    async function fetchFromSupabase(table, options = {}) {
-      try {        let url = `${SUPABASE_URL}/rest/v1/${table}`;
-        if(options.select) url += `?select=${options.select}`;
-        if(options.order) url += `&order=${options.order}`;
-        
-        const res = await fetch(url, {
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if(!res.ok) throw new Error(`HTTP ${res.status}`);
-        return await res.json();
-      } catch(err) {
-        console.error('Supabase error:', err);
-        return null;
-      }
-    }
-
     // ===== DATA LOADING =====
     async function loadStudents() {
       try {
-        const data = await fetchFromSupabase('student_reports', {
-          select: '*',
-          order: 'date.desc'
-        });
+        const { data, error } = await supabase
+          .from('student_reports')
+          .select('*')
+          .order('date', { ascending: false });
+        
+        if(error) throw error;
         
         allStudents = data || [];
         renderStudentsTable();
@@ -768,7 +746,7 @@
         
       } catch(err) {
         console.error('Error loading students:', err);
-        showToast('فشل تحميل البيانات - تأكد من اتصال الإنترنت', 'danger');
+        showToast('فشل تحميل البيانات', 'danger');
         
         // عرض بيانات تجريبية إذا فشل الاتصال
         allStudents = generateDemoStudents();
@@ -776,20 +754,25 @@
         updateStats();
       }
     }
+    window.loadStudents = loadStudents;
 
     function generateDemoStudents() {
       return [
         { id: 1, name: 'أحمد محمد', title: 'تقرير عن الذكاء الاصطناعي', subject: 'حاسب آلي', date: new Date().toISOString(), code: 'demo1', status: 'active' },
         { id: 2, name: 'سارة علي', title: 'دراسة تحليلية للبيانات', subject: 'إحصاء', date: new Date().toISOString(), code: 'demo2', status: 'active' },
         { id: 3, name: 'خالد عمر', title: 'بحث في الأمن السيبراني', subject: 'أمن معلومات', date: new Date().toISOString(), code: 'demo3', status: 'suspicious' }
-      ];    }
+      ];
+    }
 
     async function loadSecurityLogs() {
       try {
-        const data = await fetchFromSupabase('security_logs', {
-          select: '*',
-          order: 'timestamp.desc'
-        });
+        const { data, error } = await supabase
+          .from('security_logs')
+          .select('*')
+          .order('timestamp', { ascending: false })
+          .limit(50);
+        
+        if(error) throw error;
         
         securityLogs = data || generateDemoLogs();
         renderSecurityLogs();
@@ -831,7 +814,8 @@
       
       if(!students || students.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" style="padding:30px; text-align:center; color:rgba(255,255,255,0.4)">لا توجد بيانات لعرضها</td></tr>`;
-        return;      }
+        return;
+      }
       
       tbody.innerHTML = students.map((student, i) => {
         const statusClass = student.status === 'blocked' ? 'blocked' : student.status === 'suspicious' ? 'suspicious' : '';
@@ -880,7 +864,8 @@
     }
 
     // ===== SEARCH & FILTERS =====
-    function searchStudent() {      const name = $('#searchName').value.trim();
+    function searchStudent() {
+      const name = $('#searchName').value.trim();
       
       if(!name) {
         showToast('أدخل اسم الطالب للبحث', 'warning');
@@ -929,7 +914,8 @@
       
       $('#studentRiskLevel').textContent = risk.label;
       $('#studentRiskLevel').className = `alert-badge ${risk.class}`;
-            $('#studentDetailsPanel').scrollIntoView({ behavior: 'smooth' });
+      
+      $('#studentDetailsPanel').scrollIntoView({ behavior: 'smooth' });
     }
     window.viewStudentDetails = viewStudentDetails;
 
@@ -978,14 +964,20 @@
     }
     window.warnStudent = warnStudent;
 
-    // ===== SECURITY LOGS =====    function addSecurityLog(type, message, student = null) {
+    // ===== SECURITY LOGS =====
+    async function addSecurityLog(type, message, student = null) {
       const log = {
-        id: Date.now(),
         timestamp: new Date().toISOString(),
         type,
         message,
         student: student?.name || 'النظام'
       };
+      
+      try {
+        await supabase.from('security_logs').insert([log]);
+      } catch(e) {
+        console.log('Log save error:', e);
+      }
       
       securityLogs.unshift(log);
       if(securityLogs.length > 100) securityLogs.pop();
@@ -1027,28 +1019,17 @@
         loadSecurityLogs();
         updateStats();
         $('#lastUpdate').textContent = new Date().toLocaleTimeString('ar-SA');
-      }, 30000);      
+      }, 30000);
+      
       addSecurityLog('success', 'تم تشغيل لوحة المراقبة الأمنية بنجاح', null);
     }
 
     // ===== BOOT =====
-    (function boot(){
+    (async function boot(){
       initParticles();
-      
-      // التحقق إذا كان مسجل دخول سابقاً
-      if(sessionStorage.getItem('onx_admin_logged_in') === 'true') {
-        $('#loginScreen').classList.add('hidden');
-        $('#dashboardScreen').classList.add('active');
-        initDashboard();
-      }
     })();
-
-    // حفظ حالة الدخول
-    window.addEventListener('beforeunload', () => {
-      if($('#dashboardScreen').classList.contains('active')) {
-        sessionStorage.setItem('onx_admin_logged_in', 'true');
-      }
-    });
   </script>
 </body>
 </html>
+
+
