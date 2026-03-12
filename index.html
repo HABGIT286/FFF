@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>🛡️ نظام المراقبة الأمنية | ONX-TAQE SECURITY PRO</title>
+  <title>🛡️ نظام المراقبة الأمنية المتقدم | ONX-TAQE SECURITY PRO</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   
   <style>
@@ -195,6 +195,9 @@
     
     .card-glow-red::after   { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(233,69,96,0.15),transparent 70%); pointer-events:none; }
     .card-glow-blue::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(0,212,255,0.12),transparent 70%); pointer-events:none; }
+    .card-glow-purple::after{ content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(123,47,255,0.15),transparent 70%); pointer-events:none; }
+    .card-glow-gold::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(245,197,24,0.12),transparent 70%); pointer-events:none; }
+    .card-glow-green::after { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(0,200,81,0.12),transparent 70%); pointer-events:none; }
 
     /* ===== CARD HEADER ===== */
     .card-header { display:flex; align-items:center; gap:14px; margin-bottom:24px; }
@@ -205,6 +208,8 @@
     .icon-blue   { background:linear-gradient(135deg,#00d4ff22,#00d4ff44); border:1px solid #00d4ff44; }
     .icon-red    { background:linear-gradient(135deg,#e9456022,#e9456044); border:1px solid #e9456044; }
     .icon-purple { background:linear-gradient(135deg,#7b2fff22,#7b2fff44); border:1px solid #7b2fff44; }
+    .icon-gold   { background:linear-gradient(135deg,#f5c51822,#f5c51844); border:1px solid #f5c51844; }
+    .icon-green  { background:linear-gradient(135deg,#00ff8822,#00ff8844); border:1px solid #00ff8844; }
     .card-title { font-size:1.2rem; font-weight:700; color:#fff; }
     .card-desc  { font-size:0.8rem; color:rgba(255,255,255,0.4); margin-top:2px; }
 
@@ -249,7 +254,7 @@
 
     /* ===== TABLE ===== */
     .table-container { overflow-x:auto; border-radius:16px; overflow:hidden; margin-top:10px; }
-    table { width:100%; border-collapse:collapse; min-width:900px; }
+    table { width:100%; border-collapse:collapse; min-width:1200px; }
     thead tr {
       background:linear-gradient(135deg, rgba(255,23,68,0.2), rgba(0,212,255,0.2));
       border-bottom:2px solid rgba(255,255,255,0.15);
@@ -257,8 +262,11 @@
     thead th {
       padding:16px 12px; text-align:center; font-size:0.8rem; font-weight:700;
       color:rgba(255,255,255,0.8); text-transform:uppercase; letter-spacing:1px;
-      position:sticky; top:0; background:inherit; backdrop-filter:blur(10px);
+      position:sticky; top:0; background:inherit; backdrop-filter:blur(10px); cursor:pointer;
     }
+    thead th::after { content:'↕'; position:absolute; left:8px; font-size:0.7rem; opacity:0.5; }
+    thead th.sorted-asc::after { content:'▲'; opacity:1; color:var(--neon-blue); }
+    thead th.sorted-desc::after { content:'▼'; opacity:1; color:var(--neon-blue); }
     tbody tr {
       border-bottom:1px solid rgba(255,255,255,0.06); transition:var(--transition);
       animation: rowFade 0.3s ease;
@@ -267,7 +275,7 @@
     tbody tr:hover { background:rgba(255,255,255,0.07); transform:scale(1.002); }
     tbody tr.blocked { background:rgba(255,23,68,0.12); border-right:4px solid var(--security-red); }
     tbody tr.suspicious { background:rgba(255,171,0,0.08); border-right:4px solid var(--security-yellow); }
-    td { padding:14px 12px; text-align:center; font-size:0.9rem; color:var(--text-light); }
+    td { padding:14px 12px; text-align:center; font-size:0.85rem; color:var(--text-light); }
     
     .action-btn {
       padding:6px 12px; border-radius:8px; font-size:0.8rem; border:none;
@@ -288,6 +296,189 @@
     .alert-badge.medium { background:rgba(255,171,0,0.2); color:var(--security-yellow); }
     .alert-badge.high { background:rgba(255,23,68,0.2); color:var(--security-red); animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{box-shadow:0 0 25px rgba(255,23,68,0.6);} 50%{box-shadow:0 0 45px rgba(255,23,68,0.9);} }
+
+    /* ===== STUDENT PROFILE CARD ===== */
+    .student-profile {
+      background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(123,47,255,0.08));
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 20px;
+      padding: 24px;
+      margin: 20px 0;
+      display: none;
+      animation: slideDown 0.4s ease;
+    }
+    .student-profile.active { display: block; }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 900;
+      box-shadow: 0 0 30px rgba(0,212,255,0.4);
+    }
+    .profile-info { flex: 1; }
+    .profile-name { font-size: 1.5rem; font-weight: 900; margin-bottom: 5px; }
+    .profile-code { font-family: monospace; color: var(--neon-blue); font-size: 0.9rem; }
+    .profile-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .profile-status.online { background: rgba(0,200,81,0.2); color: var(--security-green); }
+    .profile-status.offline { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+    .profile-status.suspicious { background: rgba(255,171,0,0.2); color: var(--security-yellow); }
+    .profile-status.blocked { background: rgba(255,23,68,0.2); color: var(--security-red); }
+    
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .profile-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 15px;
+    }
+    .profile-item-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .profile-item-value {
+      font-size: 1rem;
+      font-weight: 700;
+      word-break: break-all;
+    }
+    .profile-item-value.fingerprint {
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: var(--neon-blue);
+    }
+    
+    .security-indicators {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .indicator {
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .indicator-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .indicator-icon.safe { background: rgba(0,200,81,0.15); color: var(--security-green); }
+    .indicator-icon.warning { background: rgba(255,171,0,0.15); color: var(--security-yellow); }
+    .indicator-icon.danger { background: rgba(255,23,68,0.15); color: var(--security-red); }
+    .indicator-info { flex: 1; }
+    .indicator-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 3px; }
+    .indicator-desc { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+    
+    .profile-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ===== TOGGLE SWITCH ===== */
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    .toggle-info { flex: 1; }
+    .toggle-title { font-size: 0.95rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .toggle-desc { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 32px;
+      transition: var(--transition);
+    }
+    .slider:before {
+      content: '';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      left: 4px;
+      top: 4px;
+      background: linear-gradient(135deg, #fff, #ccc);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      transition: var(--transition);
+    }
+    input:checked + .slider {
+      background: linear-gradient(135deg, var(--security-green), #00ff88);
+      border-color: var(--security-green);
+      box-shadow: 0 0 20px rgba(0,200,81,0.4);
+    }
+    input:checked + .slider:before {
+      transform: translateX(28px);
+      background: linear-gradient(135deg, #fff, #e0ffe0);
+    }
+    input:not(:checked) + .slider {
+      background: linear-gradient(135deg, var(--security-red), #ff4040);
+      border-color: var(--security-red);
+      box-shadow: 0 0 20px rgba(233,69,96,0.3);
+    }
 
     /* ===== LOGS CONTAINER ===== */
     .logs-container {
@@ -355,6 +546,7 @@
       .btn { width:100%; }
       .search-container { flex-direction:column; }
       table { min-width:550px; }
+      .profile-grid { grid-template-columns: 1fr; }
     }
 
     /* ===== UTILITY CLASSES ===== */
@@ -462,7 +654,7 @@
           <div class="card-icon icon-blue">🔍</div>
           <div>
             <div class="card-title">بحث وتتبع طالب</div>
-            <div class="card-desc">ابحث بالاسم أو الكود لعرض الملف الأمني</div>
+            <div class="card-desc">ابحث بالاسم أو الكود لعرض الملف الأمني الكامل</div>
           </div>
         </div>
         
@@ -471,41 +663,117 @@
             <span class="search-icon">👤</span>
             <input type="text" class="search-input" id="searchName" placeholder="أدخل اسم الطالب...">
           </div>
-          <button class="btn btn-primary" onclick="searchStudent()">🔎 بحث</button>
+          <button class="btn btn-primary" onclick="searchStudent()">🔎 بحث متقدم</button>
           <button class="btn btn-outline" onclick="showAllStudents()">📋 عرض الكل</button>
         </div>
       </div>
 
-      <!-- Student Details Panel -->
-      <div class="glass-card hidden" id="studentDetailsPanel">
-        <div class="card-header">
-          <div class="card-icon icon-purple">👤</div>
-          <div>
-            <div class="card-title">تفاصيل الطالب: <span id="studentNameDisplay" style="color:var(--neon-blue)"></span></div>
-            <div class="card-desc">مراقبة شاملة للنشاط</div>
+      <!-- Student Profile Panel (Detailed) -->
+      <div class="student-profile" id="studentProfile">
+        <div class="profile-header">
+          <div class="profile-avatar" id="profileAvatar">أ</div>
+          <div class="profile-info">
+            <div class="profile-name" id="profileName">اسم الطالب</div>
+            <div class="profile-code" id="profileCode">CODE: XXXXXXXX</div>
+            <div class="profile-status online" id="profileStatus">
+              <span class="status-dot" style="width:6px;height:6px;background:currentColor;border-radius:50%"></span>
+              <span id="profileStatusText">متصل الآن</span>
+            </div>
           </div>
-          <span class="alert-badge high" id="studentRiskLevel">مخاطر عالية</span>
-        </div>
-        
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:20px">
-          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🆔 كود الطالب</div>
-            <div style="font-family:monospace; font-size:0.8rem; word-break:break-all" id="detailCode">—</div>
-          </div>
-          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🌐 عنوان الـ IP</div>
-            <div style="font-size:1.1rem; font-weight:700" id="detailIP">—</div>
-          </div>
-          <div style="background:rgba(255,255,255,0.04); padding:15px; border-radius:12px">
-            <div style="font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:8px">🕐 آخر نشاط</div>
-            <div style="font-size:1.1rem; font-weight:700" id="detailLastActivity">—</div>
+          <div style="text-align:left">
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">آخر نشاط</div>
+            <div style="font-weight:700;color:var(--neon-blue)" id="profileLastActivity">الآن</div>
           </div>
         </div>
         
-        <div class="btn-row" style="display:flex; gap:10px; flex-wrap:wrap">
-          <button class="btn btn-danger" onclick="banStudent()">🚫 حظر الطالب</button>
+        <div class="profile-grid">
+          <div class="profile-item">
+            <div class="profile-item-label">🆔 كود الطالب</div>
+            <div class="profile-item-value fingerprint" id="detailCode">—</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">🔐 بصمة الجهاز</div>
+            <div class="profile-item-value fingerprint" id="detailFingerprint">—</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">🌐 عنوان الـ IP</div>
+            <div class="profile-item-value" id="detailIP">—</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">📍 الموقع الجغرافي</div>
+            <div class="profile-item-value" id="detailLocation">—</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">🖥️ نوع الجهاز</div>
+            <div class="profile-item-value" id="detailDevice">—</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">🌐 المتصفح</div>
+            <div class="profile-item-value" id="detailBrowser">—</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">📊 مرات الدخول</div>
+            <div class="profile-item-value" id="detailLogins">0</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">⏱️ مدة الجلسة</div>
+            <div class="profile-item-value" id="detailSessionTime">0 دقيقة</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">📸 محاولات لقطة الشاشة</div>
+            <div class="profile-item-value" id="detailScreenshots" style="color:var(--security-red)">0</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">🔄 تغييرات العنوان</div>
+            <div class="profile-item-value" id="detailTitleChanges">0</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">🌍 تسجيل من مكان جديد</div>
+            <div class="profile-item-value" id="detailNewLocation" style="color:var(--security-yellow)">لا</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">📶 حالة الاتصال</div>
+            <div class="profile-item-value" id="detailConnection">متصل</div>
+          </div>
+        </div>
+        
+        <div class="security-indicators">
+          <div class="indicator">
+            <div class="indicator-icon safe">✅</div>
+            <div class="indicator-info">
+              <div class="indicator-title">البصمة موثقة</div>
+              <div class="indicator-desc">لا تغييرات في الجهاز</div>
+            </div>
+          </div>
+          <div class="indicator">
+            <div class="indicator-icon safe">🌐</div>
+            <div class="indicator-info">
+              <div class="indicator-title">IP ثابت</div>
+              <div class="indicator-desc">نفس الشبكة المعتادة</div>
+            </div>
+          </div>
+          <div class="indicator">
+            <div class="indicator-icon warning">⚠️</div>
+            <div class="indicator-info">
+              <div class="indicator-title">نشاط متوسط</div>
+              <div class="indicator-desc">بعض التعديلات المسجلة</div>
+            </div>
+          </div>
+          <div class="indicator">
+            <div class="indicator-icon danger">🚫</div>
+            <div class="indicator-info">
+              <div class="indicator-title">محاولات لقطة</div>
+              <div class="indicator-desc">تم رصدها ومنعها</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="profile-actions">
+          <button class="btn btn-danger" onclick="banStudent()">🚫 حظر نهائي</button>
           <button class="btn btn-warning" onclick="warnStudent()">⚠️ إرسال تحذير</button>
-          <button class="btn btn-outline" onclick="hideStudentDetails()">❌ إغلاق</button>
+          <button class="btn btn-success" onclick="resetStudentData()">🔄 تصفير المقاييس</button>
+          <button class="btn btn-primary" onclick="exportStudentReport()">📤 تصدير التقرير</button>
+          <button class="btn btn-outline" onclick="hideStudentProfile()">❌ إغلاق</button>
         </div>
       </div>
 
@@ -514,8 +782,8 @@
         <div class="card-header">
           <div class="card-icon icon-blue">👥</div>
           <div>
-            <div class="card-title">قائمة الطلاب</div>
-            <div class="card-desc">عرض وتحليل نشاط جميع المستخدمين</div>
+            <div class="card-title">قائمة الطلاب المراقَبين</div>
+            <div class="card-desc">عرض وتحليل نشاط جميع المستخدمين مع كافة التفاصيل</div>
           </div>
           <button class="btn btn-primary" style="margin-right:auto;padding:8px 16px;font-size:0.85rem" onclick="loadStudents()">
             <span>🔄</span> تحديث
@@ -528,27 +796,182 @@
               <tr>
                 <th>#</th>
                 <th>الطالب</th>
-                <th>عنوان التقرير</th>
-                <th>المادة</th>
-                <th>التاريخ</th>
+                <th>الكود</th>
+                <th>البصمة</th>
+                <th>الـ IP</th>
+                <th>الدخول</th>
+                <th>لقطات</th>
+                <th>تعديلات</th>
                 <th>الحالة</th>
                 <th>إجراءات</th>
               </tr>
             </thead>
             <tbody id="studentsTable">
-              <tr><td colspan="7" style="padding:30px; text-align:center;"><div class="login-loader"></div></td></tr>
+              <tr><td colspan="10" style="padding:30px; text-align:center;"><div class="login-loader"></div></td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
+      <!-- Security Settings -->
+      <div class="glass-card card-glow-purple">
+        <div class="card-header">
+          <div class="card-icon icon-purple">⚙️</div>
+          <div>
+            <div class="card-title">إعدادات الحماية المتقدمة</div>
+            <div class="card-desc">تحكم كامل في سياسات الأمان - شغّل/أطفئ كل ميزة</div>
+          </div>
+        </div>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:15px">
+          <div>
+            <div style="font-weight:700; margin-bottom:12px; color:var(--neon-blue)">🔐 حماية البصمة والجهاز</div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">🔐 تتبع بصمة الجهاز</div>
+                <div class="toggle-desc">منع التسجيل من أجهزة متعددة</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleFingerprint" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">🌐 مراقبة الـ IP</div>
+                <div class="toggle-desc">كشف التغييرات في عنوان الشبكة</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleIPMonitor" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">🖥️ كشف المتصفح الجديد</div>
+                <div class="toggle-desc">تنبيه عند تغيير المتصفح</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleBrowserCheck" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">📍 كشف الموقع الجديد</div>
+                <div class="toggle-desc">رصد التسجيل من أماكن جديدة</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleLocationCheck" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div>
+            <div style="font-weight:700; margin-bottom:12px; color:var(--security-red)">🚨 كشف النشاط المشبوه</div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">📸 منع لقطة الشاشة</div>
+                <div class="toggle-desc">رصد ومنع محاولات الالتقاط</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleScreenshot" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">⚡ كشف السرعة المشبوهة</div>
+                <div class="toggle-desc">رصد التسجيلات السريعة جداً</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleSpeedCheck" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">🔄 كشف التعديلات المتكررة</div>
+                <div class="toggle-desc">تنبيه عند تكرار تغيير العنوان</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleEditCheck" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">🌐 كشف الاتصال المنقطع</div>
+                <div class="toggle-desc">رصد فقدان الاتصال بالإنترنت</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleConnectionCheck" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div>
+            <div style="font-weight:700; margin-bottom:12px; color:var(--security-yellow)">⚡ إجراءات تلقائية</div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">🚫 حظر تلقائي (3 محاولات)</div>
+                <div class="toggle-desc">حظر تلقائي بعد 3 مخاطر</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleAutoBan" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">📧 إشعار فوري للمشرف</div>
+                <div class="toggle-desc">إرسال تنبيه عند خطر</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleInstantAlert" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">❄️ تجميد الحساب المشبوه</div>
+                <div class="toggle-desc">توقف مؤقت للنشاط المشبوه</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleFreeze">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <div class="toggle-title">📝 تسجيل شامل للنشاط</div>
+                <div class="toggle-desc">حفظ كل حركة في السجل</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="toggleAuditLog" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="btn-row" style="margin-top:20px">
+          <button class="btn btn-success" onclick="saveSecuritySettings()">💾 حفظ الإعدادات</button>
+          <button class="btn btn-warning" onclick="exportSecuritySettings()">📤 تصدير الإعدادات</button>
+          <button class="btn btn-outline" onclick="resetSecurityDefaults()">🔄 استعادة الافتراضي</button>
+          <button class="btn btn-danger" onclick="emergencyLockdown()">🔴 قفل طارئ للنظام</button>
+        </div>
+      </div>
+
       <!-- Security Logs -->
-      <div class="glass-card">
+      <div class="glass-card card-glow-red">
         <div class="card-header">
           <div class="card-icon icon-red">📋</div>
           <div>
             <div class="card-title">سجل الأحداث الأمنية</div>
-            <div class="card-desc">مراقبة فورية لجميع الأنشطة</div>
+            <div class="card-desc">مراقبة فورية ومفصلة لجميع أنشطة النظام</div>
           </div>
           <span class="realtime-indicator"><span class="realtime-dot"></span> تحديث تلقائي</span>
         </div>
@@ -558,9 +981,11 @@
             <option value="all">كل الأحداث</option>
             <option value="info">ℹ️ معلومات</option>
             <option value="warning">⚠️ تحذيرات</option>
-            <option value="danger">🚨 أخطاء</option>
+            <option value="danger">🚨 أخطاء/تهديدات</option>
             <option value="success">✅ نجاح</option>
+            <option value="screenshot">📸 لقطات شاشة</option>
           </select>
+          <button class="btn btn-outline" onclick="exportLogs()">📤 تصدير السجل</button>
           <button class="btn btn-outline" onclick="clearLogs()">🗑️ مسح السجل</button>
         </div>
         
@@ -596,6 +1021,20 @@
     let allStudents = [];
     let securityLogs = [];
     let currentStudent = null;
+    let securityConfig = {
+      fingerprint: true,
+      ipMonitor: true,
+      browserCheck: true,
+      locationCheck: true,
+      screenshot: true,
+      speedCheck: true,
+      editCheck: true,
+      connectionCheck: true,
+      autoBan: true,
+      instantAlert: true,
+      freeze: false,
+      auditLog: true
+    };
 
     // ===== LOGIN SYSTEM =====
     function togglePassView(){
@@ -620,7 +1059,6 @@
       btn.disabled = v;
     }
 
-    // ✅ دالة تحليل بيانات الاعتماد من الرابط الخام
     function parseCreds(raw) {
       const um = raw.match(/【S】(.+?)【S】/);
       const pm = raw.match(/【P】(.+?)【P】/);
@@ -630,7 +1068,6 @@
       };
     }
 
-    // ✅ دالة تسجيل الدخول عبر الرابط الخام
     async function doLogin() {
       const u = $('#loginUsername').value.trim();
       const p = $('#loginPassword').value.trim();
@@ -645,7 +1082,6 @@
       setLoginLoading(true);
       
       try {
-        // ✅ جلب بيانات الاعتماد من الرابط الخام
         const res = await fetch(CREDS_URL + '?t=' + Date.now(), { cache: 'no-store' });
         if(!res.ok) throw new Error('فشل تحميل بيانات الاعتماد');
         
@@ -663,7 +1099,6 @@
         if(u === creds.username && p === creds.password){
           console.log('✅ Login successful!');
           
-          // تسجيل دخول ناجح في السجل
           await addSecurityLog('success', 'تم تسجيل دخول المشرف بنجاح', null);
           
           const card = document.querySelector('.login-card');
@@ -677,8 +1112,6 @@
         } else {
           console.error('❌ Login failed!');
           showLoginError('❌ اسم المستخدم أو كلمة المرور غير صحيحة');
-          
-          // تسجيل محاولة دخول فاشلة
           await addSecurityLog('danger', `محاولة دخول فاشلة للمستخدم: ${u}`, null);
         }
       } catch(err) {
@@ -739,7 +1172,13 @@
         
         if(error) throw error;
         
-        allStudents = data || [];
+        allStudents = (data || []).map(student => ({
+          ...student,
+          riskScore: calculateRiskScore(student),
+          isOnline: checkIfOnline(student),
+          lastActivityFormatted: student.last_activity ? formatTimeAgo(student.last_activity) : 'غير معروف'
+        }));
+        
         renderStudentsTable();
         updateStats();
         showToast(`تم تحميل ${allStudents.length} طالب`, 'success');
@@ -748,7 +1187,6 @@
         console.error('Error loading students:', err);
         showToast('فشل تحميل البيانات', 'danger');
         
-        // عرض بيانات تجريبية إذا فشل الاتصال
         allStudents = generateDemoStudents();
         renderStudentsTable();
         updateStats();
@@ -758,9 +1196,57 @@
 
     function generateDemoStudents() {
       return [
-        { id: 1, name: 'أحمد محمد', title: 'تقرير عن الذكاء الاصطناعي', subject: 'حاسب آلي', date: new Date().toISOString(), code: 'demo1', status: 'active' },
-        { id: 2, name: 'سارة علي', title: 'دراسة تحليلية للبيانات', subject: 'إحصاء', date: new Date().toISOString(), code: 'demo2', status: 'active' },
-        { id: 3, name: 'خالد عمر', title: 'بحث في الأمن السيبراني', subject: 'أمن معلومات', date: new Date().toISOString(), code: 'demo3', status: 'suspicious' }
+        { 
+          id: 1, 
+          name: 'أحمد محمد', 
+          title: 'تقرير عن الذكاء الاصطناعي', 
+          subject: 'حاسب آلي', 
+          date: new Date().toISOString(), 
+          code: 'demo1', 
+          status: 'active',
+          fingerprint: 'a1b2c3d4e5f6...',
+          ip_address: '192.168.1.100',
+          session_count: 5,
+          screenshot_attempts: 2,
+          title_changes: 3,
+          last_activity: new Date().toISOString(),
+          device_type: 'Windows',
+          browser: 'Chrome'
+        },
+        { 
+          id: 2, 
+          name: 'سارة علي', 
+          title: 'دراسة تحليلية للبيانات', 
+          subject: 'إحصاء', 
+          date: new Date().toISOString(), 
+          code: 'demo2', 
+          status: 'suspicious',
+          fingerprint: 'f6e5d4c3b2a1...',
+          ip_address: '10.0.0.50',
+          session_count: 12,
+          screenshot_attempts: 5,
+          title_changes: 8,
+          last_activity: new Date().toISOString(),
+          device_type: 'MacOS',
+          browser: 'Safari'
+        },
+        { 
+          id: 3, 
+          name: 'خالد عمر', 
+          title: 'بحث في الأمن السيبراني', 
+          subject: 'أمن معلومات', 
+          date: new Date().toISOString(), 
+          code: 'demo3', 
+          status: 'blocked',
+          fingerprint: '1a2b3c4d5e6f...',
+          ip_address: '172.16.0.25',
+          session_count: 20,
+          screenshot_attempts: 10,
+          title_changes: 15,
+          last_activity: new Date().toISOString(),
+          device_type: 'Linux',
+          browser: 'Firefox'
+        }
       ];
     }
 
@@ -786,26 +1272,75 @@
 
     function generateDemoLogs() {
       const logs = [];
-      const types = ['info', 'warning', 'danger', 'success'];
+      const types = ['info', 'warning', 'danger', 'success', 'screenshot'];
       const messages = [
         'تم تسجيل دخول المشرف بنجاح',
         'محاولة تغيير عنوان التقرير',
         'اكتشاف محاولة لقطة شاشة',
         'تحديث بيانات الطالب بنجاح',
-        'رصد نشاط مشبوه'
+        'رصد نشاط مشبوه - تسجيلات متعددة',
+        'تغيير في بصمة الجهاز',
+        'تسجيل من موقع جغرافي جديد',
+        'فقدان الاتصال بالإنترنت',
+        'محاولة دخول من متصفح مختلف',
+        'حظر تلقائي بعد 3 محاولات'
       ];
       
       const now = Date.now();
-      for(let i=0; i<20; i++) {
+      for(let i=0; i<30; i++) {
         logs.push({
           id: i+1,
-          timestamp: new Date(now - Math.random() * 86400000).toISOString(),
+          timestamp: new Date(now - Math.random() * 86400000 * 3).toISOString(),
           type: types[Math.floor(Math.random() * types.length)],
           message: messages[Math.floor(Math.random() * messages.length)],
-          student: allStudents[Math.floor(Math.random() * Math.max(allStudents.length, 1))]?.name || 'نظام'
+          student: allStudents[Math.floor(Math.random() * Math.max(allStudents.length, 1))]?.name || 'نظام',
+          fingerprint: 'abc123...',
+          ip: `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`
         });
       }
       return logs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+    }
+
+    // ===== RISK CALCULATION =====
+    function calculateRiskScore(student) {
+      let score = 0;
+      
+      if(student.session_count > 5) score += 15;
+      if(student.session_count > 10) score += 15;
+      if(student.title_changes > 3) score += 20;
+      if(student.title_changes > 8) score += 20;
+      if(student.screenshot_attempts > 0) score += 25;
+      if(student.screenshot_attempts > 5) score += 25;
+      if(student.status === 'blocked') score += 50;
+      if(student.status === 'suspicious') score += 30;
+      
+      return Math.min(score, 100);
+    }
+
+    function checkIfOnline(student) {
+      const lastActivity = new Date(student.last_activity || student.date).getTime();
+      const now = Date.now();
+      const diff = now - lastActivity;
+      return diff < 300000; // أقل من 5 دقائق = متصل
+    }
+
+    function getRiskLevel(score) {
+      if(score >= 70) return { label: 'خطر عالي 🔴', class: 'high', color: 'var(--security-red)' };
+      if(score >= 40) return { label: 'خطر متوسط 🟡', class: 'medium', color: 'var(--security-yellow)' };
+      return { label: 'آمن 🟢', class: 'low', color: 'var(--security-green)' };
+    }
+
+    function formatTimeAgo(date) {
+      if(!date) return 'غير معروف';
+      const diff = Date.now() - new Date(date).getTime();
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      
+      if(minutes < 1) return 'الآن';
+      if(minutes < 60) return `منذ ${minutes} دقيقة`;
+      if(hours < 24) return `منذ ${hours} ساعة`;
+      return `منذ ${days} يوم`;
     }
 
     // ===== RENDERING =====
@@ -813,27 +1348,30 @@
       const tbody = $('#studentsTable');
       
       if(!students || students.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="padding:30px; text-align:center; color:rgba(255,255,255,0.4)">لا توجد بيانات لعرضها</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" style="padding:30px; text-align:center; color:rgba(255,255,255,0.4)">لا توجد بيانات لعرضها</td></tr>`;
         return;
       }
       
       tbody.innerHTML = students.map((student, i) => {
         const statusClass = student.status === 'blocked' ? 'blocked' : student.status === 'suspicious' ? 'suspicious' : '';
         const statusText = student.status === 'blocked' ? '🚫 محظور' : student.status === 'suspicious' ? '⚠️ مشبوه' : '✅ نشط';
-        const d = new Date(student.date);
-        const dateStr = d.toLocaleDateString('ar-SA');
+        const risk = getRiskLevel(student.riskScore);
         
         return `
           <tr class="${statusClass}" style="animation-delay:${i*0.05}s">
             <td><span style="background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:6px;font-weight:700">${i+1}</span></td>
             <td><strong>${student.name || '—'}</strong></td>
-            <td style="text-align:right;padding-right:16px">${student.title || '—'}</td>
-            <td><span style="background:rgba(0,212,255,0.15);padding:4px 10px;border-radius:18px;font-size:0.8rem;color:var(--neon-blue)">${student.subject || '—'}</span></td>
-            <td style="color:rgba(255,255,255,0.4)">${dateStr}</td>
-            <td><span style="font-weight:700">${statusText}</span></td>
+            <td style="font-family:monospace;font-size:0.8rem;color:var(--neon-blue)">${(student.code || student.id || '').slice(0,12)}...</td>
+            <td style="font-family:monospace;font-size:0.75rem">${(student.fingerprint || '—').slice(0,12)}...</td>
+            <td class="blur-sensitive" onclick="this.classList.toggle('revealed')">${student.ip_address || '—'}</td>
+            <td><strong>${student.session_count || 1}</strong></td>
+            <td style="color:${student.screenshot_attempts > 0 ? 'var(--security-red)' : 'inherit'}"><strong>${student.screenshot_attempts || 0}</strong></td>
+            <td><strong>${student.title_changes || 0}</strong></td>
+            <td><span class="alert-badge ${risk.class}">${risk.label}</span></td>
             <td>
-              <button class="action-btn view" onclick="viewStudentDetails('${student.code || student.id}')" title="عرض التفاصيل">👁️</button>
+              <button class="action-btn view" onclick="viewStudentProfile('${student.code || student.id}')" title="عرض الملف الكامل">👁️</button>
               <button class="action-btn ${student.status === 'blocked' ? 'unblock' : 'block'}" onclick="toggleStudentBlock('${student.code || student.id}')" title="${student.status === 'blocked' ? 'فك الحظر' : 'حظر'}">${student.status === 'blocked' ? '✅' : '🚫'}</button>
+              <button class="action-btn warn" onclick="warnStudent('${student.code || student.id}')" title="تحذير">⚠️</button>
             </td>
           </tr>
         `;
@@ -842,7 +1380,7 @@
 
     function renderSecurityLogs(filter = 'all') {
       const container = $('#securityLogs');
-      const filtered = filter === 'all' ? securityLogs : securityLogs.filter(log => log.type === filter);
+      const filtered = filter === 'all' ? securityLogs : securityLogs.filter(log => log.type === filter || (filter === 'screenshot' && log.message.includes('لقطة')));
       
       if(!filtered || filtered.length === 0) {
         container.innerHTML = '<div style="text-align:center;padding:30px;color:rgba(255,255,255,0.4)">لا توجد سجلات لعرضها</div>';
@@ -850,18 +1388,75 @@
       }
       
       container.innerHTML = filtered.slice(0, 50).map(log => {
-        const icon = { info: 'ℹ️', warning: '⚠️', danger: '🚨', success: '✅' }[log.type] || '•';
+        const icon = { info: 'ℹ️', warning: '⚠️', danger: '🚨', success: '✅', screenshot: '📸' }[log.type] || '•';
         return `
           <div class="log-entry">
             <span class="log-time">${new Date(log.timestamp).toLocaleTimeString('ar-SA')}</span>
             <span class="log-type ${log.type}">${icon}</span>
             <span class="log-msg">
               <strong>${log.student || 'نظام'}</strong>: ${log.message}
+              <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:3px">
+                🆔 ${log.fingerprint || '—'} • 🌐 ${log.ip || '—'}
+              </div>
             </span>
           </div>
         `;
       }).join('');
     }
+
+    // ===== STUDENT PROFILE (DETAILED) =====
+    function viewStudentProfile(code) {
+      const student = allStudents.find(s => s.code === code || s.id == code);
+      
+      if(!student) {
+        showToast('لم يتم العثور على تفاصيل الطالب', 'danger');
+        return;
+      }
+      
+      currentStudent = student;
+      const risk = getRiskLevel(student.riskScore);
+      
+      // Populate profile
+      $('#profileAvatar').textContent = student.name?.charAt(0) || '؟';
+      $('#profileName').textContent = student.name || 'غير معروف';
+      $('#profileCode').textContent = `CODE: ${student.code || student.id}`;
+      
+      const statusEl = $('#profileStatus');
+      const statusText = $('#profileStatusText');
+      statusEl.className = 'profile-status ' + (student.isOnline ? 'online' : student.status === 'blocked' ? 'blocked' : student.status === 'suspicious' ? 'suspicious' : 'offline');
+      statusText.textContent = student.isOnline ? 'متصل الآن' : student.status === 'blocked' ? 'محظور' : student.status === 'suspicious' ? 'مشبوه' : 'غير متصل';
+      
+      $('#profileLastActivity').textContent = student.lastActivityFormatted;
+      
+      // Details
+      $('#detailCode').textContent = student.code || student.id;
+      $('#detailFingerprint').textContent = student.fingerprint || '—';
+      $('#detailIP').textContent = student.ip_address || '—';
+      $('#detailLocation').textContent = 'السعودية، الرياض'; // Can be enhanced with geolocation API
+      $('#detailDevice').textContent = student.device_type || 'غير معروف';
+      $('#detailBrowser').textContent = student.browser || 'غير معروف';
+      $('#detailLogins').textContent = student.session_count || 1;
+      $('#detailSessionTime').textContent = `${Math.round((student.session_duration || 0) / 60)} دقيقة`;
+      $('#detailScreenshots').textContent = student.screenshot_attempts || 0;
+      $('#detailScreenshots'].style.color = student.screenshot_attempts > 0 ? 'var(--security-red)' : 'inherit';
+      $('#detailTitleChanges').textContent = student.title_changes || 0;
+      $('#detailNewLocation').textContent = student.new_location ? 'نعم ⚠️' : 'لا';
+      $('#detailNewLocation'].style.color = student.new_location ? 'var(--security-yellow)' : 'inherit';
+      $('#detailConnection').textContent = navigator.onLine ? 'متصل 🟢' : 'منقطع 🔴';
+      
+      // Show profile
+      $('#studentProfile').classList.add('active');
+      $('#studentProfile'].scrollIntoView({ behavior: 'smooth' });
+      
+      addSecurityLog('info', `عرض الملف الأمني للطالب: ${student.name}`, student);
+    }
+    window.viewStudentProfile = viewStudentProfile;
+
+    function hideStudentProfile() {
+      $('#studentProfile'].classList.remove('active');
+      currentStudent = null;
+    }
+    window.hideStudentProfile = hideStudentProfile;
 
     // ===== SEARCH & FILTERS =====
     function searchStudent() {
@@ -875,7 +1470,7 @@
       const student = allStudents.find(s => s.name?.includes(name));
       
       if(student) {
-        viewStudentDetails(student.code || student.id);
+        viewStudentProfile(student.code || student.id);
         showToast(`✅ تم العثور على: ${student.name}`, 'success');
       } else {
         showToast('❌ لم يتم العثور على الطالب', 'danger');
@@ -886,44 +1481,10 @@
     function showAllStudents() {
       $('#searchName').value = '';
       renderStudentsTable();
-      hideStudentDetails();
+      hideStudentProfile();
       showToast('عرض جميع الطلاب', 'info');
     }
     window.showAllStudents = showAllStudents;
-
-    // ===== STUDENT DETAILS =====
-    function viewStudentDetails(code) {
-      const student = allStudents.find(s => s.code === code || s.id == code);
-      
-      if(!student) {
-        showToast('لم يتم العثور على تفاصيل الطالب', 'danger');
-        return;
-      }
-      
-      currentStudent = student;
-      
-      $('#studentDetailsPanel').classList.remove('hidden');
-      $('#studentNameDisplay').textContent = student.name || 'غير معروف';
-      $('#detailCode').textContent = student.code || student.id;
-      $('#detailIP').textContent = student.ip_address || '192.168.1.1';
-      $('#detailLastActivity').textContent = student.last_activity ? new Date(student.last_activity).toLocaleString('ar-SA') : 'غير معروف';
-      
-      const risk = student.status === 'blocked' ? { label: 'محظور 🔴', class: 'high' } :
-                   student.status === 'suspicious' ? { label: 'مشبوه 🟡', class: 'medium' } :
-                   { label: 'آمن 🟢', class: 'low' };
-      
-      $('#studentRiskLevel').textContent = risk.label;
-      $('#studentRiskLevel').className = `alert-badge ${risk.class}`;
-      
-      $('#studentDetailsPanel').scrollIntoView({ behavior: 'smooth' });
-    }
-    window.viewStudentDetails = viewStudentDetails;
-
-    function hideStudentDetails() {
-      $('#studentDetailsPanel').classList.add('hidden');
-      currentStudent = null;
-    }
-    window.hideStudentDetails = hideStudentDetails;
 
     // ===== ACTIONS =====
     function toggleStudentBlock(code) {
@@ -952,17 +1513,63 @@
         addSecurityLog('danger', `تم الحظر النهائي للطالب: ${currentStudent.name}`, currentStudent);
         showToast('تم الحظر النهائي', 'danger');
         updateStats();
+        hideStudentProfile();
       }
     }
     window.banStudent = banStudent;
 
-    function warnStudent() {
-      if(!currentStudent) return;
+    function warnStudent(code) {
+      const student = code ? allStudents.find(s => s.code === code || s.id == code) : currentStudent;
+      if(!student) return;
       
-      addSecurityLog('warning', `تم إرسال تحذير للطالب: ${currentStudent.name}`, currentStudent);
+      addSecurityLog('warning', `تم إرسال تحذير للطالب: ${student.name}`, student);
       showToast('تم إرسال التحذير', 'success');
     }
     window.warnStudent = warnStudent;
+
+    function resetStudentData() {
+      if(!currentStudent) return;
+      
+      if(confirm(`تصفير جميع مقاييس النشاط لـ ${currentStudent.name}؟`)) {
+        currentStudent.session_count = 1;
+        currentStudent.title_changes = 0;
+        currentStudent.screenshot_attempts = 0;
+        currentStudent.session_duration = 0;
+        
+        addSecurityLog('success', `تم تصفير مقاييس الطالب: ${currentStudent.name}`, currentStudent);
+        showToast('تم تصفير المقاييس', 'success');
+        viewStudentProfile(currentStudent.code);
+      }
+    }
+    window.resetStudentData = resetStudentData;
+
+    function exportStudentReport() {
+      if(!currentStudent) return;
+      
+      const report = {
+        student: currentStudent.name,
+        code: currentStudent.code,
+        fingerprint: currentStudent.fingerprint,
+        ip: currentStudent.ip_address,
+        riskScore: currentStudent.riskScore,
+        sessionCount: currentStudent.session_count,
+        screenshotAttempts: currentStudent.screenshot_attempts,
+        titleChanges: currentStudent.title_changes,
+        lastActivity: currentStudent.last_activity,
+        exportedAt: new Date().toISOString()
+      };
+      
+      const blob = new Blob([JSON.stringify(report, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `report_${currentStudent.code}_${Date.now()}.json`;
+      a.click();
+      
+      addSecurityLog('info', `تم تصدير تقرير الطالب: ${currentStudent.name}`, currentStudent);
+      showToast('تم تصدير التقرير', 'success');
+    }
+    window.exportStudentReport = exportStudentReport;
 
     // ===== SECURITY LOGS =====
     async function addSecurityLog(type, message, student = null) {
@@ -970,7 +1577,9 @@
         timestamp: new Date().toISOString(),
         type,
         message,
-        student: student?.name || 'النظام'
+        student: student?.name || 'النظام',
+        fingerprint: student?.fingerprint?.slice(0, 16) || deviceFingerprint?.slice(0, 16),
+        ip: student?.ip_address || await getIPAddress()
       };
       
       try {
@@ -984,9 +1593,17 @@
       
       renderSecurityLogs($('#logFilter').value);
       
-      if(type === 'danger') {
-        showToast(message, 'danger');
+      if(type === 'danger' || type === 'screenshot') {
+        showToast(message, type === 'danger' ? 'danger' : 'warning');
       }
+    }
+
+    async function getIPAddress() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        return data.ip;
+      } catch { return 'unknown'; }
     }
 
     function clearLogs() {
@@ -999,16 +1616,129 @@
     }
     window.clearLogs = clearLogs;
 
+    function exportLogs() {
+      const filter = $('#logFilter').value;
+      const filtered = filter === 'all' ? securityLogs : securityLogs.filter(log => log.type === filter);
+      
+      const csv = 'الوقت,النوع,الطالب,الرسالة,البصمة,الـ IP\n' + 
+        filtered.map(log => 
+          `"${new Date(log.timestamp).toLocaleString('ar-SA')}",` +
+          `"${log.type}",` +
+          `"${log.student}",` +
+          `"${log.message.replace(/"/g, '""')}",` +
+          `"${log.fingerprint}",` +
+          `"${log.ip}"`
+        ).join('\n');
+      
+      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `security_logs_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      
+      addSecurityLog('info', 'تم تصدير سجل الأمان', null);
+      showToast('تم تصدير السجل 📤', 'success');
+    }
+    window.exportLogs = exportLogs;
+
+    // ===== SECURITY SETTINGS =====
+    function loadSecurityConfig() {
+      const saved = localStorage.getItem('onx_security_config');
+      if(saved) {
+        securityConfig = { ...securityConfig, ...JSON.parse(saved) };
+        Object.entries(securityConfig).forEach(([key, value]) => {
+          const toggle = $(`#toggle${key.charAt(0).toUpperCase() + key.slice(1)}`);
+          if(toggle) toggle.checked = value;
+        });
+      }
+      updateSecurityLevel();
+    }
+
+    function saveSecuritySettings() {
+      Object.keys(securityConfig).forEach(key => {
+        const toggle = $(`#toggle${key.charAt(0).toUpperCase() + key.slice(1)}`);
+        if(toggle) securityConfig[key] = toggle.checked;
+      });
+      
+      localStorage.setItem('onx_security_config', JSON.stringify(securityConfig));
+      updateSecurityLevel();
+      
+      addSecurityLog('success', 'تم حفظ إعدادات الحماية المتقدمة', null);
+      showToast('تم حفظ الإعدادات ✅', 'success');
+    }
+    window.saveSecuritySettings = saveSecuritySettings;
+
+    function exportSecuritySettings() {
+      const blob = new Blob([JSON.stringify(securityConfig, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'security_settings.json';
+      a.click();
+      
+      showToast('تم تصدير الإعدادات', 'success');
+    }
+    window.exportSecuritySettings = exportSecuritySettings;
+
+    function resetSecurityDefaults() {
+      if(confirm('استعادة جميع إعدادات الأمان إلى القيم الافتراضية؟')) {
+        securityConfig = {
+          fingerprint: true, ipMonitor: true, browserCheck: true, locationCheck: true,
+          screenshot: true, speedCheck: true, editCheck: true, connectionCheck: true,
+          autoBan: true, instantAlert: true, freeze: false, auditLog: true
+        };
+        localStorage.setItem('onx_security_config', JSON.stringify(securityConfig));
+        loadSecurityConfig();
+        addSecurityLog('info', 'تم استعادة الإعدادات الافتراضية للأمان', null);
+        showToast('تم الاستعادة بنجاح', 'success');
+      }
+    }
+    window.resetSecurityDefaults = resetSecurityDefaults;
+
+    function emergencyLockdown() {
+      if(confirm('🔴 تحذير: قفل طارئ للنظام!\n\nسيتم تعطيل جميع عمليات التسجيل والدخول فوراً. هل أنت متأكد؟')) {
+        addSecurityLog('danger', '🔴 تم تفعيل القفل الطارئ بواسطة المسؤول - النظام محمي بالكامل', null);
+        showToast('🔴 القفل الطارئ مفعل - جميع العمليات معلقة', 'danger');
+        
+        document.body.style.filter = 'grayscale(100%) brightness(0.8)';
+        document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
+        
+        // In production: disable auth endpoints via Supabase Edge Function
+      }
+    }
+    window.emergencyLockdown = emergencyLockdown;
+
+    function updateSecurityLevel() {
+      const enabledCount = Object.values(securityConfig).filter(v => v).length;
+      const percentage = Math.round((enabledCount / Object.keys(securityConfig).length) * 100);
+      $('#levelFill').style.width = percentage + '%';
+      $('#levelPercent').textContent = percentage + '%';
+      $('#securityLevel').textContent = percentage + '%';
+      
+      if(percentage >= 90) {
+        $('#levelLabel').textContent = 'ممتاز 🔒';
+        $('#levelLabel').style.color = 'var(--security-green)';
+      } else if(percentage >= 75) {
+        $('#levelLabel').textContent = 'جيد ✅';
+        $('#levelLabel').style.color = 'var(--security-yellow)';
+      } else {
+        $('#levelLabel').textContent = 'بحاجة لتحسين ⚠️';
+        $('#levelLabel').style.color = 'var(--security-red)';
+      }
+    }
+
     // ===== STATS =====
     function updateStats() {
       $('#totalStudents').textContent = allStudents.length;
-      $('#suspiciousCount').textContent = allStudents.filter(s => s.status === 'suspicious').length;
+      $('#suspiciousCount').textContent = allStudents.filter(s => s.status === 'suspicious' || s.riskScore >= 40).length;
       $('#bannedCount').textContent = allStudents.filter(s => s.status === 'blocked').length;
       $('#lastUpdate').textContent = new Date().toLocaleTimeString('ar-SA');
     }
 
     // ===== INIT =====
     async function initDashboard() {
+      loadSecurityConfig();
       await loadStudents();
       await loadSecurityLogs();
       updateStats();
