@@ -3,378 +3,815 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔍 التشخيص الشامل - ONX-TAQE</title>
+<title>🔍 نظام التشخيص الشامل - ONX-TAQE Supabase</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cairo',sans-serif;background:linear-gradient(135deg,#0f1e3d,#1a2a4a);color:#fff;min-height:100vh;padding:20px}
-.container{max-width:900px;margin:0 auto}
-.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px;margin-bottom:20px;backdrop-filter:blur(10px)}
-h1{font-size:2rem;margin-bottom:12px;background:linear-gradient(135deg,#00d4ff,#7b2fff,#00ff88);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-h2{font-size:1.3rem;margin:16px 0 10px;color:#00d4ff}
-.status{display:flex;align-items:center;gap:12px;margin:16px 0;padding:16px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
-.status.success{border-color:#00ff88;background:rgba(0,255,136,0.1)}
-.status.error{border-color:#ff6b6b;background:rgba(255,107,107,0.1)}
-.status.pending{border-color:#ffd700;background:rgba(255,215,0,0.1)}
-.icon{font-size:1.8rem}
-.btn{padding:14px 28px;border:none;border-radius:14px;cursor:pointer;font-family:inherit;font-weight:700;font-size:1rem;margin:10px 0;transition:all 0.3s}
-.btn-primary{background:linear-gradient(135deg,#00d4ff,#7b2fff);color:#fff;box-shadow:0 4px 20px rgba(0,212,255,0.3)}
-.btn-success{background:linear-gradient(135deg,#00c851,#00ff88);color:#000;box-shadow:0 4px 20px rgba(0,200,81,0.3)}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,212,255,0.5)}
+:root{
+  --primary:#0f1e3d;--secondary:#1a2a4a;--accent:#e94560;
+  --gold:#f5c518;--neon-blue:#00d4ff;--neon-purple:#7b2fff;
+  --neon-green:#00ff88;--glass:rgba(255,255,255,0.07);
+  --glass-border:rgba(255,255,255,0.15);--text-light:#e0e0f0;
+  --card-shadow:0 20px 60px rgba(0,0,0,0.5);
+  --transition:all 0.3s cubic-bezier(0.23,1,0.32,1);
+}
+body{font-family:'Cairo',sans-serif;background:linear-gradient(135deg,var(--primary),var(--secondary));color:var(--text-light);min-height:100vh;padding:20px;line-height:1.6}
+.container{max-width:1200px;margin:0 auto}
+.header{text-align:center;padding:30px 20px;margin-bottom:20px}
+.header h1{font-size:2.2rem;margin-bottom:10px;background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header p{color:rgba(255,255,255,0.6)}
+
+/* ===== البطاقات ===== */
+.card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:24px;margin-bottom:20px;backdrop-filter:blur(10px);transition:var(--transition)}
+.card:hover{transform:translateY(-3px);box-shadow:0 30px 80px rgba(0,0,0,0.6),0 0 40px rgba(0,212,255,0.1)}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--glass-border)}
+.card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:linear-gradient(135deg,var(--neon-blue)22,var(--neon-blue)44);border:1px solid var(--neon-blue)44}
+.card-title{font-size:1.3rem;font-weight:700;color:#fff}
+.card-desc{font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:4px}
+
+/* ===== الأزرار ===== */
+.btn{padding:14px 28px;border:none;border-radius:14px;cursor:pointer;font-family:inherit;font-weight:700;font-size:1rem;margin:8px 0;transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));color:#fff;box-shadow:0 4px 20px rgba(0,212,255,0.3)}
+.btn-success{background:linear-gradient(135deg,var(--neon-green),#00c851);color:#000;box-shadow:0 4px 20px rgba(0,200,81,0.3)}
+.btn-warning{background:linear-gradient(135deg,var(--gold),#ff9500);color:#000;box-shadow:0 4px 20px rgba(245,197,24,0.3)}
+.btn-danger{background:linear-gradient(135deg,var(--accent),#ff6b6b);color:#fff;box-shadow:0 4px 20px rgba(233,69,96,0.3)}
+.btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8)}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
 .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-.log{font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:16px;line-height:1.8}
-pre{background:rgba(0,0,0,0.4);padding:20px;border-radius:14px;overflow-x:auto;font-size:0.8rem;max-height:500px;overflow-y:auto;border:1px solid rgba(255,255,255,0.1);white-space:pre-wrap;word-break:break-all}
+
+/* ===== الحالة والتقدم ===== */
+.status{display:flex;align-items:center;gap:12px;margin:16px 0;padding:16px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.status.success{border-color:var(--neon-green);background:rgba(0,255,136,0.1)}
+.status.error{border-color:var(--accent);background:rgba(233,69,96,0.1)}
+.status.pending{border-color:var(--gold);background:rgba(245,197,24,0.1)}
+.status-icon{font-size:1.8rem}
 .progress{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin:16px 0}
-.progress-bar{height:100%;background:linear-gradient(90deg,#00d4ff,#7b2fff,#00ff88);width:0%;transition:width 0.3s}
-.info-box{background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:12px;padding:14px;margin:12px 0;font-size:0.9rem}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--neon-blue),var(--neon-purple),var(--neon-green));width:0%;transition:width 0.3s}
+
+/* ===== السجلات ===== */.log{font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:16px;line-height:1.8;max-height:200px;overflow-y:auto;background:rgba(0,0,0,0.2);padding:12px;border-radius:12px}
+
+/* ===== الأقسام القابلة للطي ===== */
+.accordion{margin-bottom:12px}
+.accordion-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(255,255,255,0.05);border:1px solid var(--glass-border);border-radius:12px;cursor:pointer;transition:var(--transition)}
+.accordion-header:hover{background:rgba(255,255,255,0.08)}
+.accordion-header.active{background:rgba(0,212,255,0.1);border-color:var(--neon-blue)}
+.accordion-title{display:flex;align-items:center;gap:10px;font-weight:600}
+.accordion-toggle{font-size:1.2rem;transition:transform 0.3s}
+.accordion-toggle.active{transform:rotate(180deg)}
+.accordion-content{display:none;padding:16px 18px;background:rgba(0,0,0,0.2);border-radius:0 0 12px 12px;border:1px solid var(--glass-border);border-top:none}
+.accordion-content.show{display:block;animation:slideIn 0.3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== الجداول ===== */
+.data-table{width:100%;border-collapse:collapse;font-size:0.85rem;margin:12px 0}
+.data-table th{background:rgba(0,212,255,0.15);color:var(--neon-blue);padding:12px;text-align:right;font-weight:600;border:1px solid var(--glass-border)}
+.data-table td{padding:10px 12px;border:1px solid var(--glass-border);color:rgba(255,255,255,0.85)}
+.data-table tr:hover{background:rgba(255,255,255,0.05)}
+.data-table code{background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;font-size:0.8rem}
+
+/* ===== الشبكة ===== */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+
+/* ===== المدخلات ===== */
+.input-group{margin-bottom:16px}
+.input-label{display:block;margin-bottom:8px;font-weight:600;color:rgba(255,255,255,0.8);font-size:0.9rem}
+.styled-input{width:100%;padding:14px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:12px;color:#fff;font-family:'Cairo',sans-serif;font-size:1rem;outline:none;transition:var(--transition)}
+.styled-input:focus{border-color:var(--neon-blue);background:rgba(0,212,255,0.08);box-shadow:0 0 0 3px rgba(0,212,255,0.1)}
+.styled-textarea{min-height:100px;resize:vertical}
+
+/* ===== النتائج ===== */
+.result-box{background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;margin-top:16px;overflow:auto;max-height:500px;font-size:0.8rem}
+.result-box pre{white-space:pre-wrap;word-break:break-all;margin:0}
+.result-box.success{border:1px solid var(--neon-green)}
+.result-box.error{border:1px solid var(--accent)}
+
+/* ===== الشارات ===== */
+.badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:600;margin:2px}
+.badge-blue{background:rgba(0,212,255,0.15);color:var(--neon-blue);border:1px solid var(--neon-blue)}
+.badge-green{background:rgba(0,200,81,0.15);color:var(--neon-green);border:1px solid var(--neon-green)}
+.badge-red{background:rgba(233,69,96,0.15);color:#ff6b6b;border:1px solid #e94560}
+.badge-gold{background:rgba(245,197,24,0.15);color:var(--gold);border:1px solid var(--gold)}
+
+/* ===== التمرير ===== */
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:rgba(255,255,255,0.05)}
+::-webkit-scrollbar-thumb{background:rgba(0,212,255,0.3);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,212,255,0.6)}
+/* ===== التجاوب ===== */
+@media(max-width:768px){
+  .header h1{font-size:1.6rem}
+  .card{padding:20px}
+  .grid{grid-template-columns:1fr}
+  .btn{width:100%;justify-content:center}
+}
 </style>
 </head>
 <body>
+
 <div class="container">
+  <!-- ===== الرأس ===== -->
+  <div class="header">
+    <h1>🔍 نظام التشخيص الشامل لـ Supabase</h1>
+    <p>ONX-TAQE • تحليل كامل للمشروع • سياسات • جداول • متغيرات • بيانات</p>
+  </div>
+
+  <!-- ===== بطاقة الحالة الرئيسية ===== -->
   <div class="card">
-    <h1>🔍 التشخيص الشامل لقاعدة البيانات</h1>
-    <p style="color:rgba(255,255,255,0.6);margin-bottom:16px">سيجمع هذا الكود <strong>جميع الجداول، الأعمدة، البيانات، السياسات، والإعدادات</strong> ويرسلها عبر Telegram</p>
-    
-    <div class="info-box">
-      📊 <strong>ماذا سيرسل:</strong><br>
-      • جميع الجداول وأسمائها<br>
-      • كل جدول مع جميع أعمدته وخصائصها<br>
-      • عدد السجلات في كل جدول<br>
-      • عينات من البيانات الفعلية<br>
-      • سياسات RLS والصلاحيات<br>
-      • حالة Realtime<br>
-      • جميع القيم المخزنة في الجداول
+    <div class="card-header">
+      <div class="card-icon">📊</div>
+      <div>
+        <div class="card-title">حالة النظام</div>
+        <div class="card-desc">معلومات الاتصال والتقدم</div>
+      </div>
     </div>
     
-    <div id="status" class="status pending">
-      <span class="icon">⏳</span>
-      <span>جاهز لبدء التشخيص...</span>    </div>
+    <div id="mainStatus" class="status pending">
+      <span class="status-icon">⏳</span>
+      <span>جاهز لبدء التحليل الشامل...</span>
+    </div>
     
     <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
     
-    <button class="btn btn-primary" id="startBtn" onclick="startDiagnosis()">🚀 بدء التشخيص الشامل والإرسال</button>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <button class="btn btn-primary" id="startBtn" onclick="startFullAnalysis()">
+        <span>🚀</span> بدء التحليل الشامل
+      </button>
+      <button class="btn btn-success" onclick="sendReport()">
+        <span>📤</span> إرسال التقرير لـ Telegram
+      </button>
+      <button class="btn btn-outline" onclick="copyReport()">
+        <span>📋</span> نسخ التقرير
+      </button>
+    </div>
     
     <div class="log" id="log"></div>
   </div>
-  
-  <div class="card" id="resultCard" style="display:none">
-    <h2>📋 النتيجة الكاملة</h2>
-    <pre id="result"></pre>
-    <button class="btn btn-success" onclick="copyResult()">📋 نسخ النتيجة</button>
+  <!-- ===== قسم السياسات (RLS) ===== -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🔐</div>
+      <div>
+        <div class="card-title">قسم السياسات والأمان (RLS)</div>
+        <div class="card-desc">سياسات الوصول، الصلاحيات، والحماية</div>
+      </div>
+    </div>
+    
+    <div id="policiesSection"></div>
   </div>
+
+  <!-- ===== قسم الجداول ===== -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📁</div>
+      <div>
+        <div class="card-title">قسم الجداول والبيانات</div>
+        <div class="card-desc">جميع الجداول، الأعمدة، القيم، والعلاقات</div>
+      </div>
+    </div>
+    
+    <div id="tablesSection"></div>
+  </div>
+
+  <!-- ===== قسم الاختبار ===== -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🧪</div>
+      <div>
+        <div class="card-title">قسم اختبار المزامنة</div>
+        <div class="card-desc">تجربة إضافة بيانات والتحقق من المزامنة</div>
+      </div>
+    </div>
+    
+    <div class="grid">
+      <div class="input-group">
+        <label class="input-label">👤 اسم الطالب</label>
+        <input class="styled-input" id="testName" placeholder="أدخل اسم الطالب" value="اختبار تشخيص">
+      </div>
+      <div class="input-group">
+        <label class="input-label">📚 المادة الدراسية</label>
+        <input class="styled-input" id="testSubject" placeholder="أدخل المادة" value="مادة اختبار">
+      </div>
+      <div class="input-group">
+        <label class="input-label">📝 عنوان التقرير</label>
+        <input class="styled-input" id="testTitle" placeholder="أدخل العنوان" value="تقرير اختبار النظام">
+      </div>
+    </div>    
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn btn-warning" onclick="runTest()">🧪 تشغيل الاختبار</button>
+      <button class="btn btn-success" onclick="verifyTest()">✅ التحقق من البيانات</button>
+      <button class="btn btn-primary" onclick="sendTestResult()">📤 إرسال نتيجة الاختبار</button>
+    </div>
+    
+    <div id="testResult" class="result-box" style="display:none"></div>
+  </div>
+
+  <!-- ===== نتيجة التقرير ===== -->
+  <div class="card" id="reportCard" style="display:none">
+    <div class="card-header">
+      <div class="card-icon">📋</div>
+      <div>
+        <div class="card-title">التقرير الكامل</div>
+        <div class="card-desc">جميع المعلومات مجمعة ومنسقة</div>
+      </div>
+    </div>
+    
+    <div class="result-box" id="reportContent"></div>
+    
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn btn-success" onclick="copyReport()">📋 نسخ التقرير</button>
+      <button class="btn btn-primary" onclick="sendReport()">📤 إرسال لـ Telegram</button>
+    </div>
+  </div>
+
 </div>
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// ⚙️ إعدادات Supabase
+// ═══════════════════════════════════════════════════════════════
+// ⚙️ الإعدادات
+// ═══════════════════════════════════════════════════════════════
 const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
 const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
-
-// ⚙️ إعدادات Telegram
 const TG_BOT_TOKEN = "7735965641:AAFzkUy27zKXYWroodhdxOBapMgwttyq5_s";
 const TG_CHAT_ID = "910624538";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// ═══════════════════════════════════════════════════════════════
+// 🎯 دوال المساعدة
+// ═══════════════════════════════════════════════════════════════
 const $ = (s) => document.querySelector(s);
-const log = (msg) => { 
-  const el = $('#log'); 
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+const log = (msg) => {   const el = $('#log'); 
   const time = new Date().toLocaleTimeString('ar-EG');
   el.innerHTML += `<div>[${time}] ${msg}</div>`;
   el.scrollTop = el.scrollHeight;
 };
+
 const setProgress = (p) => { $('#progressBar').style.width = p + '%'; };
+
 const setStatus = (status, icon, text) => {
-  const el = $('#status');
+  const el = $('#mainStatus');
   el.className = `status ${status}`;
-  el.innerHTML = `<span class="icon">${icon}</span><span>${text}</span>`;
+  el.innerHTML = `<span class="status-icon">${icon}</span><span>${text}</span>`;
 };
 
-window.startDiagnosis = async function() {
+const createAccordion = (title, icon, content, defaultOpen = false) => {
+  const div = document.createElement('div');
+  div.className = 'accordion';
+  div.innerHTML = `
+    <div class="accordion-header ${defaultOpen ? 'active' : ''}" onclick="this.classList.toggle('active');this.nextElementSibling.classList.toggle('show');this.querySelector('.accordion-toggle').classList.toggle('active')">
+      <div class="accordion-title">
+        <span>${icon}</span>
+        <span>${title}</span>
+      </div>
+      <span class="accordion-toggle ${defaultOpen ? 'active' : ''}">▼</span>
+    </div>
+    <div class="accordion-content ${defaultOpen ? 'show' : ''}">${content}</div>
+  `;
+  return div;
+};
+
+const createBadge = (text, type = 'blue') => 
+  `<span class="badge badge-${type}">${text}</span>`;
+
+const formatValue = (value, maxLength = 50) => {
+  if(value === null) return '<code style="color:#ff6b6b">NULL</code>';
+  if(typeof value === 'boolean') return value ? '✅ true' : '❌ false';
+  const str = String(value);
+  return `<code>${str.length > maxLength ? str.substring(0, maxLength) + '...' : str}</code>`;
+};
+
+const getValueType = (value) => {
+  if(value === null) return 'NULL';
+  if(typeof value === 'boolean') return 'boolean';
+  if(typeof value === 'number') return Number.isInteger(value) ? 'integer' : 'numeric';
+  if(typeof value === 'string') {
+    if(value.match(/^\d{4}-\d{2}-\d{2}/)) return 'timestamp';
+    if(value.match(/^[0-9a-f]{8}-/i)) return 'uuid';
+    if(value.match(/^https?:\/\//)) return 'url';
+    return 'text';
+  }  if(typeof value === 'object') return 'json';
+  return typeof value;
+};
+
+// ═══════════════════════════════════════════════════════════════
+// 📊 التحليل الشامل
+// ═══════════════════════════════════════════════════════════════
+
+let fullReport = null;
+let lastTestData = null;
+
+window.startFullAnalysis = async function() {
   $('#startBtn').disabled = true;
   $('#log').innerHTML = '';
-  $('#resultCard').style.display = 'none';
+  $('#reportCard').style.display = 'none';
   setProgress(0);
   
-  try {    setStatus('pending', '⏳', 'جاري جمع المعلومات...');
-    log('🚀 بدء التشخيص الشامل...');
+  try {
+    setStatus('pending', '⏳', 'جاري التحليل الشامل...');
+    log('🚀 بدء التحليل الكامل للمشروع...');
     
-    // 1. جمع معلومات الجداول
+    // 1. معلومات قاعدة البيانات
     setProgress(5);
-    log('📊 جاري جلب قائمة الجداول...');
-    const tables = await getTables();
+    log('📊 جمع معلومات قاعدة البيانات...');
+    const dbInfo = await getDatabaseInfo();
+    
+    // 2. الجداول
+    setProgress(15);
+    log('📁 فحص جميع الجداول...');
+    const tables = await getAllTables();
     log(`✅ تم العثور على ${tables.length} جدول`);
     
-    // 2. جمع معلومات مفصلة لكل جدول
-    const fullSchema = [];
-    let step = 10;
+    // 3. تحليل كل جدول
+    const analyzedTables = [];
+    let step = 20;
     
-    for(const table of tables) {
+    for(const tableName of tables) {
       setProgress(step);
-      log(`📁 فحص جدول: ${table}...`);
+      log(`🔍 تحليل جدول: ${tableName}...`);
       
-      const columns = await getColumns(table);
-      log(`  • تم جمع ${columns.length} عمود`);
+      const tableData = await analyzeTable(tableName);
+      analyzedTables.push(tableData);
       
-      const rowCount = await getRowCount(table);
-      log(`  • عدد السجلات: ${rowCount}`);
+      log(`  • الأعمدة: ${tableData.columns.length}`);
+      log(`  • السجلات: ${tableData.rowCount}`);
+      log(`  • السياسات: ${tableData.policies.length}`);
       
-      const rls = await getRLSStatus(table);
-      log(`  • حالة RLS: ${rls}`);
-      
-      const policies = await getPolicies(table);
-      log(`  • عدد سياسات RLS: ${policies.length}`);
-      
-      const sampleData = await getSampleData(table, rowCount);
-      log(`  • تم جمع عينة بيانات`);
-      
-      const indexes = await getIndexes(table);
-      log(`  • عدد الفهارس: ${indexes.length}`);
-      
-      fullSchema.push({
-        table,
-        columns,
-        rowCount,
-        rls,
-        policies,
-        sampleData,
-        indexes
-      });
-      
-      step += 80 / tables.length;
+      step += 60 / tables.length;
     }
+        // 4. السياسات العامة
+    setProgress(85);
+    log('🔐 جمع سياسات الأمان...');
+    const allPolicies = await getAllPolicies();
     
-    // 3. معلومات إضافية
-    setProgress(90);    log('📋 جمع المعلومات الإضافية...');
+    // 5. العلاقات بين الجداول
+    setProgress(90);
+    log('🔗 تحليل العلاقات بين الجداول...');
+    const relationships = await getRelationships();
     
-    const dbInfo = await getDatabaseInfo();
-    const realtimeStatus = await checkRealtimeStatus();
-    
-    // 4. تنسيق الرسالة
+    // 6. تنسيق التقرير
     setProgress(95);
-    log('📝 تنسيق الرسالة...');
+    log('📝 تنسيق التقرير النهائي...');
     
-    const message = formatFullMessage(fullSchema, dbInfo, realtimeStatus);
+    fullReport = formatCompleteReport(dbInfo, analyzedTables, allPolicies, relationships);
     
-    // 5. عرض النتيجة
-    $('#result').textContent = message;
-    $('#resultCard').style.display = 'block';
+    // 7. عرض الأقسام
+    renderPoliciesSection(allPolicies);
+    renderTablesSection(analyzedTables);
     
-    // 6. الإرسال عبر Telegram
-    setProgress(98);
-    log('📤 جاري الإرسال عبر Telegram...');
-    
-    // تقسيم الرسالة إذا كانت طويلة
-    const chunks = splitMessage(message, 4000);
-    
-    for(let i = 0; i < chunks.length; i++) {
-      const chunkMsg = i > 0 ? `**(تابع ${i}/${chunks.length})**\n\n${chunks[i]}` : chunks[i];
-      await sendToTelegram(chunkMsg, i === 0);
-      log(`  • تم إرسال الجزء ${i+1}/${chunks.length}`);
-    }
+    // 8. عرض التقرير الكامل
+    $('#reportContent').innerHTML = `<pre>${fullReport}</pre>`;
+    $('#reportCard').style.display = 'block';
     
     setProgress(100);
-    setStatus('success', '✅', 'تم الإرسال بنجاح! تحقق من Telegram');
-    log('✅ اكتمل التشخيص وتم الإرسال إلى Telegram');
+    setStatus('success', '✅', 'اكتمل التحليل! يمكنك الإرسال الآن');
+    log('✅ اكتمل التحليل الشامل بنجاح');
     
   } catch(err) {
     console.error(err);
-    setStatus('error', '❌', 'حدث خطأ: ' + err.message);
-    log('❌ خطأ: ' + err.message);
+    setStatus('error', '❌', 'خطأ: ' + err.message);
+    log('❌ ' + err.message);
   }
   
   $('#startBtn').disabled = false;
 };
 
 // ═══════════════════════════════════════════════════════════════
-// دوال جمع المعلومات
+// 🔍 دوال التحليل
 // ═══════════════════════════════════════════════════════════════
-
-async function getTables() {
-  const { data, error } = await supabase
-    .from('information_schema.tables')
-    .select('table_name')
-    .eq('table_schema', 'public')    .eq('table_type', 'BASE TABLE')
-    .order('table_name');
-  
-  if(error) throw error;
-  return data?.map(t => t.table_name) || [];
-}
-
-async function getColumns(tableName) {
-  const { data, error } = await supabase
-    .from('information_schema.columns')
-    .select('column_name, data_type, udt_name, is_nullable, column_default, character_maximum_length, numeric_precision, numeric_scale, ordinal_position')
-    .eq('table_name', tableName)
-    .eq('table_schema', 'public')
-    .order('ordinal_position');
-  
-  if(error) throw error;
-  return data || [];
-}
-
-async function getRowCount(tableName) {
-  try {
-    const { count, error } = await supabase.from(tableName).select('*', { count: 'exact', head: true });
-    if(error) return 'غير متاح';
-    return count || 0;
-  } catch {
-    return 'غير متاح';
-  }
-}
-
-async function getRLSStatus(tableName) {
-  try {
-    const { data, error } = await supabase
-      .from('pg_tables')
-      .select('rowsecurity')
-      .eq('tablename', tableName)
-      .eq('schemaname', 'public')
-      .single();
-    
-    if(error) return 'غير معروف';
-    return data?.rowsecurity ? '✅ مفعّل' : '❌ معطل';
-  } catch {
-    return 'غير معروف';
-  }
-}
-
-async function getPolicies(tableName) {
-  try {
-    const { data, error } = await supabase
-      .from('pg_policies')
-      .select('policyname, cmd, qual, with_check, roles')      .eq('tablename', tableName)
-      .eq('schemaname', 'public');
-    
-    if(error) return [];
-    return data || [];
-  } catch {
-    return [];
-  }
-}
-
-async function getSampleData(tableName, rowCount) {
-  try {
-    const limit = Math.min(5, rowCount || 5);
-    const { data, error } = await supabase.from(tableName).select('*').limit(limit);
-    if(error) return null;
-    return data || [];
-  } catch {
-    return null;
-  }
-}
-
-async function getIndexes(tableName) {
-  try {
-    const { data, error } = await supabase
-      .from('pg_indexes')
-      .select('indexname, indexdef')
-      .eq('tablename', tableName)
-      .eq('schemaname', 'public');
-    
-    if(error) return [];
-    return data || [];
-  } catch {
-    return [];
-  }
-}
 
 async function getDatabaseInfo() {
   return {
     url: SUPABASE_URL,
     timestamp: new Date().toLocaleString('ar-EG'),
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    userAgent: navigator.userAgent.substring(0, 50) + '...'
   };
 }
+async function getAllTables() {
+  const expectedTables = [
+    'student_reports', 'site_control', 'banned_users',
+    'comments', 'admin_logs', 'bot_config',
+    'security_logs', 'telegram_settings', 'visitors', 'visitor_logs'
+  ];
+  
+  const existing = [];
+  for(const tableName of expectedTables) {
+    try {
+      const { count, error } = await supabase.from(tableName).select('*', { count: 'exact', head: true });
+      if(!error) existing.push(tableName);
+    } catch(e) {}
+  }
+  return existing;
+}
 
-async function checkRealtimeStatus() {
+async function analyzeTable(tableName) {
+  const info = {
+    name: tableName,
+    columns: [],
+    rowCount: 0,
+    policies: [],
+    sampleData: null,
+    allData: [],
+    indexes: []
+  };
+  
+  // عدد السجلات
   try {
-    const channel = supabase.channel('test_realtime_check');
-    return '✅ مدعوم';
-  } catch {
-    return '❌ غير معروف';  }
+    const { count } = await supabase.from(tableName).select('*', { count: 'exact', head: true });
+    info.rowCount = count || 0;
+  } catch(e) { info.rowCount = 'غير متاح'; }
+  
+  // الأعمدة من عينة بيانات
+  try {
+    const { data } = await supabase.from(tableName).select('*').limit(1);
+    if(data && data.length > 0) {
+      for(const [key, value] of Object.entries(data[0])) {
+        info.columns.push({
+          name: key,
+          type: getValueType(value),
+          sampleValue: value,
+          isNull: value === null,
+          length: value !== null ? String(value).length : 0
+        });
+      }
+    }
+  } catch(e) {}
+    // السياسات
+  try {
+    const { data } = await supabase
+      .from('pg_policies')
+      .select('policyname, cmd, qual, with_check, roles')
+      .eq('tablename', tableName)
+      .eq('schemaname', 'public');
+    if(data) info.policies = data;
+  } catch(e) {}
+  
+  // الفهارس
+  try {
+    const { data } = await supabase
+      .from('pg_indexes')
+      .select('indexname, indexdef')
+      .eq('tablename', tableName)
+      .eq('schemaname', 'public');
+    if(data) info.indexes = data;
+  } catch(e) {}
+  
+  // البيانات
+  try {
+    if(info.rowCount <= 5) {
+      const { data } = await supabase.from(tableName).select('*');
+      info.allData = data || [];
+    } else {
+      const { data } = await supabase.from(tableName).select('*').limit(3);
+      info.sampleData = data || [];
+    }
+  } catch(e) {}
+  
+  return info;
+}
+
+async function getAllPolicies() {
+  try {
+    const { data } = await supabase
+      .from('pg_policies')
+      .select('tablename, policyname, cmd, qual, with_check, roles, permissive')
+      .eq('schemaname', 'public');
+    return data || [];
+  } catch(e) {
+    return [];
+  }
+}
+
+async function getRelationships() {
+  try {
+    const { data } = await supabase
+      .from('information_schema.referential_constraints')      .select('constraint_name, table_name, referenced_table_name')
+      .eq('constraint_schema', 'public');
+    return data || [];
+  } catch(e) {
+    return [];
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
-// تنسيق الرسالة
+// 📋 تنسيق التقرير
 // ═══════════════════════════════════════════════════════════════
 
-function formatFullMessage(schema, dbInfo, realtimeStatus) {
-  let msg = `🔍 *التشخيص الشامل لقاعدة البيانات*\n`;
-  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+function formatCompleteReport(dbInfo, tables, policies, relationships) {
+  let msg = `🔍 *التقرير الشامل لمشروع Supabase - ONX-TAQE*\n`;
+  msg += `══════════════════════════════════════════\n\n`;
   
+  // معلومات عامة
   msg += `📊 *معلومات عامة:*\n`;
   msg += `• الوقت: ${dbInfo.timestamp}\n`;
-  msg += `• المنطقة الزمنية: ${dbInfo.timezone}\n`;
-  msg += `• Realtime: ${realtimeStatus}\n`;
-  msg += `• عدد الجداول: ${schema.length}\n\n`;
+  msg += `• المنطقة: ${dbInfo.timezone}\n`;
+  msg += `• عدد الجداول: ${tables.length}\n`;
+  msg += `• إجمالي السجلات: ${tables.reduce((sum, t) => sum + (typeof t.rowCount === 'number' ? t.rowCount : 0), 0)}\n\n`;
   
-  for(const s of schema) {
-    msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-    msg += `📁 *جدول: \`${s.table}\`*\n\n`;
-    
-    msg += `📊 *الإحصائيات:*\n`;
-    msg += `• عدد السجلات: ${s.rowCount}\n`;
-    msg += `• حالة RLS: ${s.rls}\n`;
-    msg += `• عدد السياسات: ${s.policies.length}\n`;
-    msg += `• عدد الفهارس: ${s.indexes.length}\n\n`;
-    
-    msg += `📝 *الأعمدة (${s.columns.length}):*\n\`\`\`\n`;
-    for(const col of s.columns) {
-      msg += `${String(col.ordinal_position).padStart(2)} `;
-      msg += `${col.column_name.padEnd(25)} `;
-      msg += `${col.data_type.padEnd(15)} `;
-      msg += `${col.is_nullable === 'YES' ? 'NULL' : 'NOT NULL'.padEnd(8)} `;
-      if(col.column_default) {
-        const def = String(col.column_default).substring(0, 30);
-        msg += `= ${def}`;
-      }
-      msg += `\n`;
+  // السياسات
+  msg += `🔐 *سياسات الأمان (RLS):*\n`;
+  if(policies.length === 0) {
+    msg += `• لا توجد سياسات مفعلة ⚠️\n`;
+  } else {
+    for(const p of policies) {
+      msg += `• \`${p.tablename}\` → \`${p.policyname}\`\n`;
+      msg += `  └─ الأمر: ${p.cmd} | الأدوار: ${p.roles || 'public'}\n`;
+      if(p.qual) msg += `  └─ الشرط: ${p.qual.substring(0, 80)}...\n`;
     }
+  }
+  msg += `\n`;
+  
+  // الجداول
+  for(const table of tables) {
+    msg += `══════════════════════════════════════════\n\n`;
+    msg += `📁 *جدول: \`${table.name}\`*\n\n`;
+    
+    msg += `📈 *الإحصائيات:*\n`;
+    msg += `• السجلات: ${table.rowCount}\n`;
+    msg += `• الأعمدة: ${table.columns.length}\n`;
+    msg += `• السياسات: ${table.policies.length}\n`;
+    msg += `• الفهارس: ${table.indexes.length}\n\n`;
+    
+    msg += `📝 *الأعمدة:*\n\`\`\`\n`;
+    msg += `# | الاسم                      | النوع       | مثال/قيمة افتراضية\n`;
+    msg += `──┼────────────────────────────┼────────────┼─────────────────────\n`;    
+    table.columns.forEach((col, idx) => {
+      const num = String(idx + 1).padStart(2);
+      const name = col.name.padEnd(26);
+      const type = col.type.padEnd(10);
+      const val = col.sampleValue !== null ? String(col.sampleValue).substring(0, 25) : 'NULL';
+      msg += `${num}│ ${name} │ ${type} │ ${val}\n`;
+    });
     msg += `\`\`\`\n\n`;
     
-    if(s.policies.length > 0) {
-      msg += `🔐 *سياسات RLS:*\n`;
-      for(const p of s.policies) {
+    // السياسات الخاصة بالجدول
+    if(table.policies.length > 0) {
+      msg += `🔐 *سياسات هذا الجدول:*\n`;
+      table.policies.forEach(p => {
         msg += `• \`${p.policyname}\` - ${p.cmd}`;
         if(p.roles) msg += ` [${p.roles}]`;
         msg += `\n`;
-      }
-      msg += `\n`;
-    }    
-    if(s.indexes.length > 0) {
-      msg += `📑 *الفهارس:*\n`;
-      for(const idx of s.indexes) {
-        msg += `• \`${idx.indexname}\`\n`;
-      }
+      });
       msg += `\n`;
     }
     
-    if(s.sampleData && s.sampleData.length > 0) {
-      msg += `💾 *عينة بيانات (${s.sampleData.length} سجلات):*\n\`\`\`\n`;
-      msg += JSON.stringify(s.sampleData, null, 2).substring(0, 1500);
-      if(JSON.stringify(s.sampleData).length > 1500) msg += '\n... (مختصر)';
-      msg += `\n\`\`\`\n\n`;
+    // عينة البيانات
+    const dataToShow = table.allData.length > 0 ? table.allData : table.sampleData;
+    if(dataToShow && dataToShow.length > 0) {
+      msg += `💾 *عينة البيانات:*\n\`\`\`json\n`;
+      dataToShow.slice(0, 2).forEach((row, i) => {
+        msg += `\n[سجل ${i+1}]\n`;
+        for(const [key, value] of Object.entries(row)) {
+          const valStr = value === null ? 'NULL' : String(value).substring(0, 60);
+          msg += `  ${key}: ${valStr}\n`;
+        }
+      });
+      msg += `\`\`\`\n\n`;
     }
   }
   
-  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-  msg += `✅ *نهاية تقرير التشخيص*\n`;
-  msg += `📌 تم الإنشاء تلقائياً بواسطة أداة التشخيص`;
+  // العلاقات
+  if(relationships.length > 0) {
+    msg += `══════════════════════════════════════════\n\n`;
+    msg += `🔗 *العلاقات بين الجداول:*\n`;
+    relationships.forEach(r => {
+      msg += `• \`${r.table_name}\` ←→ \`${r.referenced_table_name}\`\n`;
+    });
+    msg += `\n`;
+  }
   
-  return msg;
+  msg += `══════════════════════════════════════════\n`;
+  msg += `✅ *نهاية التقرير الشامل*\n`;
+  msg += `📌 تم الإنشاء تلقائياً بواسطة نظام التشخيص`;
+    return msg;
 }
 
 // ═══════════════════════════════════════════════════════════════
-// دوال الإرسال
+// 🎨 عرض الأقسام
 // ═══════════════════════════════════════════════════════════════
 
-function splitMessage(message, maxLength) {
+function renderPoliciesSection(policies) {
+  const container = $('#policiesSection');
+  
+  if(policies.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.5)">
+      <div style="font-size:3rem;margin-bottom:10px">🔓</div>
+      <div>لا توجد سياسات RLS مفعلة حالياً</div>
+      <div style="font-size:0.85rem;margin-top:8px;color:rgba(255,255,255,0.4)">
+        ⚠️ يوصى بتفعيل سياسات الوصول لحماية بياناتك
+      </div>
+    </div>`;
+    return;
+  }
+  
+  // تجميع السياسات حسب الجدول
+  const byTable = {};
+  for(const p of policies) {
+    if(!byTable[p.tablename]) byTable[p.tablename] = [];
+    byTable[p.tablename].push(p);
+  }
+  
+  let html = '';
+  for(const [tableName, tablePolicies] of Object.entries(byTable)) {
+    let policyHtml = `<table class="data-table"><thead><tr>
+      <th>اسم السياسة</th><th>الأمر</th><th>الأدوار</th><th>الشرط</th>
+    </tr></thead><tbody>`;
+    
+    for(const p of tablePolicies) {
+      policyHtml += `<tr>
+        <td><code>${p.policyname}</code></td>
+        <td>${createBadge(p.cmd, p.cmd === 'SELECT' ? 'blue' : p.cmd === 'INSERT' ? 'green' : 'gold')}</td>
+        <td>${p.roles || 'public'}</td>
+        <td><code style="font-size:0.75rem">${p.qual ? p.qual.substring(0, 40) + '...' : '—'}</code></td>
+      </tr>`;
+    }
+    policyHtml += `</tbody></table>`;
+    
+    html += createAccordion(
+      `📁 ${tableName} <span style="color:rgba(255,255,255,0.4)">(${tablePolicies.length} سياسات)</span>`,
+      '🔐',
+      policyHtml,
+      true
+    ).outerHTML;  }
+  
+  container.innerHTML = html;
+}
+
+function renderTablesSection(tables) {
+  const container = $('#tablesSection');
+  
+  let html = '';
+  for(const table of tables) {
+    // جدول الأعمدة
+    let columnsHtml = `<table class="data-table"><thead><tr>
+      <th>#</th><th>اسم العمود</th><th>النوع</th><th>مثال/قيمة</th><th>NULL</th>
+    </tr></thead><tbody>`;
+    
+    table.columns.forEach((col, idx) => {
+      columnsHtml += `<tr>
+        <td>${idx + 1}</td>
+        <td><code>${col.name}</code></td>
+        <td>${createBadge(col.type, col.type === 'text' ? 'blue' : col.type === 'integer' ? 'green' : 'gold')}</td>
+        <td>${formatValue(col.sampleValue, 30)}</td>
+        <td>${col.isNull ? createBadge('نعم', 'red') : createBadge('لا', 'green')}</td>
+      </tr>`;
+    });
+    columnsHtml += `</tbody></table>`;
+    
+    // عينة البيانات
+    let dataHtml = '';
+    const dataToShow = table.allData.length > 0 ? table.allData : table.sampleData;
+    if(dataToShow && dataToShow.length > 0) {
+      dataHtml = `<div style="margin-top:16px"><strong>💾 عينة البيانات:</strong><br><pre style="background:rgba(0,0,0,0.3);padding:12px;border-radius:8px;margin-top:8px;overflow:auto;max-height:200px;font-size:0.75rem">`;
+      dataHtml += JSON.stringify(dataToShow.slice(0, 2), null, 2).substring(0, 1000);
+      dataHtml += `</pre></div>`;
+    }
+    
+    // الفهارس
+    let indexesHtml = '';
+    if(table.indexes.length > 0) {
+      indexesHtml = `<div style="margin-top:12px"><strong>📑 الفهارس:</strong><br>`;
+      table.indexes.forEach(idx => {
+        indexesHtml += `<code style="display:block;margin:4px 0">${idx.indexname}</code>`;
+      });
+      indexesHtml += `</div>`;
+    }
+    
+    const content = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px">
+        <div><strong>📊 السجلات:</strong> ${table.rowCount}</div>
+        <div><strong>📝 الأعمدة:</strong> ${table.columns.length}</div>
+        <div><strong>🔐 السياسات:</strong> ${table.policies.length}</div>        <div><strong>📑 الفهارس:</strong> ${table.indexes.length}</div>
+      </div>
+      ${columnsHtml}
+      ${indexesHtml}
+      ${dataHtml}
+    `;
+    
+    const badge = table.rowCount > 0 ? createBadge(`${table.rowCount} سجل`, 'green') : createBadge('فارغ', 'red');
+    
+    html += createAccordion(
+      `📁 ${table.name} ${badge}`,
+      '🗄️',
+      content,
+      false
+    ).outerHTML;
+  }
+  
+  container.innerHTML = html || `<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.5)">لا توجد جداول للفحص</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 🧪 اختبار المزامنة
+// ═══════════════════════════════════════════════════════════════
+
+window.runTest = async function() {
+  const name = $('#testName').value.trim();
+  const subject = $('#testSubject').value.trim();
+  const title = $('#testTitle').value.trim();
+  
+  if(!name || !subject || !title) {
+    showTestResult('❌ يرجى ملء جميع الحقول', 'error');
+    return;
+  }
+  
+  try {
+    showTestResult('⏳ جاري الإضافة...', 'pending');
+    
+    const testCode = 'test_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    const { data, error } = await supabase.from('student_reports').insert([{
+      name, title, subject,
+      date: new Date().toISOString(),
+      code: testCode,
+      badge: null, badge_color: null, color: null,
+      alert_text: null, alert_color: null, alert_type: null,
+      banned: false, status: 'active'
+    }]).select();
+    
+    if(error) {
+      showTestResult(`❌ فشل: ${error.message}`, 'error');      return;
+    }
+    
+    lastTestData = { ...data[0], testCode };
+    
+    showTestResult(`✅ تم الإضافة!\n\nID: ${data[0].id}\nCode: ${testCode}\nName: ${name}\nTitle: ${title}\nSubject: ${subject}`, 'success');
+    
+  } catch(err) {
+    showTestResult(`❌ خطأ: ${err.message}`, 'error');
+  }
+};
+
+window.verifyTest = async function() {
+  if(!lastTestData) {
+    showTestResult('⚠️ لم تتم إضافة بيانات أولاً', 'error');
+    return;
+  }
+  
+  try {
+    showTestResult('⏳ جاري التحقق...', 'pending');
+    
+    const { data: byId } = await supabase.from('student_reports').select('*').eq('id', lastTestData.id).single();
+    const { data: byCode } = await supabase.from('student_reports').select('*').eq('code', lastTestData.testCode).single();
+    
+    if(!byId || !byCode) {
+      showTestResult('❌ لم يتم العثور على البيانات', 'error');
+      return;
+    }
+    
+    const match = byId.name === lastTestData.name && byId.title === lastTestData.title && byId.subject === lastTestData.subject;
+    
+    if(match) {
+      showTestResult(`✅ التحقق نجح!\n\n✓ البيانات محفوظة بشكل صحيح\n✓ يمكن القراءة بالـ ID\n✓ يمكن القراءة بالـ Code\n✓ جميع القيم متطابقة`, 'success');
+    } else {
+      showTestResult(`⚠️ اختلاف في البيانات!\n\nالمخزنة: ${lastTestData.name} | ${lastTestData.title}\nالمسترجعة: ${byId.name} | ${byId.title}`, 'error');
+    }
+    
+  } catch(err) {
+    showTestResult(`❌ خطأ: ${err.message}`, 'error');
+  }
+};
+
+window.sendTestResult = async function() {
+  const resultEl = $('#testResult');
+  if(!resultEl || resultEl.style.display === 'none' || resultEl.innerHTML.includes('لم يتم')) {
+    alert('⚠️ لا توجد نتيجة اختبار للإرسال');
+    return;
+  }
+  
+  const message = `🧪 *نتيجة اختبار المزامنة*\n\n` +    `📝 **البيانات:**\n` +
+    `• الاسم: ${$('#testName').value}\n` +
+    `• المادة: ${$('#testSubject').value}\n` +
+    `• العنوان: ${$('#testTitle').value}\n\n` +
+    `📊 **النتيجة:**\n${resultEl.textContent}\n\n` +
+    `🕐 ${new Date().toLocaleString('ar-EG')}`;
+  
+  try {
+    await sendToTelegram(message);
+    alert('✅ تم إرسال نتيجة الاختبار');
+  } catch(err) {
+    alert('❌ فشل الإرسال: ' + err.message);
+  }
+};
+
+function showTestResult(html, type) {
+  const el = $('#testResult');
+  el.style.display = 'block';
+  el.className = `result-box ${type}`;
+  el.innerHTML = html.replace(/\n/g, '<br>');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 📤 الإرسال والنسخ
+// ═══════════════════════════════════════════════════════════════
+
+function splitMessage(message, maxLength = 4000) {
   const chunks = [];
   let current = '';
-  
-  const lines = message.split('\n');
-  for(const line of lines) {
+  for(const line of message.split('\n')) {
     if((current + line + '\n').length > maxLength) {
       chunks.push(current);
       current = line + '\n';
@@ -382,44 +819,67 @@ function splitMessage(message, maxLength) {
       current += line + '\n';
     }
   }
-  
   if(current) chunks.push(current);
   return chunks;
 }
 
 async function sendToTelegram(message, isFirst = false) {
   const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-  
-  const response = await fetch(url, {    method: 'POST',
+  const response = await fetch(url, {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       chat_id: TG_CHAT_ID,
       text: message,
-      parse_mode: 'Markdown'
-    })
+      parse_mode: 'Markdown'    })
   });
-  
   const result = await response.json();
-  
-  if(!result.ok) {
-    throw new Error('Telegram Error: ' + (result.description || 'Unknown error'));
-  }
-  
+  if(!result.ok) throw new Error(result.description || 'Telegram error');
   return result;
 }
 
+window.sendReport = async function() {
+  if(!fullReport) {
+    alert('⚠️ يرجى تشغيل التحليل أولاً');
+    return;
+  }
+  
+  try {
+    setStatus('pending', '📤', 'جاري الإرسال...');
+    log('📤 جاري إرسال التقرير لـ Telegram...');
+    
+    const chunks = splitMessage(fullReport);
+    for(let i = 0; i < chunks.length; i++) {
+      const msg = chunks.length > 1 ? `**(جزء ${i+1}/${chunks.length})**\n\n${chunks[i]}` : chunks[i];
+      await sendToTelegram(msg);
+      log(`  • تم إرسال جزء ${i+1}/${chunks.length}`);
+    }
+    
+    setStatus('success', '✅', 'تم الإرسال! تحقق من Telegram');
+    log('✅ اكتمل إرسال التقرير');
+    
+  } catch(err) {
+    setStatus('error', '❌', 'فشل الإرسال: ' + err.message);
+    log('❌ ' + err.message);
+  }
+};
+
+window.copyReport = function() {
+  if(!fullReport) {
+    alert('⚠️ يرجى تشغيل التحليل أولاً');
+    return;
+  }
+  navigator.clipboard.writeText(fullReport);
+  alert('✅ تم نسخ التقرير الكامل!');
+};
+
 // ═══════════════════════════════════════════════════════════════
-// دوال مساعدة
+// 🎬 التهيئة
 // ═══════════════════════════════════════════════════════════════
 
-window.copyResult = function() {
-  const text = $('#result').textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    alert('✅ تم نسخ النتيجة!');
-  }).catch(() => {
-    alert('❌ فشل النسخ');
-  });
-};
-</script>
+document.addEventListener('DOMContentLoaded', () => {
+  log('🎬 النظام جاهز');
+  log('💡 اضغط "بدء التحليل الشامل" للبدء');
+});</script>
 </body>
 </html>
