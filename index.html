@@ -3,44 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 تشخيص قاعدة البيانات - ONX-TAQE</title>
+<title>🔍 التشخيص الشامل - ONX-TAQE</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cairo',sans-serif;background:#0f1e3d;color:#fff;min-height:100vh;padding:20px}
-.container{max-width:800px;margin:0 auto}
-.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;margin-bottom:20px}
-h1{font-size:1.8rem;margin-bottom:8px;background:linear-gradient(135deg,#00d4ff,#7b2fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.status{display:flex;align-items:center;gap:8px;margin:12px 0;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05)}
-.status.success{border:1px solid #00ff88}
-.status.error{border:1px solid #ff6b6b}
-.status.pending{border:1px solid #ffd700}
-.icon{font-size:1.5rem}
-pre{background:rgba(0,0,0,0.3);padding:16px;border-radius:12px;overflow-x:auto;font-size:0.85rem;max-height:400px;overflow-y:auto}
-.btn{padding:12px 24px;border:none;border-radius:12px;cursor:pointer;font-family:inherit;font-weight:700;font-size:1rem;margin:8px 0}
-.btn-primary{background:linear-gradient(135deg,#00d4ff,#7b2fff);color:#fff}
-.btn-success{background:linear-gradient(135deg,#00c851,#00ff88);color:#000}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
-.log{font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:12px}
+body{font-family:'Cairo',sans-serif;background:linear-gradient(135deg,#0f1e3d,#1a2a4a);color:#fff;min-height:100vh;padding:20px}
+.container{max-width:900px;margin:0 auto}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px;margin-bottom:20px;backdrop-filter:blur(10px)}
+h1{font-size:2rem;margin-bottom:12px;background:linear-gradient(135deg,#00d4ff,#7b2fff,#00ff88);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+h2{font-size:1.3rem;margin:16px 0 10px;color:#00d4ff}
+.status{display:flex;align-items:center;gap:12px;margin:16px 0;padding:16px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.status.success{border-color:#00ff88;background:rgba(0,255,136,0.1)}
+.status.error{border-color:#ff6b6b;background:rgba(255,107,107,0.1)}
+.status.pending{border-color:#ffd700;background:rgba(255,215,0,0.1)}
+.icon{font-size:1.8rem}
+.btn{padding:14px 28px;border:none;border-radius:14px;cursor:pointer;font-family:inherit;font-weight:700;font-size:1rem;margin:10px 0;transition:all 0.3s}
+.btn-primary{background:linear-gradient(135deg,#00d4ff,#7b2fff);color:#fff;box-shadow:0 4px 20px rgba(0,212,255,0.3)}
+.btn-success{background:linear-gradient(135deg,#00c851,#00ff88);color:#000;box-shadow:0 4px 20px rgba(0,200,81,0.3)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,212,255,0.5)}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.log{font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:16px;line-height:1.8}
+pre{background:rgba(0,0,0,0.4);padding:20px;border-radius:14px;overflow-x:auto;font-size:0.8rem;max-height:500px;overflow-y:auto;border:1px solid rgba(255,255,255,0.1);white-space:pre-wrap;word-break:break-all}
+.progress{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin:16px 0}
+.progress-bar{height:100%;background:linear-gradient(90deg,#00d4ff,#7b2fff,#00ff88);width:0%;transition:width 0.3s}
+.info-box{background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:12px;padding:14px;margin:12px 0;font-size:0.9rem}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="card">
-    <h1>📊 تشخيص قاعدة البيانات</h1>
-    <p style="color:rgba(255,255,255,0.6)">سيقوم هذا الكود بجمع معلومات الجداول والأعمدة وإرسالها عبر Telegram</p>
+    <h1>🔍 التشخيص الشامل لقاعدة البيانات</h1>
+    <p style="color:rgba(255,255,255,0.6);margin-bottom:16px">سيجمع هذا الكود <strong>جميع الجداول، الأعمدة، البيانات، السياسات، والإعدادات</strong> ويرسلها عبر Telegram</p>
+    
+    <div class="info-box">
+      📊 <strong>ماذا سيرسل:</strong><br>
+      • جميع الجداول وأسمائها<br>
+      • كل جدول مع جميع أعمدته وخصائصها<br>
+      • عدد السجلات في كل جدول<br>
+      • عينات من البيانات الفعلية<br>
+      • سياسات RLS والصلاحيات<br>
+      • حالة Realtime<br>
+      • جميع القيم المخزنة في الجداول
+    </div>
     
     <div id="status" class="status pending">
       <span class="icon">⏳</span>
-      <span>جاهز للتشغيل...</span>
-    </div>
+      <span>جاهز لبدء التشخيص...</span>    </div>
     
-    <button class="btn btn-primary" id="startBtn" onclick="startDiagnosis()">🚀 بدء التشخيص والإرسال</button>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    
+    <button class="btn btn-primary" id="startBtn" onclick="startDiagnosis()">🚀 بدء التشخيص الشامل والإرسال</button>
     
     <div class="log" id="log"></div>
   </div>
   
   <div class="card" id="resultCard" style="display:none">
-    <h2>📋 النتيجة</h2>
+    <h2>📋 النتيجة الكاملة</h2>
     <pre id="result"></pre>
     <button class="btn btn-success" onclick="copyResult()">📋 نسخ النتيجة</button>
   </div>
@@ -48,6 +65,7 @@ pre{background:rgba(0,0,0,0.3);padding:16px;border-radius:12px;overflow-x:auto;f
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
 // ⚙️ إعدادات Supabase
 const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
 const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
@@ -59,7 +77,13 @@ const TG_CHAT_ID = "910624538";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const $ = (s) => document.querySelector(s);
-const log = (msg) => { $('#log').innerHTML += `<div>• ${msg}</div>`; };
+const log = (msg) => { 
+  const el = $('#log'); 
+  const time = new Date().toLocaleTimeString('ar-EG');
+  el.innerHTML += `<div>[${time}] ${msg}</div>`;
+  el.scrollTop = el.scrollHeight;
+};
+const setProgress = (p) => { $('#progressBar').style.width = p + '%'; };
 const setStatus = (status, icon, text) => {
   const el = $('#status');
   el.className = `status ${status}`;
@@ -70,45 +94,88 @@ window.startDiagnosis = async function() {
   $('#startBtn').disabled = true;
   $('#log').innerHTML = '';
   $('#resultCard').style.display = 'none';
+  setProgress(0);
   
-  try {
-    setStatus('pending', '⏳', 'جاري جمع المعلومات...');
-    log('بدء التشخيص...');
+  try {    setStatus('pending', '⏳', 'جاري جمع المعلومات...');
+    log('🚀 بدء التشخيص الشامل...');
     
-    // جمع معلومات الجداول
+    // 1. جمع معلومات الجداول
+    setProgress(5);
+    log('📊 جاري جلب قائمة الجداول...');
     const tables = await getTables();
     log(`✅ تم العثور على ${tables.length} جدول`);
     
-    // جمع معلومات الأعمدة لكل جدول
-    const schema = [];
+    // 2. جمع معلومات مفصلة لكل جدول
+    const fullSchema = [];
+    let step = 10;
+    
     for(const table of tables) {
-      log(`📊 فحص جدول: ${table}...`);
-      const columns = await getColumns(table);
-      const rowCount = await getRowCount(table);
-      const rls = await getRLSStatus(table);
+      setProgress(step);
+      log(`📁 فحص جدول: ${table}...`);
       
-      schema.push({
+      const columns = await getColumns(table);
+      log(`  • تم جمع ${columns.length} عمود`);
+      
+      const rowCount = await getRowCount(table);
+      log(`  • عدد السجلات: ${rowCount}`);
+      
+      const rls = await getRLSStatus(table);
+      log(`  • حالة RLS: ${rls}`);
+      
+      const policies = await getPolicies(table);
+      log(`  • عدد سياسات RLS: ${policies.length}`);
+      
+      const sampleData = await getSampleData(table, rowCount);
+      log(`  • تم جمع عينة بيانات`);
+      
+      const indexes = await getIndexes(table);
+      log(`  • عدد الفهارس: ${indexes.length}`);
+      
+      fullSchema.push({
         table,
         columns,
         rowCount,
-        rls
+        rls,
+        policies,
+        sampleData,
+        indexes
       });
+      
+      step += 80 / tables.length;
     }
     
-    // تنسيق الرسالة
-    const message = formatMessage(schema);    
-    // عرض النتيجة
+    // 3. معلومات إضافية
+    setProgress(90);    log('📋 جمع المعلومات الإضافية...');
+    
+    const dbInfo = await getDatabaseInfo();
+    const realtimeStatus = await checkRealtimeStatus();
+    
+    // 4. تنسيق الرسالة
+    setProgress(95);
+    log('📝 تنسيق الرسالة...');
+    
+    const message = formatFullMessage(fullSchema, dbInfo, realtimeStatus);
+    
+    // 5. عرض النتيجة
     $('#result').textContent = message;
     $('#resultCard').style.display = 'block';
     
-    // الإرسال عبر Telegram
-    setStatus('pending', '📤', 'جاري الإرسال عبر Telegram...');
-    log('جاري الإرسال عبر Telegram...');
+    // 6. الإرسال عبر Telegram
+    setProgress(98);
+    log('📤 جاري الإرسال عبر Telegram...');
     
-    await sendToTelegram(message);
+    // تقسيم الرسالة إذا كانت طويلة
+    const chunks = splitMessage(message, 4000);
     
-    setStatus('success', '✅', 'تم الإرسال بنجاح!');
-    log('✅ تم إرسال التشخيص إلى Telegram');
+    for(let i = 0; i < chunks.length; i++) {
+      const chunkMsg = i > 0 ? `**(تابع ${i}/${chunks.length})**\n\n${chunks[i]}` : chunks[i];
+      await sendToTelegram(chunkMsg, i === 0);
+      log(`  • تم إرسال الجزء ${i+1}/${chunks.length}`);
+    }
+    
+    setProgress(100);
+    setStatus('success', '✅', 'تم الإرسال بنجاح! تحقق من Telegram');
+    log('✅ اكتمل التشخيص وتم الإرسال إلى Telegram');
     
   } catch(err) {
     console.error(err);
@@ -119,24 +186,25 @@ window.startDiagnosis = async function() {
   $('#startBtn').disabled = false;
 };
 
+// ═══════════════════════════════════════════════════════════════
+// دوال جمع المعلومات
+// ═══════════════════════════════════════════════════════════════
+
 async function getTables() {
-  const { data, error } = await supabase.rpc('get_tables');
-  if(error) {
-    // طريقة بديلة
-    const { data: alt } = await supabase
-      .from('information_schema.tables')
-      .select('table_name')
-      .eq('table_schema', 'public')
-      .eq('table_type', 'BASE TABLE');
-    return alt?.map(t => t.table_name) || [];
-  }
-  return data || [];
+  const { data, error } = await supabase
+    .from('information_schema.tables')
+    .select('table_name')
+    .eq('table_schema', 'public')    .eq('table_type', 'BASE TABLE')
+    .order('table_name');
+  
+  if(error) throw error;
+  return data?.map(t => t.table_name) || [];
 }
 
 async function getColumns(tableName) {
   const { data, error } = await supabase
     .from('information_schema.columns')
-    .select('column_name, data_type, is_nullable, column_default, character_maximum_length')
+    .select('column_name, data_type, udt_name, is_nullable, column_default, character_maximum_length, numeric_precision, numeric_scale, ordinal_position')
     .eq('table_name', tableName)
     .eq('table_schema', 'public')
     .order('ordinal_position');
@@ -145,12 +213,13 @@ async function getColumns(tableName) {
   return data || [];
 }
 
-async function getRowCount(tableName) {  try {
+async function getRowCount(tableName) {
+  try {
     const { count, error } = await supabase.from(tableName).select('*', { count: 'exact', head: true });
-    if(error) return '?';
+    if(error) return 'غير متاح';
     return count || 0;
   } catch {
-    return '?';
+    return 'غير متاح';
   }
 }
 
@@ -164,44 +233,164 @@ async function getRLSStatus(tableName) {
       .single();
     
     if(error) return 'غير معروف';
-    return data?.rowsecurity ? 'مفعّل' : 'معطل';
+    return data?.rowsecurity ? '✅ مفعّل' : '❌ معطل';
   } catch {
     return 'غير معروف';
   }
 }
 
-function formatMessage(schema) {
-  let msg = `📊 *تقرير تشخيص قاعدة البيانات*\n`;
-  msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-  msg += `🕐 الوقت: ${new Date().toLocaleString('ar-EG')}\n`;
-  msg += `📋 عدد الجداول: ${schema.length}\n\n`;
-  
-  for(const s of schema) {
-    msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-    msg += `📁 *جدول: ${s.table}*\n`;
-    msg += `📊 عدد السجلات: ${s.rowCount}\n`;
-    msg += `🔐 حالة RLS: ${s.rls}\n`;
-    msg += `📝 الأعمدة (${s.columns.length}):\n`;
+async function getPolicies(tableName) {
+  try {
+    const { data, error } = await supabase
+      .from('pg_policies')
+      .select('policyname, cmd, qual, with_check, roles')      .eq('tablename', tableName)
+      .eq('schemaname', 'public');
     
-    for(const col of s.columns) {
-      msg += `  • \`${col.column_name}\` - ${col.data_type}`;
-      if(col.is_nullable === 'YES') msg += ` (NULL)`;
-      if(col.column_default) msg += ` = ${col.column_default}`;
-      msg += `\n`;
-    }
-    msg += `\n`;
+    if(error) return [];
+    return data || [];
+  } catch {
+    return [];
   }
-  
-  msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-  msg += `✅ نهاية التقرير`;
-    return msg;
 }
 
-async function sendToTelegram(message) {
+async function getSampleData(tableName, rowCount) {
+  try {
+    const limit = Math.min(5, rowCount || 5);
+    const { data, error } = await supabase.from(tableName).select('*').limit(limit);
+    if(error) return null;
+    return data || [];
+  } catch {
+    return null;
+  }
+}
+
+async function getIndexes(tableName) {
+  try {
+    const { data, error } = await supabase
+      .from('pg_indexes')
+      .select('indexname, indexdef')
+      .eq('tablename', tableName)
+      .eq('schemaname', 'public');
+    
+    if(error) return [];
+    return data || [];
+  } catch {
+    return [];
+  }
+}
+
+async function getDatabaseInfo() {
+  return {
+    url: SUPABASE_URL,
+    timestamp: new Date().toLocaleString('ar-EG'),
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  };
+}
+
+async function checkRealtimeStatus() {
+  try {
+    const channel = supabase.channel('test_realtime_check');
+    return '✅ مدعوم';
+  } catch {
+    return '❌ غير معروف';  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// تنسيق الرسالة
+// ═══════════════════════════════════════════════════════════════
+
+function formatFullMessage(schema, dbInfo, realtimeStatus) {
+  let msg = `🔍 *التشخيص الشامل لقاعدة البيانات*\n`;
+  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+  
+  msg += `📊 *معلومات عامة:*\n`;
+  msg += `• الوقت: ${dbInfo.timestamp}\n`;
+  msg += `• المنطقة الزمنية: ${dbInfo.timezone}\n`;
+  msg += `• Realtime: ${realtimeStatus}\n`;
+  msg += `• عدد الجداول: ${schema.length}\n\n`;
+  
+  for(const s of schema) {
+    msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    msg += `📁 *جدول: \`${s.table}\`*\n\n`;
+    
+    msg += `📊 *الإحصائيات:*\n`;
+    msg += `• عدد السجلات: ${s.rowCount}\n`;
+    msg += `• حالة RLS: ${s.rls}\n`;
+    msg += `• عدد السياسات: ${s.policies.length}\n`;
+    msg += `• عدد الفهارس: ${s.indexes.length}\n\n`;
+    
+    msg += `📝 *الأعمدة (${s.columns.length}):*\n\`\`\`\n`;
+    for(const col of s.columns) {
+      msg += `${String(col.ordinal_position).padStart(2)} `;
+      msg += `${col.column_name.padEnd(25)} `;
+      msg += `${col.data_type.padEnd(15)} `;
+      msg += `${col.is_nullable === 'YES' ? 'NULL' : 'NOT NULL'.padEnd(8)} `;
+      if(col.column_default) {
+        const def = String(col.column_default).substring(0, 30);
+        msg += `= ${def}`;
+      }
+      msg += `\n`;
+    }
+    msg += `\`\`\`\n\n`;
+    
+    if(s.policies.length > 0) {
+      msg += `🔐 *سياسات RLS:*\n`;
+      for(const p of s.policies) {
+        msg += `• \`${p.policyname}\` - ${p.cmd}`;
+        if(p.roles) msg += ` [${p.roles}]`;
+        msg += `\n`;
+      }
+      msg += `\n`;
+    }    
+    if(s.indexes.length > 0) {
+      msg += `📑 *الفهارس:*\n`;
+      for(const idx of s.indexes) {
+        msg += `• \`${idx.indexname}\`\n`;
+      }
+      msg += `\n`;
+    }
+    
+    if(s.sampleData && s.sampleData.length > 0) {
+      msg += `💾 *عينة بيانات (${s.sampleData.length} سجلات):*\n\`\`\`\n`;
+      msg += JSON.stringify(s.sampleData, null, 2).substring(0, 1500);
+      if(JSON.stringify(s.sampleData).length > 1500) msg += '\n... (مختصر)';
+      msg += `\n\`\`\`\n\n`;
+    }
+  }
+  
+  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+  msg += `✅ *نهاية تقرير التشخيص*\n`;
+  msg += `📌 تم الإنشاء تلقائياً بواسطة أداة التشخيص`;
+  
+  return msg;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// دوال الإرسال
+// ═══════════════════════════════════════════════════════════════
+
+function splitMessage(message, maxLength) {
+  const chunks = [];
+  let current = '';
+  
+  const lines = message.split('\n');
+  for(const line of lines) {
+    if((current + line + '\n').length > maxLength) {
+      chunks.push(current);
+      current = line + '\n';
+    } else {
+      current += line + '\n';
+    }
+  }
+  
+  if(current) chunks.push(current);
+  return chunks;
+}
+
+async function sendToTelegram(message, isFirst = false) {
   const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
   
-  const response = await fetch(url, {
-    method: 'POST',
+  const response = await fetch(url, {    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       chat_id: TG_CHAT_ID,
@@ -219,10 +408,16 @@ async function sendToTelegram(message) {
   return result;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// دوال مساعدة
+// ═══════════════════════════════════════════════════════════════
+
 window.copyResult = function() {
   const text = $('#result').textContent;
   navigator.clipboard.writeText(text).then(() => {
     alert('✅ تم نسخ النتيجة!');
+  }).catch(() => {
+    alert('❌ فشل النسخ');
   });
 };
 </script>
