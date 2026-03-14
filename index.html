@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المحلل الأمني المتقدم للمواقع | Advanced Web Scanner</title>
+    <title>المحلل الأمني المتقدم V2</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -25,31 +25,29 @@
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
 
-        /* Header & Input */
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             padding: 20px;
             border-bottom: 1px solid var(--border);
         }
 
         h1 { color: var(--accent); margin-bottom: 10px; }
-        .subtitle { color: #8b949e; font-size: 0.9em; }
-
-        .search-box {
+        
+        .input-group {
             display: flex;
             gap: 10px;
-            max-width: 600px;
+            max-width: 700px;
             margin: 20px auto;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         input[type="text"] {
             flex: 1;
+            min-width: 250px;
             padding: 12px;
             border-radius: 6px;
             border: 1px solid var(--border);
@@ -58,99 +56,36 @@
             font-size: 16px;
         }
 
-        button.scan-btn {
+        .btn {
             padding: 12px 24px;
-            background: var(--success);
-            color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
-        }
-
-        button.scan-btn:hover { background: #2c974b; }
-        button.scan-btn:disabled { background: #30363d; cursor: not-allowed; }
-
-        /* Dashboard Grid */
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-            display: none; /* Hidden initially */
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            overflow: hidden;
-        }
-
-        .card h3 {
-            margin-top: 0;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-            color: var(--accent);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .badge {
-            font-size: 0.8em;
-            padding: 2px 8px;
-            border-radius: 12px;
-            background: #30363d;
-        }
-
-        /* Lists */
-        ul.resource-list {
-            list-style: none;
-            padding: 0;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        ul.resource-list li {
-            padding: 8px;
-            border-bottom: 1px solid #21262d;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9em;
-            word-break: break-all;
-        }
-
-        ul.resource-list li:hover { background: #21262d; }
-
-        .action-btn {
-            background: var(--accent);
             color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8em;
-            margin-right: 5px;
-            text-decoration: none;
         }
+
+        .btn-scan { background: var(--success); }
+        .btn-scan:hover { background: #2c974b; }
+        .btn-scan:disabled { background: #30363d; cursor: not-allowed; }
         
-        .action-btn:hover { opacity: 0.8; }
+        .btn-upload { background: var(--accent); }
+        .btn-upload:hover { background: #3b82f6; }
 
-        .risk-high { color: var(--danger); }
-        .risk-med { color: var(--warning); }
-        .risk-low { color: var(--success); }
+        .btn-download { background: var(--warning); color: #000; }
+        .btn-download:hover { background: #b08d1a; }
 
-        /* Stats */
+        /* Dashboard */
+        .dashboard { display: none; margin-top: 20px; }
+        
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
             margin-bottom: 20px;
         }
+
         .stat-box {
             background: var(--card-bg);
             padding: 15px;
@@ -158,253 +93,417 @@
             border-radius: 8px;
             border: 1px solid var(--border);
         }
-        .stat-number { font-size: 1.5em; font-weight: bold; color: var(--accent); }
-        .stat-label { font-size: 0.8em; color: #8b949e; }
 
-        /* Loader */
+        .stat-number { font-size: 1.8em; font-weight: bold; color: var(--accent); }
+        .stat-label { font-size: 0.85em; color: #8b949e; }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            color: var(--accent);
+            font-size: 1.1em;
+        }
+
+        .resource-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .resource-list li {
+            padding: 6px 8px;
+            border-bottom: 1px solid #21262d;
+            font-size: 0.85em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            word-break: break-all;
+        }
+
+        .resource-list li:last-child { border-bottom: none; }
+        .resource-list li:hover { background: #21262d; }
+
+        .badge {
+            background: #30363d;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            margin-right: 5px;
+        }
+
+        .risk-high { color: var(--danger); }
+        .risk-med { color: var(--warning); }
+        .risk-low { color: var(--success); }
+
+        /* Loader & Alerts */
         .loader {
             display: none;
             text-align: center;
-            margin: 20px;
-            color: var(--accent);
+            padding: 40px;
         }
-
-        /* Security Score */
-        .score-circle {
-            width: 100px;
-            height: 100px;
+        .spinner {
+            border: 4px solid #30363d;
+            border-top: 4px solid var(--accent);
             border-radius: 50%;
-            border: 5px solid var(--border);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px auto;
+            max-width: 700px;
+            display: none;
+        }
+        .alert-error { background: rgba(218, 54, 51, 0.2); border: 1px solid var(--danger); color: #ff7b72; }
+        .alert-info { background: rgba(88, 166, 255, 0.2); border: 1px solid var(--accent); color: #79c0ff; }
+
+        .score-box {
+            text-align: center;
+            padding: 20px;
+        }
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 6px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5em;
+            font-size: 2em;
             font-weight: bold;
-            margin: 0 auto 10px;
+            margin: 0 auto 15px;
         }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #484f58; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>🛡️ المحلل الأمني المتقدم</h1>
-        <div class="subtitle">أدخل رابط الموقع لتحليل الهيكلية، الموارد، الثغرات، والسيرفرات المرتبطة</div>
+        <h1>🛡️ المحلل الأمني المتقدم V2</h1>
+        <div style="color: #8b949e;">تحليل شامل للموارد، الثغرات، والسيرفرات المرتبطة</div>
         
-        <div class="search-box">
-            <input type="text" id="targetUrl" placeholder="https://example.com" value="https://example.com">
-            <button class="scan-btn" onclick="startScan()">فحص الموقع</button>
+        <div class="input-group">
+            <input type="text" id="targetUrl" placeholder="أدخل رابط الموقع (https://example.com)" value="https://example.com">
+            <button class="btn btn-scan" id="scanBtn" onclick="startScan()">🔍 فحص الرابط</button>
+            <label class="btn btn-upload" style="display: inline-block; margin: 0;">
+                📂 رفع ملف HTML
+                <input type="file" id="fileInput" accept=".html,.htm" style="display: none;" onchange="handleFileUpload(this)">
+            </label>
         </div>
     </header>
 
+    <div id="alertBox" class="alert"></div>
+
     <div id="loader" class="loader">
-        <h3>جاري الاتصال بالسيرفر وتحليل الكود المصدري...</h3>
-        <p>يرجى الانتظار، قد تستغرق العملية بضع ثوانٍ</p>
+        <div class="spinner"></div>
+        <h3 id="loaderText">جاري الاتصال...</h3>
+        <p style="color: #8b949e; font-size: 0.9em;">قد تستغرق العملية بضع ثوانٍ حسب حجم الموقع</p>
     </div>
 
     <div id="dashboard" class="dashboard">
-        <!-- Stats Row -->
-        <div class="stats-grid" style="grid-column: 1 / -1;">
+        <!-- Stats -->
+        <div class="stats-grid">
             <div class="stat-box">
-                <div class="stat-number" id="stat-images">0</div>
+                <div class="stat-number" id="stat-img">0</div>
                 <div class="stat-label">الصور</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number" id="stat-scripts">0</div>
+                <div class="stat-number" id="stat-js">0</div>
                 <div class="stat-label">ملفات JS</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number" id="stat-styles">0</div>
+                <div class="stat-number" id="stat-css">0</div>
                 <div class="stat-label">ملفات CSS</div>
             </div>
             <div class="stat-box">
+                <div class="stat-number" id="stat-links">0</div>
+                <div class="stat-label">الروابط</div>
+            </div>
+            <div class="stat-box">
                 <div class="stat-number" id="stat-risks" style="color: var(--danger)">0</div>
-                <div class="stat-label">مخاطر أمنية</div>
+                <div class="stat-label">مخاطر</div>
             </div>
         </div>
 
-        <!-- Security Score Card -->
-        <div class="card" style="grid-column: 1 / -1; text-align: center;">
+        <!-- Security Score -->
+        <div class="card score-box">
             <h3>تقييم الأمان العام</h3>
             <div id="securityScore" class="score-circle">--</div>
-            <p id="securityMsg">في انتظار الفحص...</p>
+            <p id="securityMsg" style="color: #8b949e;">في انتظار التحليل...</p>
         </div>
 
-        <!-- Resources: Scripts -->
-        <div class="card">
-            <h3>📜 ملفات الجافاسكربت (JS) <span class="badge" id="badge-js">0</span></h3>
-            <ul class="resource-list" id="list-js"></ul>
-        </div>
+        <div class="grid-cards">
+            <!-- Scripts -->
+            <div class="card">
+                <h3>📜 ملفات الجافاسكربت (JS)</h3>
+                <ul class="resource-list" id="list-js"></ul>
+            </div>
 
-        <!-- Resources: Styles -->
-        <div class="card">
-            <h3>🎨 ملفات التنسيق (CSS) <span class="badge" id="badge-css">0</span></h3>
-            <ul class="resource-list" id="list-css"></ul>
-        </div>
+            <!-- Styles -->
+            <div class="card">
+                <h3>🎨 ملفات التنسيق (CSS)</h3>
+                <ul class="resource-list" id="list-css"></ul>
+            </div>
 
-        <!-- Images & Backgrounds -->
-        <div class="card">
-            <h3>🖼️ الصور والخلفيات <span class="badge" id="badge-img">0</span></h3>
-            <ul class="resource-list" id="list-img"></ul>
-        </div>
+            <!-- Images -->
+            <div class="card">
+                <h3>🖼️ الصور والخلفيات</h3>
+                <ul class="resource-list" id="list-img"></ul>
+            </div>
 
-        <!-- Network & Paths -->
-        <div class="card">
-            <h3>🌐 المسارات والسيرفرات <span class="badge" id="badge-net">0</span></h3>
-            <ul class="resource-list" id="list-net"></ul>
+            <!-- Links -->
+            <div class="card">
+                <h3>🔗 الروابط والمسارات</h3>
+                <ul class="resource-list" id="list-links"></ul>
+            </div>
+
+            <!-- External Servers -->
+            <div class="card">
+                <h3>🌐 سيرفرات خارجية مرتبطة</h3>
+                <ul class="resource-list" id="list-servers"></ul>
+            </div>
+
+            <!-- Forms -->
+            <div class="card">
+                <h3>📝 النماذج (Forms)</h3>
+                <ul class="resource-list" id="list-forms"></ul>
+            </div>
         </div>
 
         <!-- Security Issues -->
-        <div class="card" style="grid-column: 1 / -1;">
-            <h3>⚠️ تقارير الثغرات والمخاطر</h3>
+        <div class="card" style="margin-top: 20px;">
+            <h3>⚠️ تقارير الثغرات والمخاطر الأمنية</h3>
             <ul class="resource-list" id="list-risks"></ul>
         </div>
-        
-        <!-- Full Source Download -->
-        <div class="card" style="grid-column: 1 / -1; text-align: center;">
-            <h3>💾 تحميل الكود المصدري الكامل</h3>
-            <p>يمكنك تحميل ملف HTML الكامل للموقع لدراسته محلياً</p>
-            <button class="action-btn" style="font-size: 1em; padding: 10px 20px;" onclick="downloadFullSource()">تحميل source.html</button>
+
+        <!-- Download Full Source -->
+        <div class="card" style="margin-top: 20px; text-align: center;">
+            <h3>💾 حفظ الكود المصدري الكامل</h3>
+            <p style="color: #8b949e; margin-bottom: 15px;">قم بتحميل ملف HTML الكامل لدراسته محلياً باستخدام محرر الأكواد</p>
+            <button class="btn btn-download" onclick="downloadFullSource()">تحميل source.html</button>
         </div>
     </div>
 </div>
 
 <script>
-    // استخدام Proxy لتجاوز CORS والسماح بجلب أي موقع
-    const PROXY_URL = "https://api.allorigins.win/get?url=";
+    // قائمة الوسائط (Proxies) للتحايل على CORS
+    const PROXIES = [
+        "https://api.allorigins.win/get?url=",
+        "https://corsproxy.io/?",
+        "https://api.codetabs.com/v1/proxy?quest="
+    ];
+
     let fullSourceCode = "";
+    let currentBaseUrl = "";
 
+    // showAlert Function
+    function showAlert(message, type = 'error') {
+        const alertBox = document.getElementById('alertBox');
+        alertBox.className = `alert alert-${type}`;
+        alertBox.innerHTML = message;
+        alertBox.style.display = 'block';
+        setTimeout(() => { alertBox.style.display = 'none'; }, 5000);
+    }
+
+    // Start Scan
     async function startScan() {
-        const urlInput = document.getElementById('targetUrl').value;
-        if (!urlInput) return alert("الرجاء إدخال رابط صحيح");
+        const urlInput = document.getElementById('targetUrl').value.trim();
+        if (!urlInput) {
+            showAlert("الرجاء إدخال رابط صحيح يبدأ بـ http:// أو https://");
+            return;
+        }
 
-        // UI Reset
+        // Validate URL
+        let validUrl = urlInput;
+        if (!validUrl.startsWith('http://') && !validUrl.startsWith('https://')) {
+            validUrl = 'https://' + validUrl;
+        }
+
+        currentBaseUrl = validUrl;
         document.getElementById('dashboard').style.display = 'none';
         document.getElementById('loader').style.display = 'block';
-        
-        try {
-            // 1. Fetch the website content via Proxy
-            const response = await fetch(PROXY_URL + encodeURIComponent(urlInput));
-            const data = await response.json();
-            
-            if (!data.contents) throw new Error("فشل في جلب محتوى الموقع");
+        document.getElementById('scanBtn').disabled = true;
+        document.getElementById('loaderText').innerText = "جاري الاتصال بالخادم...";
 
-            fullSourceCode = data.contents;
+        try {
+            fullSourceCode = await fetchWithProxies(validUrl);
             
-            // 2. Parse HTML
+            document.getElementById('loaderText').innerText = "جاري تحليل الكود المصدري...";
+            
+            // Parse HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(fullSourceCode, 'text/html');
 
-            // 3. Analyze
-            analyzeResources(doc, urlInput);
-            analyzeSecurity(doc, urlInput);
-            analyzeNetwork(fullSourceCode, urlInput);
+            // Run Analysis
+            analyzeResources(doc);
+            analyzeSecurity(doc);
+            analyzeNetwork(fullSourceCode);
 
-            // 4. Show Results
+            // Show Dashboard
             document.getElementById('loader').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'grid';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('scanBtn').disabled = false;
+            showAlert("تم الفحص بنجاح!", "info");
 
         } catch (error) {
             document.getElementById('loader').style.display = 'none';
-            alert("حدث خطأ أثناء الفحص: " + error.message);
+            document.getElementById('scanBtn').disabled = false;
+            showAlert("فشل الفحص: " + error.message + "<br><br>💡 <b>حل بديل:</b> احفظ صفحة الموقع كملف HTML على جهازك ثم اضغط على زر 'رفع ملف HTML' في الأعلى.");
             console.error(error);
         }
     }
 
-    function analyzeResources(doc, baseUrl) {
+    // Fetch with Fallback Proxies
+    async function fetchWithProxies(url) {
+        for (let i = 0; i < PROXIES.length; i++) {
+            try {
+                document.getElementById('loaderText').innerText = `جاري المحاولة عبر الوسيط ${i + 1} من ${PROXIES.length}...`;
+                const response = await fetch(PROXIES[i] + encodeURIComponent(url));
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                
+                // Handle different proxy response formats
+                if (data.contents) return data.contents;
+                if (data.body) return data.body;
+                if (typeof data === 'string') return data;
+                
+                throw new Error("صيغة استجابة غير معروفة");
+            } catch (e) {
+                console.log(`Proxy ${i + 1} failed:`, e.message);
+                if (i === PROXIES.length - 1) throw new Error("فشل الاتصال بجميع الخوادم الوسيطة. الموقع قد يحمي نفسه من الوصول المباشر.");
+            }
+        }
+    }
+
+    // Handle File Upload
+    function handleFileUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            fullSourceCode = e.target.result;
+            currentBaseUrl = "file://local-upload";
+            
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('loaderText').innerText = "جاري تحليل الملف المرفوع...";
+
+            setTimeout(() => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(fullSourceCode, 'text/html');
+                analyzeResources(doc);
+                analyzeSecurity(doc);
+                analyzeNetwork(fullSourceCode);
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                showAlert("تم تحليل الملف بنجاح!", "info");
+            }, 500);
+        };
+        reader.readAsText(file);
+    }
+
+    // Analyze Resources
+    function analyzeResources(doc) {
         // Scripts
-        const scripts = doc.querySelectorAll('script[src]');
-        const jsList = document.getElementById('list-js');
-        jsList.innerHTML = '';
-        scripts.forEach(s => addResourceItem(jsList, s.src, 'js'));
-        document.getElementById('stat-scripts').innerText = scripts.length;
-        document.getElementById('badge-js').innerText = scripts.length;
+        const scripts = Array.from(doc.querySelectorAll('script[src]')).map(s => s.src);
+        renderList('list-js', scripts, 'js');
+        document.getElementById('stat-js').innerText = scripts.length;
 
         // Styles
-        const styles = doc.querySelectorAll('link[rel="stylesheet"]');
-        const cssList = document.getElementById('list-css');
-        cssList.innerHTML = '';
-        styles.forEach(s => addResourceItem(cssList, s.href, 'css'));
-        document.getElementById('stat-styles').innerText = styles.length;
-        document.getElementById('badge-css').innerText = styles.length;
+        const styles = Array.from(doc.querySelectorAll('link[rel="stylesheet"]')).map(s => s.href);
+        renderList('list-css', styles, 'css');
+        document.getElementById('stat-css').innerText = styles.length;
 
         // Images
-        const images = doc.querySelectorAll('img');
-        const imgList = document.getElementById('list-img');
-        imgList.innerHTML = '';
-        images.forEach(img => {
-            if(img.src) addResourceItem(imgList, img.src, 'img');
-        });
-        
-        // Extract Background Images from inline styles
-        const elementsWithBg = doc.querySelectorAll('[style*="background"]');
-        elementsWithBg.forEach(el => {
+        const images = Array.from(doc.querySelectorAll('img')).map(img => img.src);
+        // Extract Background Images
+        const bgElements = doc.querySelectorAll('[style*="background"]');
+        bgElements.forEach(el => {
             const style = el.getAttribute('style');
-            const urlMatch = style.match(/url\(['"]?(.*?)['"]?\)/);
-            if (urlMatch && urlMatch[1]) {
-                addResourceItem(imgList, urlMatch[1], 'img');
+            const matches = style.match(/url\(['"]?(.*?)['"]?\)/g);
+            if (matches) {
+                matches.forEach(m => {
+                    const url = m.replace(/url\(['"]?(.*?)['"]?\)/, '$1');
+                    if (url && !images.includes(url)) images.push(url);
+                });
             }
         });
+        renderList('list-img', images, 'img');
+        document.getElementById('stat-img').innerText = images.length;
 
-        document.getElementById('stat-images').innerText = imgList.children.length;
-        document.getElementById('badge-img').innerText = imgList.children.length;
-    }
-
-    function addResourceItem(listElement, url, type) {
-        // Resolve relative URLs
-        let finalUrl = url;
-        if (!url.startsWith('http')) {
-            // Simple resolution logic (might need improvement for complex paths)
-            const base = new URL(window.location.href); // Fallback base
-            // Ideally we use the target URL base, but for proxy content it's tricky. 
-            // We will assume relative to root for simplicity in this demo or leave as is.
-            finalUrl = url; 
-        }
-
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <span>${finalUrl}</span>
-            <button class="action-btn" onclick="downloadResource('${finalUrl}', '${type}')">تحميل</button>
-        `;
-        listElement.appendChild(li);
-    }
-
-    function analyzeNetwork(sourceCode, baseUrl) {
-        const netList = document.getElementById('list-net');
-        netList.innerHTML = '';
-        
-        // Regex to find URLs, APIs, Paths
-        const urlRegex = /(https?:\/\/[^\s"'<>]+)/g;
-        const pathRegex = /(\/[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_-]+)*)/g;
-        
-        const foundUrls = new Set();
-        let match;
-        
-        // Find HTTP links
-        while ((match = urlRegex.exec(sourceCode)) !== null) {
-            foundUrls.add(match[0]);
-        }
-
-        // Filter out the main site and common CDNs to show "Connected Servers"
-        const mainDomain = new URL(baseUrl).hostname;
-        const externalServers = Array.from(foundUrls).filter(u => {
-            try {
-                const uObj = new URL(u);
-                return uObj.hostname !== mainDomain && !uObj.hostname.includes('googleapis') && !uObj.hostname.includes('cloudflare');
-            } catch(e) { return false; }
-        });
-
-        externalServers.slice(0, 50).forEach(url => {
+        // Links
+        const links = Array.from(doc.querySelectorAll('a[href]')).map(a => ({
+            href: a.href,
+            text: a.textContent.trim().substring(0, 30) || 'بدون نص'
+        }));
+        const linkList = document.getElementById('list-links');
+        linkList.innerHTML = '';
+        links.forEach(link => {
             const li = document.createElement('li');
-            li.innerHTML = `<span class="risk-med">🔗 متصل بـ: ${url}</span>`;
-            netList.appendChild(li);
+            li.innerHTML = `<span><a href="${link.href}" target="_blank" style="color:var(--accent)">${link.text}</a><br><small style="color:#8b949e">${link.href}</small></span>`;
+            linkList.appendChild(li);
         });
+        document.getElementById('stat-links').innerText = links.length;
 
-        document.getElementById('badge-net').innerText = externalServers.length;
-        document.getElementById('stat-net').innerText = externalServers.length;
+        // Forms
+        const forms = doc.querySelectorAll('form');
+        const formList = document.getElementById('list-forms');
+        formList.innerHTML = '';
+        forms.forEach((form, i) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<span>Form #${i+1}: ${form.action || 'لا يوجد action'} (${form.method || 'GET'})</span>`;
+            formList.appendChild(li);
+        });
     }
 
-    function analyzeSecurity(doc, baseUrl) {
+    // Render List Helper
+    function renderList(elementId, items, type) {
+        const list = document.getElementById(elementId);
+        list.innerHTML = '';
+        const uniqueItems = [...new Set(items)].filter(i => i); // Remove duplicates and empty
+        
+        uniqueItems.forEach(item => {
+            const li = document.createElement('li');
+            const isExternal = item.startsWith('http') && !item.includes(window.location.hostname) && !item.includes('local-upload');
+            li.innerHTML = `
+                <span style="${isExternal ? 'color: var(--warning)' : ''}">${item}</span>
+                <button class="btn btn-download" style="padding: 2px 8px; font-size: 0.7em;" onclick="downloadResource('${item}', '${type}')">تحميل</button>
+            `;
+            list.appendChild(li);
+        });
+    }
+
+    // Analyze Security
+    function analyzeSecurity(doc) {
         const riskList = document.getElementById('list-risks');
         riskList.innerHTML = '';
         let riskCount = 0;
@@ -412,99 +511,142 @@
 
         const addRisk = (msg, level) => {
             riskCount++;
-            score -= (level === 'high' ? 20 : 10);
+            score -= (level === 'high' ? 15 : 8);
             const li = document.createElement('li');
             li.className = level === 'high' ? 'risk-high' : 'risk-med';
-            li.innerHTML = `<span>${msg}</span>`;
+            li.innerHTML = `<span>⚠️ ${msg}</span>`;
             riskList.appendChild(li);
         };
 
-        // 1. Check for HTTP (Non-secure) resources
+        // 1. HTTP Resources
         const httpResources = doc.querySelectorAll('[src^="http:"], [href^="http:"]');
         if (httpResources.length > 0) {
-            addRisk(`يوجد ${httpResources.length} موارد تستخدم HTTP غير الآمن (Mixed Content)`, 'high');
+            addRisk(`${httpResources.length} مورد يستخدم HTTP غير الآمن`, 'high');
         }
 
-        // 2. Check for exposed emails
+        // 2. Exposed Emails
         const emailRegex = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/gi;
         if (emailRegex.test(fullSourceCode)) {
-            addRisk("تم العثور على عناوين بريد إلكتروني مكشوفة في الكود", 'med');
+            addRisk("عناوين بريد إلكتروني مكشوفة في الكود", 'med');
         }
 
-        // 3. Check for hidden inputs with sensitive names
-        const hiddenInputs = doc.querySelectorAll('input[type="hidden"]');
-        hiddenInputs.forEach(input => {
+        // 3. Hidden Sensitive Inputs
+        doc.querySelectorAll('input[type="hidden"]').forEach(input => {
             const name = input.name.toLowerCase();
-            if (name.includes('token') || name.includes('key') || name.includes('secret') || name.includes('auth')) {
-                addRisk(`حقل مخفي حساس محتمل: name="${input.name}"`, 'high');
+            if (['token', 'key', 'secret', 'auth', 'password', 'api'].some(k => name.includes(k))) {
+                addRisk(`حقل مخفي حساس: name="${input.name}"`, 'high');
             }
         });
 
-        // 4. Check for iframe without sandbox
-        const iframes = doc.querySelectorAll('iframe');
-        iframes.forEach(iframe => {
+        // 4. Iframes without Sandbox
+        doc.querySelectorAll('iframe').forEach(iframe => {
             if (!iframe.hasAttribute('sandbox')) {
-                addRisk("iframe بدون خاصية Sandbox (قد يكون خطراً)", 'med');
+                addRisk("iframe بدون خاصية Sandbox", 'med');
             }
         });
 
-        // Update UI
-        document.getElementById('stat-risks').innerText = riskCount;
-        
+        // 5. Inline Scripts (Potential XSS)
+        const inlineScripts = doc.querySelectorAll('script:not([src])');
+        if (inlineScripts.length > 5) {
+            addRisk(`${inlineScripts.length} سكريبت مدمج داخل الصفحة (قد يؤثر على الأداء والأمان)`, 'med');
+        }
+
+        // Update Score
+        score = Math.max(0, score);
         const scoreEl = document.getElementById('securityScore');
         const msgEl = document.getElementById('securityMsg');
-        
-        score = Math.max(0, score);
+        document.getElementById('stat-risks').innerText = riskCount;
+
         scoreEl.innerText = score + "%";
-        
         if (score >= 80) {
             scoreEl.style.borderColor = "var(--success)";
             scoreEl.style.color = "var(--success)";
-            msgEl.innerText = "الموقع يبدو آمناً بشكل عام.";
+            msgEl.innerText = "✅ الموقع يبدو آمناً بشكل عام";
         } else if (score >= 50) {
             scoreEl.style.borderColor = "var(--warning)";
             scoreEl.style.color = "var(--warning)";
-            msgEl.innerText = "يوجد بعض التحسينات الأمنية المطلوبة.";
+            msgEl.innerText = "⚠️ توجد بعض التحسينات المطلوبة";
         } else {
             scoreEl.style.borderColor = "var(--danger)";
             scoreEl.style.color = "var(--danger)";
-            msgEl.innerText = "تحذير: توجد ثغرات أو ممارسات غير آمنة واضحة!";
+            msgEl.innerText = "🚨 تحذير: توجد مخاطر أمنية واضحة!";
         }
     }
 
-    // Function to download a specific resource via Proxy
+    // Analyze Network/External Servers
+    function analyzeNetwork(sourceCode) {
+        const serverList = document.getElementById('list-servers');
+        serverList.innerHTML = '';
+        
+        const urlRegex = /(https?:\/\/[^\s"'<>]+)/g;
+        const foundUrls = new Set();
+        let match;
+        
+        while ((match = urlRegex.exec(sourceCode)) !== null) {
+            foundUrls.add(match[0]);
+        }
+
+        const mainDomain = currentBaseUrl.includes('local-upload') ? '' : new URL(currentBaseUrl).hostname;
+        const externalServers = Array.from(foundUrls).filter(u => {
+            try {
+                const uObj = new URL(u);
+                return uObj.hostname !== mainDomain && 
+                       !uObj.hostname.includes('googleapis') && 
+                       !uObj.hostname.includes('cloudflare') &&
+                       !uObj.hostname.includes('gstatic');
+            } catch(e) { return false; }
+        });
+
+        externalServers.slice(0, 30).forEach(url => {
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="risk-med">🔗 ${url}</span>`;
+            serverList.appendChild(li);
+        });
+    }
+
+    // Download Resource
     async function downloadResource(url, type) {
-        try {
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "جاري...";
-            
-            // Fetch content
-            const res = await fetch(PROXY_URL + encodeURIComponent(url));
-            const data = await res.json();
-            
-            if (data.contents) {
-                const blob = new Blob([data.contents], { type: 'text/plain' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `resource_${type}_${Date.now()}.txt`; // Save as txt to ensure viewable
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-            btn.innerText = originalText;
-        } catch (e) {
-            alert("فشل تحميل الملف: " + e.message);
-            btn.innerText = "خطأ";
+        if (!url || url.startsWith('data:') || url.startsWith('javascript:')) {
+            showAlert("لا يمكن تحميل هذا النوع من الموارد");
+            return;
         }
+
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "...";
+        btn.disabled = true;
+
+        try {
+            const content = await fetchWithProxies(url);
+            const blob = new Blob([content], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `resource_${type}_${Date.now()}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            btn.innerText = "✅";
+        } catch (e) {
+            btn.innerText = "❌";
+            showAlert("فشل تحميل الملف: " + e.message);
+        }
+        
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }, 2000);
     }
 
+    // Download Full Source
     function downloadFullSource() {
-        if (!fullSourceCode) return;
+        if (!fullSourceCode) {
+            showAlert("لا يوجد كود مصدر متاح للتحميل");
+            return;
+        }
         const blob = new Blob([fullSourceCode], { type: 'text/html' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'website_source.html';
+        link.download = `website_source_${Date.now()}.html`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
