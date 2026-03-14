@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔍 FORENSIC IMAGE ANALYZER v2.0</title>
-    <script src="https://cdn.jsdelivr.net/npm/exif-js@2.3.0"></script>
+    <title>🔍 FORENSIC IMAGE ANALYZER - مصحح</title>
+    <!-- تحميل مكتبة EXIF من مصدر موثوق -->
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
         
@@ -37,29 +38,24 @@
         }
         
         .header h1 { 
-            font-size: 2rem; text-shadow: 0 0 20px var(--primary); margin-bottom: 10px;
-            animation: pulse 2s infinite;
+            font-size: 1.8rem; text-shadow: 0 0 20px var(--primary); margin-bottom: 10px;
         }
         
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        
-        .header .subtitle { color: var(--secondary); font-size: 0.9rem; letter-spacing: 2px; }
+        .header .subtitle { color: var(--secondary); font-size: 0.85rem; letter-spacing: 2px; }
         
         .upload-section {
             background: rgba(0, 20, 0, 0.8); border: 2px dashed var(--warning);
-            padding: 40px; text-align: center; border-radius: 10px; margin-bottom: 30px;            transition: all 0.3s; cursor: pointer;
-        }
-        
+            padding: 40px 20px; text-align: center; border-radius: 10px; margin-bottom: 30px;
+            transition: all 0.3s; cursor: pointer;
+        }        
         .upload-section:hover {
             background: rgba(0, 20, 0, 0.95); border-color: var(--primary);
             box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
         }
         
-        .upload-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
-        
-        .upload-text { color: var(--secondary); margin-bottom: 10px; }
-        
-        .upload-hint { font-size: 0.8rem; color: var(--info); }
+        .upload-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; }
+        .upload-text { color: var(--secondary); margin-bottom: 10px; font-size: 1.1rem; }
+        .upload-hint { font-size: 0.75rem; color: var(--info); }
         
         #fileInput { display: none; }
         
@@ -68,137 +64,119 @@
         }
         
         #imagePreview {
-            max-width: 100%; max-height: 400px; border: 2px solid var(--primary);
-            border-radius: 5px; box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+            max-width: 100%; max-height: 350px; border: 2px solid var(--primary);
+            border-radius: 5px;
         }
         
         .analyze-btn {
-            width: 100%; padding: 20px; background: var(--warning); color: var(--black);
-            border: none; font-weight: bold; font-size: 1.2rem; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px;
-            transition: all 0.3s; border-radius: 5px;
+            width: 100%; padding: 18px; 
+            background: var(--warning); color: var(--black);
+            border: none; font-weight: bold; font-size: 1.1rem; 
+            cursor: pointer; text-transform: uppercase; letter-spacing: 2px; 
+            margin-bottom: 30px; transition: all 0.3s; border-radius: 5px;
         }
         
-        .analyze-btn:hover {
+        .analyze-btn:hover:not(:disabled) {
             background: #ffcc00; box-shadow: 0 0 40px var(--warning);
             transform: translateY(-2px);
         }
         
-        .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .analyze-btn:disabled { 
+            opacity: 0.4; cursor: not-allowed; 
+            background: #333; color: #666;
+        }
         
         .results-container { display: none; }
         
         .result-card {
             background: rgba(0, 20, 0, 0.8); border: 1px solid var(--secondary);
-            padding: 20px; margin-bottom: 20px; border-radius: 5px;
+            padding: 15px; margin-bottom: 15px; border-radius: 5px;
         }
         
         .result-card.critical {
             border-color: var(--alert); box-shadow: 0 0 15px rgba(255, 0, 64, 0.3);
         }
                 .result-card h3 {
-            color: var(--primary); margin-bottom: 15px; padding-bottom: 10px;
-            border-bottom: 1px solid var(--secondary); display: flex;
-            align-items: center; gap: 10px;
+            color: var(--primary); margin-bottom: 12px; padding-bottom: 8px;
+            border-bottom: 1px solid var(--secondary); font-size: 1.1rem;
         }
         
-        .result-card h3 .icon { font-size: 1.5rem; }
-        
         .data-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
         }
         
         .data-item {
-            background: rgba(0, 255, 65, 0.05); padding: 12px; border-radius: 3px;
+            background: rgba(0, 255, 65, 0.05); padding: 10px; border-radius: 3px;
             border-left: 3px solid var(--primary);
         }
         
         .data-label {
-            color: var(--secondary); font-size: 0.75rem; margin-bottom: 5px;
-            text-transform: uppercase; letter-spacing: 1px;
+            color: var(--secondary); font-size: 0.7rem; margin-bottom: 4px;
+            text-transform: uppercase;
         }
         
         .data-value {
             color: var(--primary); font-weight: bold; word-break: break-all;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         
         .data-value.warning { color: var(--warning); }
         .data-value.alert { color: var(--alert); }
-        .data-value.info { color: var(--info); }
         
         .gps-warning {
             background: rgba(255, 0, 64, 0.2); border: 2px solid var(--alert);
-            padding: 20px; border-radius: 5px; margin: 20px 0; display: none;
-            animation: alertPulse 2s infinite;
+            padding: 15px; border-radius: 5px; margin: 15px 0; display: none;
         }
         
-        @keyframes alertPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 64, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(255, 0, 64, 0.8); }
-        }
-        
-        .gps-warning h4 { color: var(--alert); margin-bottom: 10px; }
-        
-        .map-container {
-            height: 300px; border: 2px solid var(--primary); border-radius: 5px;
-            margin: 15px 0; background: rgba(0, 0, 0, 0.5);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--secondary);        }
+        .gps-warning h4 { color: var(--alert); margin-bottom: 8px; font-size: 1rem; }
         
         .terminal {
             background: rgba(0, 10, 0, 0.95); border: 1px solid var(--primary);
-            padding: 15px; height: 200px; overflow-y: auto; font-size: 0.7rem;
+            padding: 12px; height: 180px; overflow-y: auto; font-size: 0.68rem;
             margin-bottom: 20px; border-radius: 5px;
         }
         
-        .log-line { margin: 3px 0; font-family: 'Courier New', monospace; }
+        .log-line { margin: 2px 0; }
         .log-line.success { color: var(--primary); }
         .log-line.error { color: var(--alert); }
         .log-line.warn { color: var(--warning); }
         .log-line.info { color: var(--secondary); }
-        .log-line.system { color: var(--info); }
-        
-        .export-btn {
-            width: 100%; padding: 15px; background: transparent;
-            border: 2px solid var(--info); color: var(--info);
-            font-weight: bold; cursor: pointer; margin-top: 20px;
-            transition: all 0.3s; border-radius: 5px;
-        }
-        
-        .export-btn:hover {
-            background: var(--info); color: var(--black);
-            box-shadow: 0 0 30px var(--info);
-        }
         
         .progress-bar {
-            width: 100%; height: 30px; background: rgba(0, 20, 0, 0.8);
-            border: 1px solid var(--primary); border-radius: 5px;
-            margin-bottom: 20px; overflow: hidden; position: relative;
+            width: 100%; height: 25px; background: rgba(0, 20, 0, 0.8);
+            border: 1px solid var(--primary); border-radius: 5px;            margin-bottom: 20px; overflow: hidden;
         }
         
         .progress-fill {
             height: 100%; background: linear-gradient(90deg, var(--dark), var(--primary));
             width: 0%; transition: width 0.3s ease; display: flex;
             align-items: center; justify-content: center;
-            color: var(--black); font-weight: bold;
+            color: var(--black); font-weight: bold; font-size: 0.8rem;
         }
         
+        .status-msg {
+            text-align: center; padding: 10px; margin: 10px 0;
+            border-radius: 5px; display: none;
+        }
+        .status-msg.success { background: rgba(0,255,0,0.1); border: 1px solid var(--primary); color: var(--primary); }
+        .status-msg.error { background: rgba(255,0,0,0.1); border: 1px solid var(--alert); color: var(--alert); }
+        
         @media (max-width: 768px) {
-            .header h1 { font-size: 1.5rem; }
+            .header h1 { font-size: 1.4rem; }
             .data-grid { grid-template-columns: 1fr; }
-            .upload-section { padding: 20px; }
+            .upload-section { padding: 25px 15px; }
         }
     </style>
 </head>
 <body>
     <div class="scan-line"></div>
-        <div class="container">
+    
+    <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🔍 FORENSIC IMAGE ANALYZER v2.0</h1>
-            <div class="subtitle">استخراج شامل لجميع البيانات الوصفية من الصور</div>
+            <h1>🔍 FORENSIC IMAGE ANALYZER</h1>
+            <div class="subtitle">استخراج جميع البيانات من الصور</div>
         </div>
         
         <!-- Progress -->
@@ -206,22 +184,24 @@
             <div class="progress-fill" id="progressBar">0% - جاهز</div>
         </div>
         
+        <!-- Status Message -->
+        <div class="status-msg" id="statusMsg"></div>
+        
         <!-- Upload Section -->
         <div class="upload-section" onclick="document.getElementById('fileInput').click()">
             <span class="upload-icon">📁</span>
-            <div class="upload-text"><strong>اضغط هنا لاختيار صورة</strong></div>
-            <div class="upload-hint">يدعم: JPG, JPEG, PNG, TIFF, WEBP, HEIC</div>
+            <div class="upload-text"><strong>اضغط لاختيار صورة</strong></div>
+            <div class="upload-hint">JPG • JPEG • PNG • TIFF</div>
             <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
-        
-        <!-- Preview -->
+                <!-- Preview -->
         <div class="preview-section" id="previewSection">
             <img id="imagePreview" alt="معاينة">
         </div>
         
         <!-- Analyze Button -->
         <button class="analyze-btn" id="analyzeBtn" onclick="analyzeImage()" disabled>
-            🔍 بدء التحليل الجنائي الشامل
+            🔍 بدء التحليل
         </button>
         
         <!-- Terminal -->
@@ -232,69 +212,51 @@
             
             <!-- GPS Warning -->
             <div class="gps-warning" id="gpsWarning">
-                <h4>⚠️ تحذير أمني: تم اكتشاف إحداثيات موقع!</h4>
-                <p>تحتوي هذه الصورة على بيانات موقع جغرافي دقيقة يمكن استخدامها لتحديد المكان الذي التقطت فيه الصورة.</p>
-                <div id="gpsCoords" style="margin-top: 10px; font-weight: bold;"></div>
-                <div class="map-container" id="mapPlaceholder">
-                    🗺️ سيتم عرض الخريطة هنا (يتطلب اتصال إنترنت)
-                </div>
+                <h4>⚠️ تحذير: تم اكتشاف موقع جغرافي!</h4>
+                <div id="gpsCoords" style="font-weight: bold; margin: 5px 0;"></div>
+                <a id="mapLink" href="#" target="_blank" style="color: var(--primary); display: inline-block; margin-top: 5px;">
+                    🗺️ عرض على خرائط جوجل
+                </a>
             </div>
             
-            <!-- Basic File Info -->
+            <!-- Basic Info -->
             <div class="result-card">
-                <h3><span class="icon">📄</span> معلومات الملف الأساسية</h3>
-                <div class="data-grid" id="basicInfo"></div>            </div>
+                <h3>📄 معلومات الملف</h3>
+                <div class="data-grid" id="basicInfo"></div>
+            </div>
             
-            <!-- Image Properties -->
+            <!-- Image Props -->
             <div class="result-card">
-                <h3><span class="icon">🖼️</span> خصائص الصورة</h3>
+                <h3>🖼️ خصائص الصورة</h3>
                 <div class="data-grid" id="imageProps"></div>
             </div>
             
             <!-- Camera Info -->
             <div class="result-card">
-                <h3><span class="icon">📷</span> معلومات الكاميرا</h3>
+                <h3>📷 معلومات الكاميرا</h3>
                 <div class="data-grid" id="cameraInfo"></div>
             </div>
             
-            <!-- Exposure Settings -->
+            <!-- Exposure -->
             <div class="result-card">
-                <h3><span class="icon">⚙️</span> إعدادات التعريض</h3>
+                <h3>⚙️ إعدادات التصوير</h3>
                 <div class="data-grid" id="exposureInfo"></div>
             </div>
             
-            <!-- Date & Time -->
-            <div class="result-card">
-                <h3><span class="icon">🕐</span> التواريخ والأوقات</h3>
-                <div class="data-grid" id="dateTimeInfo"></div>
-            </div>
-            
-            <!-- GPS Data -->
-            <div class="result-card critical" id="gpsSection" style="display: none;">
-                <h3><span class="icon">📍</span> بيانات الموقع الجغرافي (GPS)</h3>
+            <!-- GPS -->            <div class="result-card critical" id="gpsSection" style="display: none;">
+                <h3>📍 بيانات الموقع (GPS)</h3>
                 <div class="data-grid" id="gpsInfo"></div>
             </div>
             
-            <!-- Software & Processing -->
+            <!-- Raw EXIF -->
             <div class="result-card">
-                <h3><span class="icon">💻</span> البرامج والمعالجة</h3>
-                <div class="data-grid" id="softwareInfo"></div>
-            </div>
-            
-            <!-- Color & Compression -->
-            <div class="result-card">
-                <h3><span class="icon">🎨</span> الألوان والضغط</h3>
-                <div class="data-grid" id="colorInfo"></div>
-            </div>
-            
-            <!-- All Raw EXIF -->
-            <div class="result-card">
-                <h3><span class="icon">🔧</span> جميع بيانات EXIF الخام</h3>
+                <h3>🔧 جميع بيانات EXIF</h3>
                 <div class="data-grid" id="rawExif"></div>
             </div>
-                        <!-- Export Button -->
-            <button class="export-btn" onclick="exportResults()">
-                📥 تصدير التقرير الكامل كـ JSON
+            
+            <!-- Export -->
+            <button class="analyze-btn" onclick="exportResults()" style="background: var(--info);">
+                📥 تصدير كـ JSON
             </button>
         </div>
     </div>
@@ -305,19 +267,32 @@
         let imageData = {};
         let exifData = {};
         
-        // Logging function
+        // Logging with console output
         function log(msg, type = 'info') {
-            const console = document.getElementById('console');
-            const line = document.createElement('div');
-            line.className = `log-line ${type}`;
-            line.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
-            console.appendChild(line);
-            console.scrollTop = console.scrollHeight;
-            console.log(type, msg);
+            const consoleEl = document.getElementById('console');
+            if (consoleEl) {
+                const line = document.createElement('div');
+                line.className = `log-line ${type}`;
+                line.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+                consoleEl.appendChild(line);
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+            }
+            // Also output to browser console for debugging
+            if (type === 'error') console.error(msg);
+            else if (type === 'warn') console.warn(msg);
+            else console.log(msg);
         }
         
-        // Update progress
-        function updateProgress(percent, message) {
+        // Show status message
+        function showStatus(msg, type) {
+            const statusEl = document.getElementById('statusMsg');
+            statusEl.className = `status-msg ${type}`;
+            statusEl.innerText = msg;
+            statusEl.style.display = 'block';
+            setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
+        }
+        
+        // Update progress        function updateProgress(percent, message) {
             const bar = document.getElementById('progressBar');
             bar.style.width = percent + '%';
             bar.innerText = `${percent}% - ${message}`;
@@ -325,6 +300,7 @@
         
         // Format file size
         function formatFileSize(bytes) {
+            if (!bytes && bytes !== 0) return 'غير معروف';
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -332,404 +308,337 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
         
-        // Format date from EXIF
+        // Format EXIF date
         function formatExifDate(dateStr) {
             if (!dateStr) return 'غير متوفر';
-            // EXIF date format: "YYYY:MM:DD HH:MM:SS"
             const parts = dateStr.split(' ');
             const dateParts = parts[0]?.split(':') || [];
             const timeParts = parts[1]?.split(':') || [];
             if (dateParts.length === 3) {
                 return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]} ${timeParts.join(':') || '00:00:00'}`;
-            }            return dateStr;
+            }
+            return dateStr;
         }
         
-        // Convert GPS coordinates from EXIF format
-        function convertGPSCoordinates(degrees, minutes, seconds, ref) {
+        // Convert GPS coordinates
+        function convertGPS(degrees, minutes, seconds, ref) {
             let decimal = parseFloat(degrees) + parseFloat(minutes) / 60 + parseFloat(seconds) / 3600;
             if (ref === 'S' || ref === 'W') decimal = -decimal;
             return decimal.toFixed(6);
         }
         
-        // Get human-readable value for EXIF tag
-        function getReadableValue(tag, value) {
-            const mappings = {
-                'ExposureProgram': {
-                    0: 'غير محدد', 1: 'يدوي', 2: 'تلقائي', 3: 'أولوية فتحة',
-                    4: 'أولوية غالق', 5: 'برنامج إبداعي', 6: 'هيدلايت',
-                    7: 'بورتريه', 8: 'مناظر طبيعية'
-                },
-                'MeteringMode': {
-                    0: 'غير معروف', 1: 'متوسط', 2: 'مركزي', 3: 'نقطة',
-                    4: 'متعدد', 5: 'نمط', 6: 'جزئي', 255: 'أخرى'
-                },
-                'Flash': {
-                    0: 'لم يومض', 1: 'يومض', 5: 'يومض لكن لم يكتشف الضوء الأحمر',
-                    7: 'يومض واكتشف الضوء الأحمر', 9: 'يومض تلقائي لم يومض',
-                    13: 'يومض تلقائي يومض', 15: 'يومض تلقائي لم يكتشف',
-                    16: 'لا يوجد فلاش', 24: 'تلقائي لم يومض', 25: 'تلقائي يومض',
-                    29: 'تلقائي يومض لم يكتشف', 31: 'تلقائي يومض اكتشف',
-                    32: 'لا يوجد فلاش لم يكتشف', 48: 'تلقائي لم يكتشف'
-                },
-                'WhiteBalance': { 0: 'تلقائي', 1: 'يدوي' },
-                'SceneCaptureType': {
-                    0: 'قياسي', 1: 'مناظر طبيعية', 2: 'بورتريه', 3: 'مشهد ليلي'
-                },
-                'Contrast': { 0: 'عادي', 1: 'منخفض', 2: 'عالي' },
-                'Saturation': { 0: 'عادي', 1: 'منخفض', 2: 'عالي' },
-                'Sharpness': { 0: 'عادي', 1: 'منخفض', 2: 'عالي' }
+        // Get readable EXIF value
+        function getReadable(tag, value) {
+            const maps = {
+                'ExposureProgram': {0:'غير محدد',1:'يدوي',2:'تلقائي',3:'أولوية فتحة',4:'أولوية غالق',5:'برنامج',6:'هيدلايت',7:'بورتريه',8:'طبيعة'},
+                'MeteringMode': {0:'غير معروف',1:'متوسط',2:'مركزي',3:'نقطة',4:'متعدد'},
+                'Flash': {0:'لم يومض',1:'يومض',16:'لا يوجد فلاش'},
+                'WhiteBalance': {0:'تلقائي',1:'يدوي'},
+                'Contrast': {0:'عادي',1:'منخفض',2:'عالي'},
+                'Saturation': {0:'عادي',1:'منخفض',2:'عالي'},
+                'Sharpness': {0:'عادي',1:'منخفض',2:'عالي'}
             };
-            
-            if (mappings[tag] && mappings[tag][value] !== undefined) {
-                return mappings[tag][value];
-            }
-            return value;
+            return maps[tag]?.[value] ?? value;
         }
         
-        // Handle file selection
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-                        if (!file.type.startsWith('image/')) {
-                log('✗ الملف المحدد ليس صورة', 'error');
-                alert('الرجاء اختيار ملف صورة صالح');
+        // Handle file selection - FIXED        function handleFileSelect(event) {
+            log('=== اختيار ملف ===', 'info');
+            
+            const file = event.target.files?.[0];
+            if (!file) {
+                log('✗ لم يتم اختيار ملف', 'error');
+                return;
+            }
+            
+            log(`📁 الملف: ${file.name}`, 'info');
+            log(`📄 النوع: ${file.type}`, 'info');
+            log(`💾 الحجم: ${formatFileSize(file.size)}`, 'info');
+            
+            // Validate image type
+            if (!file.type || !file.type.startsWith('image/')) {
+                log('✗ الملف ليس صورة صالحة', 'error');
+                showStatus('الرجاء اختيار ملف صورة صالح', 'error');
                 return;
             }
             
             selectedFile = file;
-            log(`✓ تم اختيار: ${file.name} (${formatFileSize(file.size)})`, 'success');
+            log('✓ تم اختيار الملف بنجاح', 'success');
             
             // Show preview
             const preview = document.getElementById('imagePreview');
             const reader = new FileReader();
             
             reader.onload = function(e) {
-                preview.src = e.target.result;
-                document.getElementById('previewSection').style.display = 'block';
-                document.getElementById('analyzeBtn').disabled = false;
-                updateProgress(25, 'الصورة جاهزة للتحليل');
+                try {
+                    preview.src = e.target.result;
+                    document.getElementById('previewSection').style.display = 'block';
+                    document.getElementById('analyzeBtn').disabled = false;
+                    updateProgress(25, 'الصورة جاهزة');
+                    log('✓ تم عرض المعاينة', 'success');
+                } catch (err) {
+                    log('✗ فشل عرض المعاينة: ' + err.message, 'error');
+                }
+            };
+            
+            reader.onerror = function(err) {
+                log('✗ فشل قراءة الملف: ' + (err.target?.error?.message || 'خطأ غير معروف'), 'error');
+                showStatus('فشل قراءة الملف', 'error');
             };
             
             reader.readAsDataURL(file);
+            log('🔄 جاري قراءة الملف...', 'info');
         }
         
-        // Main analysis function
-        async function analyzeImage() {
+        // Main analysis function - FIXED & SIMPLIFIED
+        async function analyzeImage() {            log('=== بدء التحليل ===', 'system');
+            
             if (!selectedFile) {
-                log('✗ لم يتم اختيار صورة', 'error');
+                log('✗ لا يوجد صورة مختارة', 'error');
+                showStatus('اختر صورة أولاً', 'error');
                 return;
             }
             
-            log('=== بدء التحليل الجنائي الشامل ===', 'system');
-            updateProgress(30, 'جاري قراءة الملف...');
+            // Disable button during analysis
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = true;
+            btn.innerText = 'جاري التحليل...';
             
-            // Reset results
-            document.getElementById('resultsContainer').style.display = 'none';
-            document.getElementById('gpsWarning').style.display = 'none';
-            document.getElementById('gpsSection').style.display = 'none';
-            
-            // Clear previous data
-            imageData = {};
-            exifData = {};
+            updateProgress(30, 'جاري القراءة...');
             
             try {
-                // Read file as ArrayBuffer for EXIF
-                const arrayBuffer = await selectedFile.arrayBuffer();
-                log('✓ تم قراءة الملف بنجاح', 'success');
-                updateProgress(40, 'جاري استخراج البيانات...');
+                // Reset results
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('gpsWarning').style.display = 'none';
+                document.getElementById('gpsSection').style.display = 'none';
+                imageData = {};
+                exifData = {};
                 
                 // Basic file info
-                imageData.basic = {                    '📁 اسم الملف': selectedFile.name,
-                    '📄 نوع MIME': selectedFile.type || 'غير معروف',
+                imageData.basic = {
+                    '📁 الاسم': selectedFile.name,
+                    '📄 النوع': selectedFile.type || 'غير معروف',
                     '💾 الحجم': formatFileSize(selectedFile.size),
-                    '🔢 الحجم (بايت)': selectedFile.size.toLocaleString(),
-                    '🕐 آخر تعديل': selectedFile.lastModified ? new Date(selectedFile.lastModified).toLocaleString('ar-SA') : 'غير متوفر'
+                    '🔢 البايت': selectedFile.size.toLocaleString() + ' بايت'
                 };
                 
                 // Load image for dimensions
+                log('🔄 جاري تحميل الصورة...', 'info');
+                updateProgress(40, 'جاري التحميل...');
+                
                 const img = new Image();
-                const dataUrl = await new Promise(resolve => {
+                const dataUrl = await new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onload = e => resolve(e.target.result);
+                    reader.onerror = reject;
                     reader.readAsDataURL(selectedFile);
                 });
                 
-                await new Promise(resolve => {
+                await new Promise((resolve, reject) => {
                     img.onload = resolve;
+                    img.onerror = () => reject(new Error('فشل تحميل الصورة'));
                     img.src = dataUrl;
                 });
                 
+                log(`✓ تم تحميل الصورة: ${img.width}x${img.height}`, 'success');                
                 // Image properties
                 imageData.properties = {
-                    '📐 العرض': `${img.width} بكسل`,
-                    '📐 الارتفاع': `${img.height} بكسل`,
-                    '🔲 النسبة': `${(img.width/img.height).toFixed(2)}:1`,
-                    '🎨 عمق الألوان': `${img.constructor.name === 'Image' ? '24-bit (تقديري)' : 'غير معروف'}`,
-                    '🖼️ التنسيق': selectedFile.type.split('/')[1]?.toUpperCase() || 'غير معروف'
+                    '📐 العرض': img.width + ' بكسل',
+                    '📐 الارتفاع': img.height + ' بكسل',
+                    '🔲 النسبة': (img.width / img.height).toFixed(2) + ':1',
+                    '🖼️ التنسيق': (selectedFile.type.split('/')[1] || 'غير معروف').toUpperCase()
                 };
                 
-                updateProgress(50, 'جاري قراءة بيانات EXIF...');
+                // Extract EXIF - with fallback
+                log('🔍 جاري استخراج بيانات EXIF...', 'info');
+                updateProgress(60, 'جاري استخراج البيانات...');
                 
-                // Extract EXIF data
-                if (typeof EXIF !== 'undefined') {
+                if (typeof EXIF !== 'undefined' && typeof EXIF.getData === 'function') {
+                    log('✓ مكتبة EXIF متاحة', 'success');
+                    
+                    // Wait for EXIF to load
                     await new Promise(resolve => {
                         EXIF.getData(img, function() {
-                            exifData = EXIF.getAllTags(this);
-                            log(`✓ تم استخراج ${Object.keys(exifData).length} حقل من بيانات EXIF`, 'success');
-                            resolve();
+                            try {
+                                exifData = EXIF.getAllTags(this) || {};
+                                log(`✓ تم استخراج ${Object.keys(exifData).length} حقل`, 'success');
+                                resolve();
+                            } catch (e) {
+                                log('✗ فشل استخراج EXIF: ' + e.message, 'error');
+                                resolve(); // Continue anyway
+                            }
                         });
                     });
                 } else {
-                    log('⚠️ مكتبة EXIF غير متاحة', 'warn');
+                    log('⚠️ مكتبة EXIF غير متاحة - سيتم التحليل بدونها', 'warn');
                 }
                 
-                // Process EXIF data into categories
+                // Process EXIF data
                 processExifData();
                 
-                updateProgress(90, 'جاري عرض النتائج...');
+                // Display results
+                updateProgress(90, 'جاري العرض...');
+                displayResults();
                 
-                // Display all results                displayResults();
+                updateProgress(100, '✅ اكتمل');
+                log('=== اكتمل التحليل ===', 'success');
                 
-                updateProgress(100, '✅ اكتمل التحليل');
-                log('=== اكتمل التحليل الجنائي ===', 'success');
-                
-                // Show results container
                 document.getElementById('resultsContainer').style.display = 'block';
+                showStatus('✅ اكتمل التحليل بنجاح', 'success');
                 
             } catch (error) {
-                log(`✗ فشل التحليل: ${error.message}`, 'error');
-                updateProgress(0, '❌ فشل التحليل');
-                alert(`فشل تحليل الصورة:\n${error.message}`);
+                log('✗ فشل التحليل: ' + error.message, 'error');
+                log('💡 تأكد أن الملف صورة صالحة وغير تالفة', 'warn');
+                updateProgress(0, '❌ فشل');                showStatus('فشل التحليل: ' + error.message, 'error');
+            } finally {
+                // Re-enable button
+                btn.disabled = false;
+                btn.innerText = '🔍 بدء التحليل';
             }
         }
         
-        // Process EXIF data into organized categories
+        // Process EXIF into categories
         function processExifData() {
             if (Object.keys(exifData).length === 0) return;
             
-            // Camera info
+            // Camera
             if (exifData.Make || exifData.Model) {
                 imageData.camera = {};
-                if (exifData.Make) imageData.camera['🏭 الشركة المصنعة'] = exifData.Make;
-                if (exifData.Model) imageData.camera['📱 موديل الكاميرا'] = exifData.Model;
+                if (exifData.Make) imageData.camera['🏭 المصنع'] = exifData.Make;
+                if (exifData.Model) imageData.camera['📱 الموديل'] = exifData.Model;
                 if (exifData.LensModel) imageData.camera['🔭 العدسة'] = exifData.LensModel;
-                if (exifData.LensMake) imageData.camera['🏭 مصنع العدسة'] = exifData.LensMake;
-                if (exifData.SerialNumber) imageData.camera['🔢 الرقم التسلسلي'] = exifData.SerialNumber;
             }
             
-            // Exposure settings
+            // Exposure
             imageData.exposure = {};
-            if (exifData.ISOSpeedRatings) imageData.exposure['🔆 حساسية ISO'] = exifData.ISOSpeedRatings;
-            if (exifData.FNumber) imageData.exposure['🔍 فتحة العدسة (f/)'] = exifData.FNumber;
-            if (exifData.ExposureTime) imageData.exposure['⏱️ سرعة الغالق'] = `${exifData.ExposureTime} ثانية`;
-            if (exifData.ExposureProgram) imageData.exposure['🎬 برنامج التعريض'] = getReadableValue('ExposureProgram', exifData.ExposureProgram);
-            if (exifData.ExposureMode) imageData.exposure['🔀 وضع التعريض'] = exifData.ExposureMode === 0 ? 'تلقائي' : 'يدوي';
-            if (exifData.ExposureBiasValue) imageData.exposure['⚖️ تعويض التعريض'] = `${exifData.ExposureBiasValue} EV`;
-            if (exifData.MaxApertureValue) imageData.exposure['🔓 أقصى فتحة'] = `f/${exifData.MaxApertureValue}`;
-            if (exifData.FocalLength) imageData.exposure['🔭 البعد البؤري'] = `${exifData.FocalLength} ملم`;
-            if (exifData.FocalLengthIn35mmFilm) imageData.exposure['🎞️ مكافئ 35مم'] = `${exifData.FocalLengthIn35mmFilm} ملم`;
-            if (exifData.DigitalZoomRatio) imageData.exposure['🔍 التكبير الرقمي'] = `${exifData.DigitalZoomRatio}x`;
+            if (exifData.ISOSpeedRatings) imageData.exposure['🔆 ISO'] = exifData.ISOSpeedRatings;
+            if (exifData.FNumber) imageData.exposure['🔍 فتحة'] = 'f/' + exifData.FNumber;
+            if (exifData.ExposureTime) imageData.exposure['⏱️ غالق'] = exifData.ExposureTime + 'ث';
+            if (exifData.FocalLength) imageData.exposure['🔭 بعد بؤري'] = exifData.FocalLength + 'مم';
+            if (exifData.Flash !== undefined) imageData.exposure['💡 فلاش'] = getReadable('Flash', exifData.Flash);
+            if (exifData.WhiteBalance !== undefined) imageData.exposure['⚖️ توازن أبيض'] = getReadable('WhiteBalance', exifData.WhiteBalance);
             
-            // Metering & Flash
-            if (exifData.MeteringMode) imageData.exposure['📊 قياس الضوء'] = getReadableValue('MeteringMode', exifData.MeteringMode);
-            if (exifData.Flash) imageData.exposure['💡 الفلاش'] = getReadableValue('Flash', exifData.Flash);
-            if (exifData.FlashEnergy) imageData.exposure['⚡ طاقة الفلاش'] = exifData.FlashEnergy;
-            if (exifData.WhiteBalance) imageData.exposure['⚖️ توازن الأبيض'] = getReadableValue('WhiteBalance', exifData.WhiteBalance);
+            // Date/Time
+            if (exifData.DateTimeOriginal || exifData.DateTime) {
+                imageData.dateTime = {};
+                if (exifData.DateTimeOriginal) imageData.dateTime['📅 التصوير'] = formatExifDate(exifData.DateTimeOriginal);
+                if (exifData.DateTime) imageData.dateTime['📅 التعديل'] = formatExifDate(exifData.DateTime);
+            }
             
-            // Date & Time
-            imageData.dateTime = {};            if (exifData.DateTimeOriginal) imageData.dateTime['📅 تاريخ التصوير الأصلي'] = formatExifDate(exifData.DateTimeOriginal);
-            if (exifData.DateTimeDigitized) imageData.dateTime['📅 تاريخ الرقمنة'] = formatExifDate(exifData.DateTimeDigitized);
-            if (exifData.DateTime) imageData.dateTime['📅 تاريخ التعديل'] = formatExifDate(exifData.DateTime);
-            if (exifData.SubSecTimeOriginal) imageData.dateTime['⏱️ أجزاء الثانية'] = exifData.SubSecTimeOriginal;
-            
-            // GPS Data
-            if (exifData.GPSLatitude && exifData.GPSLongitude) {
+            // GPS - MOST IMPORTANT
+            if (exifData.GPSLatitude && exifData.GPSLongitude && 
+                Array.isArray(exifData.GPSLatitude) && Array.isArray(exifData.GPSLongitude)) {
                 try {
-                    const lat = convertGPSCoordinates(
-                        exifData.GPSLatitude[0],
-                        exifData.GPSLatitude[1], 
-                        exifData.GPSLatitude[2],
+                    const lat = convertGPS(
+                        exifData.GPSLatitude[0], exifData.GPSLatitude[1], exifData.GPSLatitude[2],
                         exifData.GPSLatitudeRef || 'N'
                     );
-                    const lng = convertGPSCoordinates(
-                        exifData.GPSLongitude[0],
-                        exifData.GPSLongitude[1],
-                        exifData.GPSLongitude[2], 
+                    const lng = convertGPS(
+                        exifData.GPSLongitude[0], exifData.GPSLongitude[1], exifData.GPSLongitude[2],
                         exifData.GPSLongitudeRef || 'E'
                     );
                     
-                    imageData.gps = {
-                        '📍 خط العرض': lat,
-                        '📍 خط الطول': lng,
+                    imageData.gps = {                        '📍 العرض': lat,
+                        '📍 الطول': lng,
                         '🧭 مرجع العرض': exifData.GPSLatitudeRef || 'N',
                         '🧭 مرجع الطول': exifData.GPSLongitudeRef || 'E'
                     };
                     
                     if (exifData.GPSAltitude) {
-                        const alt = parseFloat(exifData.GPSAltitude);
-                        const altRef = exifData.GPSAltitudeRef === 1 ? '-' : '';
-                        imageData.gps['🏔️ الارتفاع'] = `${altRef}${alt.toFixed(2)} متر`;
-                    }
-                    
-                    if (exifData.GPSImgDirection) {
-                        imageData.gps['🧭 اتجاه الصورة'] = `${exifData.GPSImgDirection}° ${exifData.GPSImgDirectionRef || ''}`;
-                    }
-                    
-                    if (exifData.GPSSpeed) {
-                        imageData.gps['🚀 السرعة'] = `${exifData.GPSSpeed} ${exifData.GPSSpeedRef || 'كم/س'}`;
+                        imageData.gps['🏔️ الارتفاع'] = parseFloat(exifData.GPSAltitude).toFixed(1) + 'م';
                     }
                     
                     // Show GPS warning
                     document.getElementById('gpsWarning').style.display = 'block';
                     document.getElementById('gpsSection').style.display = 'block';
                     document.getElementById('gpsCoords').innerHTML = 
-                        `LAT: <span class="data-value alert">${lat}</span><br>
-                         LNG: <span class="data-value alert">${lng}</span>`;
+                        `LAT: <span class="data-value alert">${lat}</span><br>LNG: <span class="data-value alert">${lng}</span>`;
+                    document.getElementById('mapLink').href = `https://maps.google.com/?q=${lat},${lng}`;
                     
-                    // Try to show map link                    const mapLink = `https://www.google.com/maps?q=${lat},${lng}`;
-                    document.getElementById('mapPlaceholder').innerHTML = 
-                        `<a href="${mapLink}" target="_blank" style="color: var(--primary);">
-                            🗺️ عرض الموقع على خرائط جوجل (اضغط هنا)
-                        </a>`;
-                    
-                    log(`⚠️ تم اكتشاف إحداثيات GPS: ${lat}, ${lng}`, 'warn');
+                    log(`⚠️ GPS مكتشف: ${lat}, ${lng}`, 'warn');
                     
                 } catch (e) {
-                    log('✗ فشل معالجة بيانات GPS: ' + e.message, 'error');
+                    log('✗ فشل معالجة GPS: ' + e.message, 'error');
                 }
             }
             
-            // Software & Processing
-            imageData.software = {};
-            if (exifData.Software) imageData.software['💻 البرنامج'] = exifData.Software;
-            if (exifData.Artist) imageData.software['👤 الفنان/المالك'] = exifData.Artist;
-            if (exifData.Copyright) imageData.software['© حقوق النشر'] = exifData.Copyright;
-            if (exifData.UserComment) imageData.software['💬 تعليق المستخدم'] = exifData.UserComment;
-            if (exifData.ImageDescription) imageData.software['📝 وصف الصورة'] = exifData.ImageDescription;
+            // Software
+            if (exifData.Software || exifData.Artist) {
+                imageData.software = {};
+                if (exifData.Software) imageData.software['💻 البرنامج'] = exifData.Software;
+                if (exifData.Artist) imageData.software['👤 المالك'] = exifData.Artist;
+            }
             
-            // Color & Compression
-            imageData.color = {};
-            if (exifData.ColorSpace) imageData.color['🎨 مساحة الألوان'] = exifData.ColorSpace === 1 ? 'sRGB' : `كود ${exifData.ColorSpace}`;
-            if (exifData.ComponentsConfiguration) imageData.color['🔴🟢🔵 المكونات'] = exifData.ComponentsConfiguration;
-            if (exifData.Compression) imageData.color['🗜️ الضغط'] = exifData.Compression === 6 ? 'JPEG' : `كود ${exifData.Compression}`;
-            if (exifData.JPEGInterchangeFormat) imageData.color['🖼️ موقع JPEG'] = exifData.JPEGInterchangeFormat;
-            if (exifData.JPEGInterchangeFormatLength) imageData.color['📦 حجم JPEG'] = formatFileSize(exifData.JPEGInterchangeFormatLength);
-            if (exifData.YCbCrPositioning) imageData.color['🎯 موضع YCbCr'] = exifData.YCbCrPositioning === 2 ? 'متمركز' : 'مجاور';
-            if (exifData.XResolution) imageData.color['📏 الدقة الأفقية'] = `${exifData.XResolution} DPI`;
-            if (exifData.YResolution) imageData.color['📏 الدقة العمودية'] = `${exifData.YResolution} DPI`;
-            if (exifData.ResolutionUnit) imageData.color['📐 وحدة الدقة'] = exifData.ResolutionUnit === 2 ? 'بوصة' : 'سم';
-            
-            // Image processing
-            if (exifData.Contrast) imageData.color['🔆 التباين'] = getReadableValue('Contrast', exifData.Contrast);
-            if (exifData.Saturation) imageData.color['🎨 التشبع'] = getReadableValue('Saturation', exifData.Saturation);
-            if (exifData.Sharpness) imageData.color['🔪 الحدة'] = getReadableValue('Sharpness', exifData.Sharpness);
-            if (exifData.SceneCaptureType) imageData.color['🎬 نوع المشهد'] = getReadableValue('SceneCaptureType', exifData.SceneCaptureType);
-            if (exifData.GainControl) imageData.color['📈 التحكم في الكسب'] = exifData.GainControl === 0 ? 'لا شيء' : exifData.GainControl === 1 ? 'منخفض' : exifData.GainControl === 2 ? 'عالي' : 'غير معروف';
-            if (exifData.SubjectDistanceRange) imageData.color['📏 نطاق المسافة'] = exifData.SubjectDistanceRange === 0 ? 'غير معروف' : exifData.SubjectDistanceRange === 1 ? 'ماكرو' : exifData.SubjectDistanceRange === 2 ? 'قريب' : exifData.SubjectDistanceRange === 3 ? 'بعيد' : 'غير معروف';
-            
-            // Orientation
-            if (exifData.Orientation) {
-                const orientations = {
-                    1: 'أفقي (عادي)', 2: 'معكوس أفقي', 3: 'دوران 180°',
-                    4: 'معكوس عمودي', 5: 'دوران 90° معكوس', 6: 'دوران 90° عكس عقارب',
-                    7: 'دوران 270° معكوس', 8: 'دوران 270° عكس عقارب'
-                };
-                imageData.properties['🔄 الاتجاه'] = orientations[exifData.Orientation] || `كود ${exifData.Orientation}`;
-            }            
-            // Raw EXIF (all tags)
+            // Raw EXIF (limited to avoid overflow)
             imageData.rawExif = {};
+            let count = 0;
             for (const [key, value] of Object.entries(exifData)) {
-                // Skip GPS coordinates as they're shown separately
-                if (['GPSLatitude', 'GPSLongitude', 'GPSLatitudeRef', 'GPSLongitudeRef'].includes(key)) continue;
-                
-                const readableValue = getReadableValue(key, value);
-                imageData.rawExif[`🔧 ${key}`] = typeof readableValue === 'object' ? 
-                    JSON.stringify(readableValue) : String(readableValue);
+                if (count >= 20) break; // Limit display
+                if (['GPSLatitude','GPSLongitude','GPSLatitudeRef','GPSLongitudeRef'].includes(key)) continue;
+                imageData.rawExif[`🔧 ${key}`] = typeof value === 'object' ? JSON.stringify(value).slice(0, 50) : String(value);
+                count++;
             }
         }
         
-        // Display results in the UI
+        // Display results
         function displayResults() {
-            // Helper to populate a grid
-            function populateGrid(elementId, data) {
-                const grid = document.getElementById(elementId);
+            function populate(gridId, data) {
+                const grid = document.getElementById(gridId);
+                if (!grid) return;
                 grid.innerHTML = '';
                 
-                if (!data || Object.keys(data).length === 0) {
-                    grid.innerHTML = '<div class="data-item"><div class="data-value warning">لا توجد بيانات متاحة</div></div>';
+                if (!data || Object.keys(data).length === 0) {                    grid.innerHTML = '<div class="data-item"><div class="data-value warning">لا توجد بيانات</div></div>';
                     return;
                 }
                 
                 for (const [label, value] of Object.entries(data)) {
                     const item = document.createElement('div');
                     item.className = 'data-item';
-                    
-                    // Add special styling for sensitive data
-                    let valueClass = '';
-                    if (label.includes('GPS') || label.includes('خط العرض') || label.includes('خط الطول')) {
-                        valueClass = 'alert';
-                    } else if (label.includes('Serial') || label.includes('الرقم التسلسلي')) {
-                        valueClass = 'warning';
-                    }
-                    
-                    item.innerHTML = `
-                        <div class="data-label">${label}</div>
-                        <div class="data-value ${valueClass}">${value}</div>
-                    `;
+                    const valClass = label.includes('GPS') || label.includes('العرض') || label.includes('الطول') ? 'alert' : '';
+                    item.innerHTML = `<div class="data-label">${label}</div><div class="data-value ${valClass}">${value}</div>`;
                     grid.appendChild(item);
                 }
             }
             
-            // Populate all grids
-            populateGrid('basicInfo', imageData.basic);
-            populateGrid('imageProps', imageData.properties);
-            populateGrid('cameraInfo', imageData.camera);
-            populateGrid('exposureInfo', imageData.exposure);            populateGrid('dateTimeInfo', imageData.dateTime);
-            populateGrid('gpsInfo', imageData.gps);
-            populateGrid('softwareInfo', imageData.software);
-            populateGrid('colorInfo', imageData.color);
-            populateGrid('rawExif', imageData.rawExif);
+            populate('basicInfo', imageData.basic);
+            populate('imageProps', imageData.properties);
+            populate('cameraInfo', imageData.camera);
+            populate('exposureInfo', imageData.exposure);
+            populate('gpsInfo', imageData.gps);
+            populate('rawExif', imageData.rawExif);
         }
         
-        // Export results as JSON
+        // Export results
         function exportResults() {
             const exportData = {
                 timestamp: new Date().toISOString(),
-                file: {
-                    name: selectedFile?.name,
-                    type: selectedFile?.type,
-                    size: selectedFile?.size,
-                    lastModified: selectedFile?.lastModified
-                },
-                analysis: {
-                    basic: imageData.basic,
-                    properties: imageData.properties,
-                    camera: imageData.camera,
-                    exposure: imageData.exposure,
-                    dateTime: imageData.dateTime,
-                    gps: imageData.gps,
-                    software: imageData.software,
-                    color: imageData.color,
-                    rawExif: imageData.rawExif
-                }
+                file: { name: selectedFile?.name, type: selectedFile?.type, size: selectedFile?.size },
+                data: { ...imageData, exif: exifData }
             };
             
             const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `forensic_report_${selectedFile?.name?.split('.')[0] || 'image'}_${Date.now()}.json`;
+            a.download = `report_${Date.now()}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            
-            log('✓ تم تصدير التقرير', 'success');
+            log('✓ تم التصدير', 'success');
         }
         
         // Initialize
         window.onload = function() {
-            log('✅ Forensic Image Analyzer v2.0 - جاهز', 'system');
-            updateProgress(0, 'جاهز - اختر صورة للبدء');
-        };
+            log('✅ المحلل الجنائي للصور - جاهز', 'system');
+            updateProgress(0, 'جاهز - اختر صورة');
+            
+            // Check if EXIF library loaded
+            if (typeof EXIF === 'undefined') {
+                log('⚠️ مكتبة EXIF لم تُحمّل - سيتم التحليل الأساسي فقط', 'warn');
+            } else {
+                log('✓ مكتبة EXIF جاهزة', 'success');
+            }        };
+        
+        // Debug: Log EXIF library status
+        console.log('EXIF library:', typeof EXIF !== 'undefined' ? 'loaded' : 'NOT loaded');
     </script>
 </body>
 </html>
