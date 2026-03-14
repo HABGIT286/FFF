@@ -3,643 +3,515 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AxtarGet - Particle Text System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <title>المحلل الأمني المتقدم للمواقع | Advanced Web Scanner</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --accent: #58a6ff;
+            --success: #2ea043;
+            --danger: #da3633;
+            --warning: #d29922;
+            --border: #30363d;
         }
-        
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: #000;
-            overflow: hidden;
-            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
         }
-        
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        
-        #ui-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .input-container {
-            pointer-events: auto;            position: relative;
-            width: 90%;
-            max-width: 600px;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 20px 40px;
-            background: rgba(0, 20, 40, 0.6);
-            border: 2px solid rgba(0, 255, 170, 0.3);
-            border-radius: 50px;
-            color: #00ffaa;
-            font-size: 18px;
-            font-weight: 600;
+
+        /* Header & Input */
+        header {
             text-align: center;
-            letter-spacing: 2px;
-            outline: none;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            box-shadow: 0 0 30px rgba(0, 255, 170, 0.2),
-                        inset 0 0 20px rgba(0, 255, 170, 0.1);
+            margin-bottom: 40px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
         }
-        
-        .search-input:focus {
-            border-color: rgba(0, 255, 170, 0.8);
-            box-shadow: 0 0 50px rgba(0, 255, 170, 0.4),
-                        inset 0 0 30px rgba(0, 255, 170, 0.2);
-            transform: scale(1.02);
-        }
-        
-        .search-input::placeholder {
-            color: rgba(0, 255, 170, 0.4);
-        }
-        
-        .submit-btn {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #00ffaa, #00cc88);
-            border: none;
-            border-radius: 25px;
-            color: #000;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 255, 170, 0.4);
-        }
-                .submit-btn:hover {
-            transform: translateY(-50%) scale(1.05);
-            box-shadow: 0 6px 25px rgba(0, 255, 170, 0.6);
-        }
-        
-        .loading-orb {
-            position: absolute;
-            top: -150px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 255, 170, 0.8) 0%, transparent 70%);
-            opacity: 0;
-            pointer-events: none;
-            filter: blur(20px);
-        }
-        
-        .loading-orb.active {
-            animation: orbPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes orbPulse {
-            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
-            50% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
-        }
-        
-        .title-text {
-            position: absolute;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 72px;
-            font-weight: 900;
-            color: #00ffaa;
-            text-shadow: 0 0 40px rgba(0, 255, 170, 0.8);
-            opacity: 0;
-            pointer-events: none;
-            white-space: nowrap;
-            letter-spacing: 8px;
-        }
-        
-        .title-text.visible {
-            animation: titleAppear 1s ease-out forwards;
-        }
-        
-        @keyframes titleAppear {
-            0% { opacity: 0; transform: translateX(-50%) scale(0.5); }
-            50% { opacity: 1; transform: translateX(-50%) scale(1.1); }            100% { opacity: 1; transform: translateX(-50%) scale(1); }
-        }
-        
-        .particle-info {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 20, 40, 0.7);
-            padding: 15px 30px;
-            border-radius: 15px;
-            border: 1px solid rgba(0, 255, 170, 0.3);
-            backdrop-filter: blur(10px);
-            font-size: 14px;
-            color: rgba(0, 255, 170, 0.8);
-            z-index: 20;
-        }
-        
-        .controls {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 20;
+
+        h1 { color: var(--accent); margin-bottom: 10px; }
+        .subtitle { color: #8b949e; font-size: 0.9em; }
+
+        .search-box {
             display: flex;
             gap: 10px;
+            max-width: 600px;
+            margin: 20px auto;
         }
-        
-        .control-btn {
-            padding: 10px 20px;
-            background: rgba(0, 255, 170, 0.1);
-            border: 1px solid rgba(0, 255, 170, 0.4);
-            border-radius: 8px;
-            color: #00ffaa;
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: white;
+            font-size: 16px;
+        }
+
+        button.scan-btn {
+            padding: 12px 24px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 12px;
-            font-weight: 600;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button.scan-btn:hover { background: #2c974b; }
+        button.scan-btn:disabled { background: #30363d; cursor: not-allowed; }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            display: none; /* Hidden initially */
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            color: var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            font-size: 0.8em;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: #30363d;
+        }
+
+        /* Lists */
+        ul.resource-list {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        ul.resource-list li {
+            padding: 8px;
+            border-bottom: 1px solid #21262d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+
+        ul.resource-list li:hover { background: #21262d; }
+
+        .action-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-right: 5px;
+            text-decoration: none;
         }
         
-        .control-btn:hover {
-            background: rgba(0, 255, 170, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 255, 170, 0.4);
+        .action-btn:hover { opacity: 0.8; }
+
+        .risk-high { color: var(--danger); }
+        .risk-med { color: var(--warning); }
+        .risk-low { color: var(--success); }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        
-        .stats {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 20, 40, 0.7);            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 170, 0.3);
-            font-size: 12px;
-            color: rgba(0, 255, 170, 0.8);
-            z-index: 20;
-            backdrop-filter: blur(10px);
+        .stat-box {
+            background: var(--card-bg);
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .stat-number { font-size: 1.5em; font-weight: bold; color: var(--accent); }
+        .stat-label { font-size: 0.8em; color: #8b949e; }
+
+        /* Loader */
+        .loader {
+            display: none;
+            text-align: center;
+            margin: 20px;
+            color: var(--accent);
+        }
+
+        /* Security Score */
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 5px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0 auto 10px;
         }
     </style>
 </head>
 <body>
 
-    <div id="canvas-container"></div>
-    
-    <div class="controls">
-        <button class="control-btn" onclick="particleSystem.randomizeColors()">🎨 ألوان عشوائية</button>
-        <button class="control-btn" onclick="particleSystem.explode()">💥 انفجار</button>
-        <button class="control-btn" onclick="particleSystem.reset()">🔄 إعادة تعيين</button>
-        <button class="control-btn" onclick="toggleRotation()">🔄 دوران</button>
-    </div>
-    
-    <div class="stats">
-        <div>الجسيمات: <span id="particle-count">0</span></div>
-        <div>FPS: <span id="fps-counter">60</span></div>
-    </div>
-    
-    <div id="ui-layer">
-        <div class="loading-orb" id="loadingOrb"></div>
-        <div class="title-text" id="titleText">AxtarGet</div>
+<div class="container">
+    <header>
+        <h1>🛡️ المحلل الأمني المتقدم</h1>
+        <div class="subtitle">أدخل رابط الموقع لتحليل الهيكلية، الموارد، الثغرات، والسيرفرات المرتبطة</div>
         
-        <div class="input-container">
-            <input type="text" 
-                   class="search-input" 
-                   id="textInput" 
-                   placeholder="اكتب النص هنا..." 
-                   maxlength="20"
-                   autocomplete="off">
-            <button class="submit-btn" onclick="particleSystem.generateText()">تحويل</button>
+        <div class="search-box">
+            <input type="text" id="targetUrl" placeholder="https://example.com" value="https://example.com">
+            <button class="scan-btn" onclick="startScan()">فحص الموقع</button>
         </div>
-    </div>
-    
-    <div class="particle-info">
-        نظام الجسيمات المتحولة | اسحب بالماوس للتدوير | عجلة الماوس للتكبير
+    </header>
+
+    <div id="loader" class="loader">
+        <h3>جاري الاتصال بالسيرفر وتحليل الكود المصدري...</h3>
+        <p>يرجى الانتظار، قد تستغرق العملية بضع ثوانٍ</p>
     </div>
 
-    <script>
-        class AxtarGetParticleSystem {
-            constructor() {
-                this.container = document.getElementById('canvas-container');
-                this.scene = new THREE.Scene();                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-                this.particleSystem = null;
-                this.particleCount = 8000;
-                this.positions = null;
-                this.targetPositions = null;
-                this.originalPositions = null;
-                this.colors = null;
-                this.currentText = '';
-                this.isAnimating = false;
-                this.autoRotate = true;
-                this.rotationSpeed = 0.002;
-                
-                this.init();
-                this.createParticles();
-                this.setupEvents();
-                this.animate();
-                
-                // Update stats
-                document.getElementById('particle-count').textContent = this.particleCount;
-            }
-            
-            init() {
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
-                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                this.container.appendChild(this.renderer.domElement);
-                
-                this.camera.position.z = 50;
-                this.camera.position.y = 10;
-                this.camera.lookAt(0, 0, 0);
-                
-                // Add ambient light
-                const ambientLight = new THREE.AmbientLight(0x404040, 2);
-                this.scene.add(ambientLight);
-                
-                // Add point lights
-                const light1 = new THREE.PointLight(0x00ffaa, 2, 100);
-                light1.position.set(10, 10, 10);
-                this.scene.add(light1);
-                
-                const light2 = new THREE.PointLight(0x00ccff, 2, 100);
-                light2.position.set(-10, -10, 10);
-                this.scene.add(light2);
-            }
-            
-            createParticles() {
-                const geometry = new THREE.BufferGeometry();
-                this.positions = new Float32Array(this.particleCount * 3);
-                this.originalPositions = new Float32Array(this.particleCount * 3);
-                this.colors = new Float32Array(this.particleCount * 3);                
-                // Create sphere distribution
-                for (let i = 0; i < this.particleCount; i++) {
-                    const i3 = i * 3;
-                    
-                    // Spherical distribution
-                    const radius = 20 + Math.random() * 5;
-                    const theta = Math.random() * Math.PI * 2;
-                    const phi = Math.acos(2 * Math.random() - 1);
-                    
-                    this.positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
-                    this.positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-                    this.positions[i3 + 2] = radius * Math.cos(phi);
-                    
-                    this.originalPositions[i3] = this.positions[i3];
-                    this.originalPositions[i3 + 1] = this.positions[i3 + 1];
-                    this.originalPositions[i3 + 2] = this.positions[i3 + 2];
-                    
-                    // Green/cyan colors
-                    const colorChoice = Math.random();
-                    if (colorChoice > 0.7) {
-                        // Yellow-green accent
-                        this.colors[i3] = 0.8 + Math.random() * 0.2;
-                        this.colors[i3 + 1] = 1;
-                        this.colors[i3 + 2] = 0.2 + Math.random() * 0.3;
-                    } else {
-                        // Cyan-green main
-                        this.colors[i3] = 0 + Math.random() * 0.2;
-                        this.colors[i3 + 1] = 0.8 + Math.random() * 0.2;
-                        this.colors[i3 + 2] = 0.6 + Math.random() * 0.4;
-                    }
-                }
-                
-                geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
-                geometry.setAttribute('color', new THREE.BufferAttribute(this.colors, 3));
-                
-                // Create particle material
-                const sprite = this.createParticleSprite();
-                const material = new THREE.PointsMaterial({
-                    size: 0.8,
-                    map: sprite,
-                    vertexColors: true,
-                    blending: THREE.AdditiveBlending,
-                    depthTest: false,
-                    transparent: true,
-                    opacity: 0.8
-                });
-                
-                this.particleSystem = new THREE.Points(geometry, material);
-                this.scene.add(this.particleSystem);            }
-            
-            createParticleSprite() {
-                const canvas = document.createElement('canvas');
-                canvas.width = 64;
-                canvas.height = 64;
-                const ctx = canvas.getContext('2d');
-                
-                const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-                gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-                gradient.addColorStop(0.3, 'rgba(0, 255, 170, 0.8)');
-                gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, 64, 64);
-                
-                const texture = new THREE.CanvasTexture(canvas);
-                return texture;
-            }
-            
-            async generateText() {
-                const input = document.getElementById('textInput');
-                const text = input.value.trim();
-                
-                if (!text) {
-                    this.showNotification('الرجاء إدخال نص', 'error');
-                    return;
-                }
-                
-                this.currentText = text;
-                document.getElementById('titleText').textContent = text;
-                document.getElementById('titleText').classList.add('visible');
-                document.getElementById('loadingOrb').classList.add('active');
-                
-                // Generate text positions
-                const textPositions = await this.getTextPositions(text);
-                
-                // Animate particles to text shape
-                this.morphToText(textPositions);
-                
-                setTimeout(() => {
-                    document.getElementById('loadingOrb').classList.remove('active');
-                }, 2000);
-            }
-            
-            getTextPositions(text) {
-                return new Promise((resolve) => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = 800;                    canvas.height = 400;
-                    
-                    ctx.fillStyle = 'white';
-                    ctx.font = 'bold 120px Inter';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(text, 400, 200);
-                    
-                    const imageData = ctx.getImageData(0, 0, 800, 400);
-                    const data = imageData.data;
-                    const positions = [];
-                    
-                    // Sample pixels
-                    const step = 6;
-                    for (let y = 0; y < 400; y += step) {
-                        for (let x = 0; x < 800; x += step) {
-                            const index = (y * 800 + x) * 4;
-                            if (data[index + 3] > 128) {
-                                positions.push({
-                                    x: (x - 400) * 0.15,
-                                    y: -(y - 200) * 0.15,
-                                    z: (Math.random() - 0.5) * 5
-                                });
-                            }
-                        }
-                    }
-                    
-                    // If not enough positions, fill randomly
-                    while (positions.length < this.particleCount) {
-                        positions.push({
-                            x: (Math.random() - 0.5) * 100,
-                            y: (Math.random() - 0.5) * 50,
-                            z: (Math.random() - 0.5) * 20
-                        });
-                    }
-                    
-                    resolve(positions.slice(0, this.particleCount));
-                });
-            }
-            
-            morphToText(textPositions) {
-                if (!this.particleSystem) return;
-                
-                const positions = this.particleSystem.geometry.attributes.position.array;
-                this.targetPositions = textPositions;
-                
-                // Animate each particle
-                for (let i = 0; i < this.particleCount; i++) {
-                    const i3 = i * 3;
-                    const target = textPositions[i];                    
-                    if (target) {
-                        gsap.to(positions, {
-                            duration: 2,
-                            ease: "power3.inOut",
-                            [i3]: target.x,
-                            [i3 + 1]: target.y,
-                            [i3 + 2]: target.z,
-                            delay: i * 0.0005
-                        });
-                    }
-                }
-                
-                this.particleSystem.geometry.attributes.position.needsUpdate = true;
-                this.isAnimating = true;
-                
-                setTimeout(() => {
-                    this.isAnimating = false;
-                }, 3000);
-            }
-            
-            explode() {
-                if (!this.particleSystem) return;
-                
-                const positions = this.particleSystem.geometry.attributes.position.array;
-                
-                for (let i = 0; i < this.particleCount; i++) {
-                    const i3 = i * 3;
-                    const direction = new THREE.Vector3(
-                        positions[i3],
-                        positions[i3 + 1],
-                        positions[i3 + 2]
-                    ).normalize();
-                    
-                    gsap.to(positions, {
-                        duration: 1.5,
-                        ease: "power2.out",
-                        [i3]: positions[i3] + direction.x * 50,
-                        [i3 + 1]: positions[i3 + 1] + direction.y * 50,
-                        [i3 + 2]: positions[i3 + 2] + direction.z * 50,
-                        yoyo: true,
-                        repeat: 1,
-                        delay: i * 0.0001
-                    });
-                }
-                
-                this.particleSystem.geometry.attributes.position.needsUpdate = true;
-            }
-            
-            reset() {                if (!this.particleSystem) return;
-                
-                const positions = this.particleSystem.geometry.attributes.position.array;
-                
-                for (let i = 0; i < this.particleCount; i++) {
-                    const i3 = i * 3;
-                    gsap.to(positions, {
-                        duration: 2,
-                        ease: "power3.inOut",
-                        [i3]: this.originalPositions[i3],
-                        [i3 + 1]: this.originalPositions[i3 + 1],
-                        [i3 + 2]: this.originalPositions[i3 + 2],
-                        delay: i * 0.0003
-                    });
-                }
-                
-                this.particleSystem.geometry.attributes.position.needsUpdate = true;
-                document.getElementById('titleText').classList.remove('visible');
-                document.getElementById('textInput').value = '';
-                this.currentText = '';
-            }
-            
-            randomizeColors() {
-                if (!this.particleSystem) return;
-                
-                const colors = this.particleSystem.geometry.attributes.color.array;
-                const hue = Math.random();
-                
-                for (let i = 0; i < this.particleCount; i++) {
-                    const i3 = i * 3;
-                    const color = new THREE.Color();
-                    color.setHSL(hue + Math.random() * 0.2, 0.8, 0.6);
-                    
-                    colors[i3] = color.r;
-                    colors[i3 + 1] = color.g;
-                    colors[i3 + 2] = color.b;
-                }
-                
-                this.particleSystem.geometry.attributes.color.needsUpdate = true;
-            }
-            
-            setupEvents() {
-                window.addEventListener('resize', () => {
-                    this.camera.aspect = window.innerWidth / window.innerHeight;
-                    this.camera.updateProjectionMatrix();
-                    this.renderer.setSize(window.innerWidth, window.innerHeight);
-                });
-                
-                // Mouse interaction
-                let isDragging = false;                let previousMousePosition = { x: 0, y: 0 };
-                
-                document.addEventListener('mousedown', () => isDragging = true);
-                document.addEventListener('mouseup', () => isDragging = false);
-                document.addEventListener('mousemove', (e) => {
-                    if (isDragging && this.particleSystem) {
-                        const deltaMove = {
-                            x: e.offsetX - previousMousePosition.x,
-                            y: e.offsetY - previousMousePosition.y
-                        };
-                        
-                        this.particleSystem.rotation.y += deltaMove.x * 0.005;
-                        this.particleSystem.rotation.x += deltaMove.y * 0.005;
-                        this.autoRotate = false;
-                    }
-                    previousMousePosition = { x: e.offsetX, y: e.offsetY };
-                });
-                
-                document.addEventListener('wheel', (e) => {
-                    this.camera.position.z += e.deltaY * 0.05;
-                    this.camera.position.z = Math.max(20, Math.min(200, this.camera.position.z));
-                });
-                
-                // Enter key to generate
-                document.getElementById('textInput').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.generateText();
-                });
-            }
-            
-            animate() {
-                requestAnimationFrame(() => this.animate());
-                
-                if (this.autoRotate && this.particleSystem && !this.isAnimating) {
-                    this.particleSystem.rotation.y += this.rotationSpeed;
-                }
-                
-                // Add subtle floating animation
-                if (this.particleSystem) {
-                    this.particleSystem.position.y = Math.sin(Date.now() * 0.0005) * 2;
-                }
-                
-                this.renderer.render(this.scene, this.camera);
-            }
-            
-            showNotification(message, type = 'info') {
-                const notif = document.createElement('div');
-                notif.style.cssText = `
-                    position: fixed;
-                    top: 100px;
-                    left: 50%;                    transform: translateX(-50%);
-                    background: ${type === 'error' ? 'rgba(255, 0, 0, 0.8)' : 'rgba(0, 255, 170, 0.8)'};
-                    color: white;
-                    padding: 15px 30px;
-                    border-radius: 10px;
-                    z-index: 100;
-                    animation: slideDown 0.3s ease;
-                `;
-                notif.textContent = message;
-                document.body.appendChild(notif);
-                
-                setTimeout(() => {
-                    notif.remove();
-                }, 3000);
-            }
-        }
+    <div id="dashboard" class="dashboard">
+        <!-- Stats Row -->
+        <div class="stats-grid" style="grid-column: 1 / -1;">
+            <div class="stat-box">
+                <div class="stat-number" id="stat-images">0</div>
+                <div class="stat-label">الصور</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="stat-scripts">0</div>
+                <div class="stat-label">ملفات JS</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="stat-styles">0</div>
+                <div class="stat-label">ملفات CSS</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="stat-risks" style="color: var(--danger)">0</div>
+                <div class="stat-label">مخاطر أمنية</div>
+            </div>
+        </div>
+
+        <!-- Security Score Card -->
+        <div class="card" style="grid-column: 1 / -1; text-align: center;">
+            <h3>تقييم الأمان العام</h3>
+            <div id="securityScore" class="score-circle">--</div>
+            <p id="securityMsg">في انتظار الفحص...</p>
+        </div>
+
+        <!-- Resources: Scripts -->
+        <div class="card">
+            <h3>📜 ملفات الجافاسكربت (JS) <span class="badge" id="badge-js">0</span></h3>
+            <ul class="resource-list" id="list-js"></ul>
+        </div>
+
+        <!-- Resources: Styles -->
+        <div class="card">
+            <h3>🎨 ملفات التنسيق (CSS) <span class="badge" id="badge-css">0</span></h3>
+            <ul class="resource-list" id="list-css"></ul>
+        </div>
+
+        <!-- Images & Backgrounds -->
+        <div class="card">
+            <h3>🖼️ الصور والخلفيات <span class="badge" id="badge-img">0</span></h3>
+            <ul class="resource-list" id="list-img"></ul>
+        </div>
+
+        <!-- Network & Paths -->
+        <div class="card">
+            <h3>🌐 المسارات والسيرفرات <span class="badge" id="badge-net">0</span></h3>
+            <ul class="resource-list" id="list-net"></ul>
+        </div>
+
+        <!-- Security Issues -->
+        <div class="card" style="grid-column: 1 / -1;">
+            <h3>⚠️ تقارير الثغرات والمخاطر</h3>
+            <ul class="resource-list" id="list-risks"></ul>
+        </div>
         
-        let particleSystem;
-        let rotationInterval;
+        <!-- Full Source Download -->
+        <div class="card" style="grid-column: 1 / -1; text-align: center;">
+            <h3>💾 تحميل الكود المصدري الكامل</h3>
+            <p>يمكنك تحميل ملف HTML الكامل للموقع لدراسته محلياً</p>
+            <button class="action-btn" style="font-size: 1em; padding: 10px 20px;" onclick="downloadFullSource()">تحميل source.html</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // استخدام Proxy لتجاوز CORS والسماح بجلب أي موقع
+    const PROXY_URL = "https://api.allorigins.win/get?url=";
+    let fullSourceCode = "";
+
+    async function startScan() {
+        const urlInput = document.getElementById('targetUrl').value;
+        if (!urlInput) return alert("الرجاء إدخال رابط صحيح");
+
+        // UI Reset
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
         
-        function init() {
-            particleSystem = new AxtarGetParticleSystem();
+        try {
+            // 1. Fetch the website content via Proxy
+            const response = await fetch(PROXY_URL + encodeURIComponent(urlInput));
+            const data = await response.json();
             
-            // Generate default text after 2 seconds
-            setTimeout(() => {
-                document.getElementById('textInput').value = 'AxtarGet';
-                particleSystem.generateText();
-            }, 2000);
-        }
-        
-        function toggleRotation() {
-            particleSystem.autoRotate = !particleSystem.autoRotate;
-        }
-        
-        // FPS Counter
-        let lastTime = performance.now();
-        let frames = 0;
-        function updateFPS() {
-            const currentTime = performance.now();
-            frames++;
+            if (!data.contents) throw new Error("فشل في جلب محتوى الموقع");
+
+            fullSourceCode = data.contents;
             
-            if (currentTime >= lastTime + 1000) {
-                document.getElementById('fps-counter').textContent = frames;
-                frames = 0;
-                lastTime = currentTime;
-            }
-            
-            requestAnimationFrame(updateFPS);
+            // 2. Parse HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(fullSourceCode, 'text/html');
+
+            // 3. Analyze
+            analyzeResources(doc, urlInput);
+            analyzeSecurity(doc, urlInput);
+            analyzeNetwork(fullSourceCode, urlInput);
+
+            // 4. Show Results
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'grid';
+
+        } catch (error) {
+            document.getElementById('loader').style.display = 'none';
+            alert("حدث خطأ أثناء الفحص: " + error.message);
+            console.error(error);
         }
-                // Initialize
-        window.addEventListener('DOMContentLoaded', () => {
-            init();
-            updateFPS();
+    }
+
+    function analyzeResources(doc, baseUrl) {
+        // Scripts
+        const scripts = doc.querySelectorAll('script[src]');
+        const jsList = document.getElementById('list-js');
+        jsList.innerHTML = '';
+        scripts.forEach(s => addResourceItem(jsList, s.src, 'js'));
+        document.getElementById('stat-scripts').innerText = scripts.length;
+        document.getElementById('badge-js').innerText = scripts.length;
+
+        // Styles
+        const styles = doc.querySelectorAll('link[rel="stylesheet"]');
+        const cssList = document.getElementById('list-css');
+        cssList.innerHTML = '';
+        styles.forEach(s => addResourceItem(cssList, s.href, 'css'));
+        document.getElementById('stat-styles').innerText = styles.length;
+        document.getElementById('badge-css').innerText = styles.length;
+
+        // Images
+        const images = doc.querySelectorAll('img');
+        const imgList = document.getElementById('list-img');
+        imgList.innerHTML = '';
+        images.forEach(img => {
+            if(img.src) addResourceItem(imgList, img.src, 'img');
         });
-    </script>
+        
+        // Extract Background Images from inline styles
+        const elementsWithBg = doc.querySelectorAll('[style*="background"]');
+        elementsWithBg.forEach(el => {
+            const style = el.getAttribute('style');
+            const urlMatch = style.match(/url\(['"]?(.*?)['"]?\)/);
+            if (urlMatch && urlMatch[1]) {
+                addResourceItem(imgList, urlMatch[1], 'img');
+            }
+        });
+
+        document.getElementById('stat-images').innerText = imgList.children.length;
+        document.getElementById('badge-img').innerText = imgList.children.length;
+    }
+
+    function addResourceItem(listElement, url, type) {
+        // Resolve relative URLs
+        let finalUrl = url;
+        if (!url.startsWith('http')) {
+            // Simple resolution logic (might need improvement for complex paths)
+            const base = new URL(window.location.href); // Fallback base
+            // Ideally we use the target URL base, but for proxy content it's tricky. 
+            // We will assume relative to root for simplicity in this demo or leave as is.
+            finalUrl = url; 
+        }
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${finalUrl}</span>
+            <button class="action-btn" onclick="downloadResource('${finalUrl}', '${type}')">تحميل</button>
+        `;
+        listElement.appendChild(li);
+    }
+
+    function analyzeNetwork(sourceCode, baseUrl) {
+        const netList = document.getElementById('list-net');
+        netList.innerHTML = '';
+        
+        // Regex to find URLs, APIs, Paths
+        const urlRegex = /(https?:\/\/[^\s"'<>]+)/g;
+        const pathRegex = /(\/[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_-]+)*)/g;
+        
+        const foundUrls = new Set();
+        let match;
+        
+        // Find HTTP links
+        while ((match = urlRegex.exec(sourceCode)) !== null) {
+            foundUrls.add(match[0]);
+        }
+
+        // Filter out the main site and common CDNs to show "Connected Servers"
+        const mainDomain = new URL(baseUrl).hostname;
+        const externalServers = Array.from(foundUrls).filter(u => {
+            try {
+                const uObj = new URL(u);
+                return uObj.hostname !== mainDomain && !uObj.hostname.includes('googleapis') && !uObj.hostname.includes('cloudflare');
+            } catch(e) { return false; }
+        });
+
+        externalServers.slice(0, 50).forEach(url => {
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="risk-med">🔗 متصل بـ: ${url}</span>`;
+            netList.appendChild(li);
+        });
+
+        document.getElementById('badge-net').innerText = externalServers.length;
+        document.getElementById('stat-net').innerText = externalServers.length;
+    }
+
+    function analyzeSecurity(doc, baseUrl) {
+        const riskList = document.getElementById('list-risks');
+        riskList.innerHTML = '';
+        let riskCount = 0;
+        let score = 100;
+
+        const addRisk = (msg, level) => {
+            riskCount++;
+            score -= (level === 'high' ? 20 : 10);
+            const li = document.createElement('li');
+            li.className = level === 'high' ? 'risk-high' : 'risk-med';
+            li.innerHTML = `<span>${msg}</span>`;
+            riskList.appendChild(li);
+        };
+
+        // 1. Check for HTTP (Non-secure) resources
+        const httpResources = doc.querySelectorAll('[src^="http:"], [href^="http:"]');
+        if (httpResources.length > 0) {
+            addRisk(`يوجد ${httpResources.length} موارد تستخدم HTTP غير الآمن (Mixed Content)`, 'high');
+        }
+
+        // 2. Check for exposed emails
+        const emailRegex = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/gi;
+        if (emailRegex.test(fullSourceCode)) {
+            addRisk("تم العثور على عناوين بريد إلكتروني مكشوفة في الكود", 'med');
+        }
+
+        // 3. Check for hidden inputs with sensitive names
+        const hiddenInputs = doc.querySelectorAll('input[type="hidden"]');
+        hiddenInputs.forEach(input => {
+            const name = input.name.toLowerCase();
+            if (name.includes('token') || name.includes('key') || name.includes('secret') || name.includes('auth')) {
+                addRisk(`حقل مخفي حساس محتمل: name="${input.name}"`, 'high');
+            }
+        });
+
+        // 4. Check for iframe without sandbox
+        const iframes = doc.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+            if (!iframe.hasAttribute('sandbox')) {
+                addRisk("iframe بدون خاصية Sandbox (قد يكون خطراً)", 'med');
+            }
+        });
+
+        // Update UI
+        document.getElementById('stat-risks').innerText = riskCount;
+        
+        const scoreEl = document.getElementById('securityScore');
+        const msgEl = document.getElementById('securityMsg');
+        
+        score = Math.max(0, score);
+        scoreEl.innerText = score + "%";
+        
+        if (score >= 80) {
+            scoreEl.style.borderColor = "var(--success)";
+            scoreEl.style.color = "var(--success)";
+            msgEl.innerText = "الموقع يبدو آمناً بشكل عام.";
+        } else if (score >= 50) {
+            scoreEl.style.borderColor = "var(--warning)";
+            scoreEl.style.color = "var(--warning)";
+            msgEl.innerText = "يوجد بعض التحسينات الأمنية المطلوبة.";
+        } else {
+            scoreEl.style.borderColor = "var(--danger)";
+            scoreEl.style.color = "var(--danger)";
+            msgEl.innerText = "تحذير: توجد ثغرات أو ممارسات غير آمنة واضحة!";
+        }
+    }
+
+    // Function to download a specific resource via Proxy
+    async function downloadResource(url, type) {
+        try {
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "جاري...";
+            
+            // Fetch content
+            const res = await fetch(PROXY_URL + encodeURIComponent(url));
+            const data = await res.json();
+            
+            if (data.contents) {
+                const blob = new Blob([data.contents], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `resource_${type}_${Date.now()}.txt`; // Save as txt to ensure viewable
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            btn.innerText = originalText;
+        } catch (e) {
+            alert("فشل تحميل الملف: " + e.message);
+            btn.innerText = "خطأ";
+        }
+    }
+
+    function downloadFullSource() {
+        if (!fullSourceCode) return;
+        const blob = new Blob([fullSourceCode], { type: 'text/html' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'website_source.html';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
 </body>
 </html>
+
+
