@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -8,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -48,8 +46,8 @@
                         radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%);
             animation: bgMove 20s ease-in-out infinite;
         }
-        @keyframes bgMove {            0%, 100% { transform: translate(0,0) rotate(0deg); }
-            50% { transform: translate(-50px,-50px) rotate(180deg); }
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0,0) rotate(0deg); }            50% { transform: translate(-50px,-50px) rotate(180deg); }
         }
 
         .app-container {
@@ -97,8 +95,8 @@
             to { opacity: 1; transform: scale(1); } 
         }
         .registration-box .logo {
-            width: 100px; height: 100px;            background: var(--primary-gradient);
-            border-radius: 50%;
+            width: 100px; height: 100px;
+            background: var(--primary-gradient);            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -146,8 +144,8 @@
             font-weight: 800;
             cursor: pointer;
             background: var(--primary-gradient);
-            color: white;            transition: var(--transition);
-        }
+            color: white;
+            transition: var(--transition);        }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(102,126,234,0.4); }
         .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -195,8 +193,8 @@
         }
         .vip-modal.active { display: flex; }
         .vip-modal-content {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);            border-radius: var(--border-radius);
-            padding: 40px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: var(--border-radius);            padding: 40px;
             max-width: 500px;
             width: 100%;
             border: 2px solid var(--warning);
@@ -244,8 +242,8 @@
             gap: 25px; 
             animation: fadeIn 0.5s ease; 
         }
-        .dashboard.active { display: grid; }        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(20px); } 
+        .dashboard.active { display: grid; }
+        @keyframes fadeIn {             from { opacity: 0; transform: translateY(20px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
 
@@ -293,8 +291,8 @@
             font-weight: 600;
         }
         .nav-menu { list-style: none; }
-        .nav-item { margin-bottom: 8px; }        .nav-link {
-            display: flex; 
+        .nav-item { margin-bottom: 8px; }
+        .nav-link {            display: flex; 
             align-items: center; 
             gap: 15px; 
             padding: 15px 20px;
@@ -342,8 +340,8 @@
         }
         .stat-card.vip {
             border: 2px solid var(--warning);
-            background: linear-gradient(135deg, rgba(245,175,25,0.1) 0%, rgba(241,39,17,0.1) 100%);        }
-        .stat-icon {
+            background: linear-gradient(135deg, rgba(245,175,25,0.1) 0%, rgba(241,39,17,0.1) 100%);
+        }        .stat-icon {
             width: 70px; 
             height: 70px; 
             border-radius: 15px; 
@@ -391,8 +389,8 @@
             background: rgba(255,255,255,0.06); 
             transform: translateX(-5px); 
         }
-        .leader-item.top-1 {             background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05)); 
-            border-color: rgba(255,215,0,0.3); 
+        .leader-item.top-1 { 
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));             border-color: rgba(255,215,0,0.3); 
         }
         .leader-item.muted { opacity: 0.6; border-color: var(--warning); }
         .leader-item.banned { opacity: 0.4; border-color: var(--danger); }
@@ -440,8 +438,8 @@
             background: rgba(255,255,255,0.03); 
             border-radius: 15px; 
             color: var(--text-primary);
-            font-weight: 700;             cursor: pointer; 
-            transition: var(--transition);
+            font-weight: 700; 
+            cursor: pointer;             transition: var(--transition);
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -489,8 +487,8 @@
             border-radius: 12px; 
             margin-bottom: 15px;
         }
-        .chat-message {             margin-bottom: 15px; 
-            animation: slideIn 0.3s ease;
+        .chat-message { 
+            margin-bottom: 15px;             animation: slideIn 0.3s ease;
         }
         @keyframes slideIn { 
             from { opacity: 0; transform: translateY(10px); } 
@@ -538,8 +536,8 @@
             border-radius: 12px; 
             color: white; 
             font-weight: 700; 
-            cursor: pointer;        }
-        .chat-input-wrapper button:disabled {
+            cursor: pointer;
+        }        .chat-input-wrapper button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
@@ -636,8 +634,8 @@
             cursor: pointer; 
             transition: var(--transition); 
             border: none;
-        }        .modal-footer .cancel { background: rgba(255,255,255,0.1); color: var(--text-primary); }
-        .modal-footer .confirm { background: var(--danger); color: white; }
+        }
+        .modal-footer .cancel { background: rgba(255,255,255,0.1); color: var(--text-primary); }        .modal-footer .confirm { background: var(--danger); color: white; }
 
         .connection-status {
             position: fixed; 
@@ -674,19 +672,19 @@
     <div class="toast-container" id="toastContainer"></div>
     <div class="connection-status offline" id="connectionStatus">
         <i class="fas fa-circle"></i>
-        <span id="connectionText">جاري الاتصال...</span>
+        <span id="connectionText">يعمل بدون اتصال</span>
     </div>
 
     <!-- Registration Screen -->
-    <div class="registration-screen" id="registrationScreen">
+    <div class="registration-screen active" id="registrationScreen">
         <div class="registration-box">
             <div class="logo">🎮</div>
             <h2>مرحباً بك!</h2>
             <p>الرجاء إدخال اسمك للتسجيل في اللعبة</p>
             <div class="input-group">
                 <label><i class="fas fa-user"></i> اسمك الكامل</label>
-                <input type="text" id="registerName" class="input-field" placeholder="أدخل اسمك هنا..." maxlength="30">            </div>
-            <button class="btn-primary" id="registerBtn" onclick="registerUser()">
+                <input type="text" id="registerName" class="input-field" placeholder="أدخل اسمك هنا..." maxlength="30">
+            </div>            <button class="btn-primary" id="registerBtn" onclick="registerUser()">
                 <i class="fas fa-user-plus"></i> تسجيل الدخول
             </button>
         </div>
@@ -734,8 +732,8 @@
                 <ul class="nav-menu">
                     <li class="nav-item">
                         <a class="nav-link active" onclick="showPage('overview')">
-                            <i class="fas fa-home"></i><span>الرئيسية</span>                        </a>
-                    </li>
+                            <i class="fas fa-home"></i><span>الرئيسية</span>
+                        </a>                    </li>
                     <li class="nav-item">
                         <a class="nav-link" onclick="showPage('players')">
                             <i class="fas fa-users"></i><span>اللاعبين</span>
@@ -783,8 +781,8 @@
             <main class="main-content">
                 <!-- Overview Page -->
                 <section id="page-overview" class="page-section active">
-                    <div class="page-header">                        <h2>🎮 لوحة التحكم</h2>
-                        <p>نظرة عامة على النظام</p>
+                    <div class="page-header">
+                        <h2>🎮 لوحة التحكم</h2>                        <p>نظرة عامة على النظام</p>
                     </div>
 
                     <div class="stats-grid">
@@ -832,8 +830,8 @@
                         </div>
 
                         <div class="glass-card">
-                            <h3 class="section-title"><i class="fas fa-info-circle"></i> معلومات سريعة</h3>                            <div style="padding: 20px; line-height: 2;">
-                                <p><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>تم تسجيلك بنجاح</strong></p>
+                            <h3 class="section-title"><i class="fas fa-info-circle"></i> معلومات سريعة</h3>
+                            <div style="padding: 20px; line-height: 2;">                                <p><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>تم تسجيلك بنجاح</strong></p>
                                 <p><i class="fas fa-fingerprint" style="color: var(--info);"></i> <strong>بصمة جهازك محفوظة</strong></p>
                                 <p><i class="fas fa-sync" style="color: var(--warning);"></i> <strong>التحديث تلقائي</strong></p>
                             </div>
@@ -881,8 +879,8 @@
                             </thead>
                             <tbody id="registrationsTable"></tbody>
                         </table>
-                    </div>                </section>
-
+                    </div>
+                </section>
                 <!-- Moderation Page (Admin) -->
                 <section id="page-moderation" class="page-section">
                     <div class="page-header">
@@ -930,8 +928,8 @@
                 <section id="page-security" class="page-section">
                     <div class="page-header">
                         <h2>🔒 الحماية والأمان</h2>
-                        <p>مراقبة محاولات الدخول المشبوهة</p>                    </div>
-                    <div class="glass-card">
+                        <p>مراقبة محاولات الدخول المشبوهة</p>
+                    </div>                    <div class="glass-card">
                         <div id="securityList"></div>
                     </div>
                 </section>
@@ -979,8 +977,8 @@
 
     <!-- Confirmation Modal -->
     <div class="modal" id="confirmModal">
-        <div class="modal-content">            <div class="modal-header">
-                <h3>تأكيد العملية</h3>
+        <div class="modal-content">
+            <div class="modal-header">                <h3>تأكيد العملية</h3>
                 <button class="modal-close" onclick="closeConfirmModal()">&times;</button>
             </div>
             <div class="modal-body" id="confirmMessage"></div>
@@ -1007,30 +1005,31 @@
         let gameEnabled = true;
         let siteLocked = false;
 
-        // ===== Initialize =====
-        window.addEventListener('load', async () => {
-            // Generate device fingerprint
+        // ===== Initialize - FIXED: Show registration immediately =====
+        window.addEventListener('load', () => {
+            // Generate device ID immediately
             deviceId = localStorage.getItem('game_device_id') || 'device_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
             localStorage.setItem('game_device_id', deviceId);
             
-            deviceFingerprint = await generateFingerprint();
+            // Generate fingerprint
+            deviceFingerprint = generateFingerprint();
             
-            // Initialize Supabase
+            // Try to initialize Supabase but don't wait for it
             if (typeof window.supabase !== 'undefined') {
                 try {
                     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    await testConnection();
+                    testConnection();
                 } catch (e) {
                     console.error('Supabase error:', e);
                     updateConnectionStatus(false);
                 }
             }
             
-            // Check if user exists
-            await checkExistingUser();
+            // Check if user exists in localStorage first (for offline mode)
+            checkExistingUser();
         });
         // ===== Device Fingerprinting =====
-        async function generateFingerprint() {
+        function generateFingerprint() {
             const data = {
                 userAgent: navigator.userAgent,
                 language: navigator.language,
@@ -1040,7 +1039,6 @@
                 cookieEnabled: navigator.cookieEnabled,
                 deviceId: deviceId
             };
-            
             const str = JSON.stringify(data);
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
@@ -1053,38 +1051,32 @@
 
         // ===== User Registration & Login =====
         async function checkExistingUser() {
-            if (!supabase) {
-                showDashboard();
-                return;
+            // First check localStorage for offline mode
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    showDashboard();
+                    showToast(`👋 أهلاً بك مجدداً ${currentUser.name}!`, 'success');
+                    return;
+                } catch (e) {
+                    localStorage.removeItem('currentUser');
+                }
             }
             
-            try {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .eq('device_fingerprint', deviceFingerprint)
-                    .eq('is_banned', false)
-                    .single();
-                
-                if (data && !error) {
-                    currentUser = data;
-                    showDashboard();
-                    showToast(`👋 أهلاً بك مجدداً ${data.name}!`, 'success');
-                } else {
-                    document.getElementById('registrationScreen').classList.add('active');
-                }
-            } catch (error) {
+            // If no saved user, show registration
+            if (!currentUser) {
                 document.getElementById('registrationScreen').classList.add('active');
             }
         }
+
         async function registerUser() {
             const nameInput = document.getElementById('registerName');
             const btn = document.getElementById('registerBtn');
             const name = nameInput.value.trim();
             
             if (!name || name.length < 3) {
-                showToast('⚠️ الاسم يجب أن يكون 3 أحرف على الأقل', 'warning');
-                nameInput.focus();
+                showToast('⚠️ الاسم يجب أن يكون 3 أحرف على الأقل', 'warning');                nameInput.focus();
                 return;
             }
             
@@ -1092,22 +1084,9 @@
             btn.innerHTML = '<div class="spinner" style="width:25px;height:25px;border-width:3px;"></div> جاري التسجيل...';
             
             try {
-                // Check if name exists
-                const { data: existingUser } = await supabase
-                    .from('users')
-                    .select('id')
-                    .eq('name', name)
-                    .single();
-                
-                if (existingUser) {
-                    showToast('⚠️ هذا الاسم مستخدم بالفعل، اختر اسم آخر', 'warning');
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-user-plus"></i> تسجيل الدخول';
-                    return;
-                }
-                
-                // Create new user
-                const newUser = {
+                // Create user object
+                currentUser = {
+                    id: 'user_' + deviceId,
                     device_id: deviceId,
                     device_fingerprint: deviceFingerprint,
                     name: name,
@@ -1123,14 +1102,18 @@
                     created_at: new Date().toISOString()
                 };
                 
-                const { data, error } = await supabase
-                    .from('users')
-                    .insert([newUser])
-                    .select()                    .single();
+                // Save to localStorage for offline mode
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 
-                if (error) throw error;
+                // Try to save to Supabase if available
+                if (supabase && isOnline) {
+                    try {
+                        await supabase.from('users').upsert(currentUser, { onConflict: 'device_id' });
+                    } catch (e) {
+                        console.warn('Could not save to Supabase:', e);
+                    }
+                }
                 
-                currentUser = data;
                 document.getElementById('registrationScreen').classList.remove('active');
                 showDashboard();
                 showToast('✅ تم تسجيلك بنجاح! أهلاً بك', 'success');
@@ -1138,11 +1121,11 @@
             } catch (error) {
                 console.error('Registration error:', error);
                 showToast('❌ حدث خطأ أثناء التسجيل', 'error');
+            } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-user-plus"></i> تسجيل الدخول';
             }
         }
-
         // ===== VIP Login =====
         function openVIPModal() {
             document.getElementById('vipModal').classList.add('active');
@@ -1175,7 +1158,8 @@
                 const userMatch = data.match(/【S】(.*?)【S】/);
                 const passMatch = data.match(/【P】(.*?)【P】/);
                 
-                if (userMatch && passMatch) {                    const validUser = userMatch[1].trim();
+                if (userMatch && passMatch) {
+                    const validUser = userMatch[1].trim();
                     const validPass = passMatch[1].trim();
                     
                     if (username === validUser && password === validPass) {
@@ -1190,13 +1174,15 @@
             } catch (error) {
                 showToast('❌ خطأ في الاتصال', 'error');
             } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> دخول كمسؤول VIP';
+                btn.disabled = false;                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> دخول كمسؤول VIP';
             }
         }
 
         function upgradeToVIP() {
-            currentUser.role = 'admin';
+            if (currentUser) {
+                currentUser.role = 'admin';
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
             
             document.getElementById('sidebarName').textContent = 'المسؤول VIP';
             document.getElementById('sidebarRole').textContent = '👑 مسؤول VIP';
@@ -1218,20 +1204,28 @@
 
         // ===== Dashboard & Navigation =====
         function showDashboard() {
+            document.getElementById('registrationScreen').classList.remove('active');
             document.getElementById('dashboard').classList.add('active');
-            document.getElementById('sidebarName').textContent = currentUser.name;
-            document.getElementById('sidebarAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-            document.getElementById('userScore').textContent = currentUser.score || 0;
-            document.getElementById('userWins').textContent = currentUser.wins || 0;
-            document.getElementById('userLosses').textContent = currentUser.losses || 0;
-                        if (currentUser.is_muted) {
-                document.getElementById('chatInput').disabled = true;
-                document.getElementById('chatSendBtn').disabled = true;
-                document.getElementById('chatInput').placeholder = 'تم كتمك - لا يمكنك الكتابة';
+            
+            if (currentUser) {
+                document.getElementById('sidebarName').textContent = currentUser.name;
+                document.getElementById('sidebarAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+                document.getElementById('userScore').textContent = currentUser.score || 0;
+                document.getElementById('userWins').textContent = currentUser.wins || 0;
+                document.getElementById('userLosses').textContent = currentUser.losses || 0;
+                
+                if (currentUser.is_muted) {
+                    document.getElementById('chatInput').disabled = true;
+                    document.getElementById('chatSendBtn').disabled = true;
+                    document.getElementById('chatInput').placeholder = 'تم كتمك - لا يمكنك الكتابة';
+                }
             }
             
             loadAllData();
-            setupRealtimeListeners();
+            
+            // Setup realtime if available            if (supabase && isOnline) {
+                setupRealtimeListeners();
+            }
         }
 
         function showPage(pageName) {
@@ -1265,277 +1259,366 @@
         }
 
         async function loadTopPlayers() {
-            if (!supabase) return;
+            const container = document.getElementById('topPlayers');
             
-            const { data } = await supabase
-                .from('users')
-                .select('*')
-                .eq('is_banned', false)
-                .order('score', { ascending: false })
-                .limit(5);
-                        const container = document.getElementById('topPlayers');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:20px;">لا يوجد لاعبين بعد</p>';
-                return;
+            // If offline or no supabase, show local data
+            if (!supabase || !isOnline) {
+                container.innerHTML = `
+                    <div class="leader-item top-1">
+                        <div class="rank gold">1</div>
+                        <div class="player-info">
+                            <div class="name">${currentUser?.name || 'لاعب'} <span style="color:var(--info);margin-right:8px;">(أنت)</span></div>
+                            <div class="meta">0 مباريات • فوز: 0</div>
+                        </div>
+                        <div class="player-score">0</div>
+                    </div>
+                `;                return;
             }
             
-            container.innerHTML = data.map((p, i) => `
-                <div class="leader-item ${i===0?'top-1':''} ${p.is_muted?'muted':''}">
-                    <div class="rank ${i===0?'gold':'normal'}">${i+1}</div>
-                    <div class="player-info">
-                        <div class="name">
-                            ${escapeHtml(p.name)}
-                            ${p.is_muted ? '<span class="status-badge muted">مكتم</span>' : ''}
-                            ${p.is_online ? '<span class="status-badge online">متصل</span>' : '<span class="status-badge offline">غير متصل</span>'}
+            try {
+                const { data } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('is_banned', false)
+                    .order('score', { ascending: false })
+                    .limit(5);
+                
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:20px;">لا يوجد لاعبين بعد</p>';
+                    return;
+                }
+                
+                container.innerHTML = data.map((p, i) => `
+                    <div class="leader-item ${i===0?'top-1':''} ${p.is_muted?'muted':''}">
+                        <div class="rank ${i===0?'gold':'normal'}">${i+1}</div>
+                        <div class="player-info">
+                            <div class="name">
+                                ${escapeHtml(p.name)}
+                                ${p.is_muted ? '<span class="status-badge muted">مكتم</span>' : ''}
+                                ${p.is_online ? '<span class="status-badge online">متصل</span>' : '<span class="status-badge offline">غير متصل</span>'}
+                            </div>
+                            <div class="meta">${p.games_played||0} مباريات • فوز: ${p.wins||0}</div>
                         </div>
-                        <div class="meta">${p.games_played||0} مباريات • فوز: ${p.wins||0}</div>
+                        <div class="player-score">${p.score||0}</div>
                     </div>
-                    <div class="player-score">${p.score||0}</div>
-                </div>
-            `).join('');
+                `).join('');
+            } catch (e) {
+                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:20px;">لا يمكن تحميل البيانات</p>';
+            }
         }
 
         async function loadPlayers() {
-            if (!supabase) return;
-            
-            const { data } = await supabase
-                .from('users')
-                .select('*')
-                .eq('is_banned', false)
-                .order('is_online', { ascending: false })
-                .order('score', { ascending: false });
-            
             const container = document.getElementById('playersList');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يوجد لاعبين</p>';
+            
+            if (!supabase || !isOnline) {
+                container.innerHTML = `
+                    <div class="leader-item">
+                        <div class="rank normal">${currentUser?.name.charAt(0).toUpperCase() || '?'}</div>
+                        <div class="player-info">
+                            <div class="name">
+                                ${currentUser?.name || 'لاعب'}
+                                <span style="color:var(--info);margin-right:8px;">(أنت)</span>
+                                <span class="status-badge online">متصل</span>
+                            </div>
+                            <div class="meta">
+                                النقاط: ${currentUser?.score||0} | الفوز: ${currentUser?.wins||0} | الخسارة: ${currentUser?.losses||0} | المباريات: ${currentUser?.games_played||0}                            </div>
+                        </div>
+                    </div>
+                `;
                 return;
             }
             
-            container.innerHTML = data.map(p => `
-                <div class="leader-item ${p.is_muted?'muted':''}">
-                    <div class="rank normal">${p.name.charAt(0).toUpperCase()}</div>
-                    <div class="player-info">
-                        <div class="name">
-                            ${escapeHtml(p.name)}
-                            ${p.id === currentUser.id ? '<span style="color:var(--info);margin-right:8px;">(أنت)</span>' : ''}
-                            ${p.is_muted ? '<span class="status-badge muted">مكتم</span>' : ''}
-                            ${p.is_online ? '<span class="status-badge online">متصل</span>' : '<span class="status-badge offline">غير متصل</span>'}
+            try {
+                const { data } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('is_banned', false)
+                    .order('is_online', { ascending: false })
+                    .order('score', { ascending: false });
+                
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يوجد لاعبين</p>';
+                    return;
+                }
+                
+                container.innerHTML = data.map(p => `
+                    <div class="leader-item ${p.is_muted?'muted':''}">
+                        <div class="rank normal">${p.name.charAt(0).toUpperCase()}</div>
+                        <div class="player-info">
+                            <div class="name">
+                                ${escapeHtml(p.name)}
+                                ${p.id === currentUser?.id ? '<span style="color:var(--info);margin-right:8px;">(أنت)</span>' : ''}
+                                ${p.is_muted ? '<span class="status-badge muted">مكتم</span>' : ''}
+                                ${p.is_online ? '<span class="status-badge online">متصل</span>' : '<span class="status-badge offline">غير متصل</span>'}
+                            </div>
+                            <div class="meta">
+                                النقاط: ${p.score||0} | الفوز: ${p.wins||0} | الخسارة: ${p.losses||0} | المباريات: ${p.games_played||0}
+                            </div>
                         </div>
-                        <div class="meta">
-                            النقاط: ${p.score||0} | الفوز: ${p.wins||0} | الخسارة: ${p.losses||0} | المباريات: ${p.games_played||0}                        </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            } catch (e) {
+                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يمكن تحميل البيانات</p>';
+            }
         }
 
         async function loadVisitors() {
-            if (!supabase || !isVipAdmin) return;
-            
-            const { data } = await supabase
-                .from('users')
-                .select('*')
-                .order('last_seen', { ascending: false });
-            
-            const container = document.getElementById('visitorsList');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يوجد زوار</p>';
+            if (!supabase || !isOnline || !isVipAdmin) {
+                document.getElementById('visitorsList').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يوجد زوار</p>';
                 return;
             }
             
-            container.innerHTML = data.map(p => `
-                <div class="leader-item" style="margin-bottom:10px;">
-                    <div class="rank normal">${p.name.charAt(0).toUpperCase()}</div>
-                    <div class="player-info">
-                        <div class="name">
-                            ${escapeHtml(p.name)}
-                            ${p.is_online ? '<span class="status-badge online">متصل الآن</span>' : '<span class="status-badge offline">آخر ظهور: ' + timeAgo(p.last_seen) + '</span>'}
-                        </div>
-                        <div class="meta">
-                            الجهاز: ${p.device_id.slice(-8)} | البصمة: ${p.device_fingerprint?.slice(-6) || 'N/A'}
+            try {
+                const { data } = await supabase
+                    .from('users')                    .select('*')
+                    .order('last_seen', { ascending: false });
+                
+                const container = document.getElementById('visitorsList');
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يوجد زوار</p>';
+                    return;
+                }
+                
+                container.innerHTML = data.map(p => `
+                    <div class="leader-item" style="margin-bottom:10px;">
+                        <div class="rank normal">${p.name.charAt(0).toUpperCase()}</div>
+                        <div class="player-info">
+                            <div class="name">
+                                ${escapeHtml(p.name)}
+                                ${p.is_online ? '<span class="status-badge online">متصل الآن</span>' : '<span class="status-badge offline">آخر ظهور: ' + timeAgo(p.last_seen) + '</span>'}
+                            </div>
+                            <div class="meta">
+                                الجهاز: ${p.device_id.slice(-8)} | البصمة: ${p.device_fingerprint?.slice(-6) || 'N/A'}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            } catch (e) {
+                document.getElementById('visitorsList').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يمكن تحميل البيانات</p>';
+            }
         }
 
         async function loadRegistrations() {
-            if (!supabase || !isVipAdmin) return;
-            
-            const { data } = await supabase
-                .from('users')
-                .select('*')
-                .order('created_at', { ascending: false });
-            
-            const tbody = document.getElementById('registrationsTable');
-            if (!data || data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-secondary)">لا يوجد تسجيلات</td></tr>';
+            if (!supabase || !isOnline || !isVipAdmin) {
+                document.getElementById('registrationsTable').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-secondary)">لا يوجد تسجيلات</td></tr>';
                 return;
             }
-                        tbody.innerHTML = data.map(p => `
-                <tr>
-                    <td><strong>${escapeHtml(p.name)}</strong></td>
-                    <td>${new Date(p.created_at).toLocaleString('ar-SA')}</td>
-                    <td style="font-family:monospace;font-size:0.85em;">${p.device_fingerprint?.slice(-10) || 'N/A'}</td>
-                    <td class="action-btns">
-                        <button class="action-btn edit" onclick="openEditModal('${p.id}', '${escapeHtml(p.name)}')" title="تعديل الاسم">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
+            
+            try {
+                const { data } = await supabase
+                    .from('users')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                const tbody = document.getElementById('registrationsTable');
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-secondary)">لا يوجد تسجيلات</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = data.map(p => `
+                    <tr>
+                        <td><strong>${escapeHtml(p.name)}</strong></td>
+                        <td>${new Date(p.created_at).toLocaleString('ar-SA')}</td>                        <td style="font-family:monospace;font-size:0.85em;">${p.device_fingerprint?.slice(-10) || 'N/A'}</td>
+                        <td class="action-btns">
+                            <button class="action-btn edit" onclick="openEditModal('${p.id}', '${escapeHtml(p.name)}')" title="تعديل الاسم">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                document.getElementById('registrationsTable').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-secondary)">لا يمكن تحميل البيانات</td></tr>';
+            }
         }
 
         async function loadModeration() {
-            if (!supabase || !isVipAdmin) return;
-            
-            const { data } = await supabase
-                .from('users')
-                .select('*')
-                .or('is_muted.eq.true,is_banned.eq.true')
-                .order('last_seen', { ascending: false });
-            
-            const container = document.getElementById('moderationList');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يوجدPlayers محظورين أو مكتومين</p>';
+            if (!supabase || !isOnline || !isVipAdmin) {
+                document.getElementById('moderationList').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يوجد لاعبين محظورين أو مكتومين</p>';
                 return;
             }
             
-            container.innerHTML = data.map(p => `
-                <div class="leader-item ${p.is_banned?'banned':'muted'}" style="margin-bottom:10px;">
-                    <div class="rank normal">${p.name.charAt(0).toUpperCase()}</div>
-                    <div class="player-info">
-                        <div class="name">
-                            ${escapeHtml(p.name)}
-                            ${p.is_banned ? '<span class="status-badge banned">محظور</span>' : '<span class="status-badge muted">مكتم</span>'}
+            try {
+                const { data } = await supabase
+                    .from('users')
+                    .select('*')
+                    .or('is_muted.eq.true,is_banned.eq.true')
+                    .order('last_seen', { ascending: false });
+                
+                const container = document.getElementById('moderationList');
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يوجد لاعبين محظورين أو مكتومين</p>';
+                    return;
+                }
+                
+                container.innerHTML = data.map(p => `
+                    <div class="leader-item ${p.is_banned?'banned':'muted'}" style="margin-bottom:10px;">
+                        <div class="rank normal">${p.name.charAt(0).toUpperCase()}</div>
+                        <div class="player-info">
+                            <div class="name">
+                                ${escapeHtml(p.name)}
+                                ${p.is_banned ? '<span class="status-badge banned">محظور</span>' : '<span class="status-badge muted">مكتم</span>'}
+                            </div>
+                            <div class="meta">آخر ظهور: ${timeAgo(p.last_seen)}</div>
                         </div>
-                        <div class="meta">آخر ظهور: ${timeAgo(p.last_seen)}</div>
+                        <div class="action-btns">
+                            ${p.is_banned ? 
+                                `<button class="action-btn" style="background:rgba(16,185,129,0.2);color:var(--success)" onclick="unbanUser('${p.id}')">فك الحظر</button>` :
+                                `<button class="action-btn" style="background:rgba(16,185,129,0.2);color:var(--success)" onclick="unmuteUser('${p.id}')">فك الكتم</button>`
+                            }
+                        </div>
                     </div>
-                    <div class="action-btns">
-                        ${p.is_banned ? 
-                            `<button class="action-btn" style="background:rgba(16,185,129,0.2);color:var(--success)" onclick="unbanUser('${p.id}')">فك الحظر</button>` :
-                            `<button class="action-btn" style="background:rgba(16,185,129,0.2);color:var(--success)" onclick="unmuteUser('${p.id}')">فك الكتم</button>`
-                        }
-                    </div>
-                </div>
-            `).join('');
+                `).join('');            } catch (e) {
+                document.getElementById('moderationList').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يمكن تحميل البيانات</p>';
+            }
         }
 
-        async function loadStats() {            if (!supabase || !isVipAdmin) return;
-            
-            const { data } = await supabase
-                .from('users')
-                .select('*')
-                .order('score', { ascending: false });
-            
-            const container = document.getElementById('statsList');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا توجد إحصائيات</p>';
+        async function loadStats() {
+            if (!supabase || !isOnline || !isVipAdmin) {
+                document.getElementById('statsList').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا توجد إحصائيات</p>';
                 return;
             }
             
-            container.innerHTML = '<div class="stats-grid">' + data.map(p => `
-                <div class="stat-card">
-                    <div class="stat-icon blue"><i class="fas fa-user"></i></div>
-                    <div class="stat-info">
-                        <h4>${escapeHtml(p.name)}</h4>
-                        <div style="margin-top:10px;line-height:1.8;">
-                            <div>النقاط: <strong>${p.score||0}</strong></div>
-                            <div>الفوز: <strong style="color:var(--success)">${p.wins||0}</strong></div>
-                            <div>الخسارة: <strong style="color:var(--danger)">${p.losses||0}</strong></div>
-                            <div>المباريات: <strong>${p.games_played||0}</strong></div>
-                            <div>معدل الفوز: <strong>${p.games_played ? Math.round((p.wins/p.games_played)*100) : 0}%</strong></div>
+            try {
+                const { data } = await supabase
+                    .from('users')
+                    .select('*')
+                    .order('score', { ascending: false });
+                
+                const container = document.getElementById('statsList');
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا توجد إحصائيات</p>';
+                    return;
+                }
+                
+                container.innerHTML = '<div class="stats-grid">' + data.map(p => `
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fas fa-user"></i></div>
+                        <div class="stat-info">
+                            <h4>${escapeHtml(p.name)}</h4>
+                            <div style="margin-top:10px;line-height:1.8;">
+                                <div>النقاط: <strong>${p.score||0}</strong></div>
+                                <div>الفوز: <strong style="color:var(--success)">${p.wins||0}</strong></div>
+                                <div>الخسارة: <strong style="color:var(--danger)">${p.losses||0}</strong></div>
+                                <div>المباريات: <strong>${p.games_played||0}</strong></div>
+                                <div>معدل الفوز: <strong>${p.games_played ? Math.round((p.wins/p.games_played)*100) : 0}%</strong></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('') + '</div>';
+                `).join('') + '</div>';
+            } catch (e) {
+                document.getElementById('statsList').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يمكن تحميل البيانات</p>';
+            }
         }
 
         async function loadSecurity() {
-            if (!supabase || !isVipAdmin) return;
-            
-            const { data } = await supabase
-                .from('security_logs')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(50);
-            
-            const container = document.getElementById('securityList');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا توجد سجلات أمنية</p>';
+            if (!supabase || !isOnline || !isVipAdmin) {
+                document.getElementById('securityList').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا توجد سجلات أمنية</p>';
                 return;
             }
             
-            container.innerHTML = data.map(log => `
-                <div class="leader-item" style="margin-bottom:10px;">
-                    <div class="rank normal" style="background:${log.severity==='high'?'var(--danger)':log.severity==='medium'?'var(--warning)':'var(--info)'}">
-                        <i class="fas fa-${log.severity==='high'?'exclamation-triangle':log.severity==='medium'?'exclamation-circle':'info-circle'}"></i>
-                    </div>                    <div class="player-info">
-                        <div class="name">${log.event_type}</div>
-                        <div class="meta">
-                            ${log.details} | ${new Date(log.created_at).toLocaleString('ar-SA')}
+            try {                const { data } = await supabase
+                    .from('security_logs')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(50);
+                
+                const container = document.getElementById('securityList');
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا توجد سجلات أمنية</p>';
+                    return;
+                }
+                
+                container.innerHTML = data.map(log => `
+                    <div class="leader-item" style="margin-bottom:10px;">
+                        <div class="rank normal" style="background:${log.severity==='high'?'var(--danger)':log.severity==='medium'?'var(--warning)':'var(--info)'}">
+                            <i class="fas fa-${log.severity==='high'?'exclamation-triangle':log.severity==='medium'?'exclamation-circle':'info-circle'}"></i>
+                        </div>
+                        <div class="player-info">
+                            <div class="name">${log.event_type}</div>
+                            <div class="meta">
+                                ${log.details} | ${new Date(log.created_at).toLocaleString('ar-SA')}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            } catch (e) {
+                document.getElementById('securityList').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">لا يمكن تحميل البيانات</p>';
+            }
         }
 
         // ===== Chat System =====
         async function loadChat() {
-            if (!supabase || !chatEnabled) {
-                document.getElementById('chatMessages').innerHTML = 
-                    '<div class="chat-message system"><div class="sender">🤖 النظام</div><div class="text">الدردشة معطلة حالياً</div></div>';
-                return;
-            }
-            
-            const { data } = await supabase
-                .from('chat_messages')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(50);
-            
             const container = document.getElementById('chatMessages');
-            if (!data || data.length === 0) {
-                container.innerHTML = '<div class="chat-message system"><div class="sender">🤖 النظام</div><div class="text">أهلاً بك! ابدأ المحادثة</div></div>';
+            
+            if (!supabase || !isOnline || !chatEnabled) {
+                container.innerHTML = '<div class="chat-message system"><div class="sender">🤖 النظام</div><div class="text">الدردشة تعمل بدون اتصال - الرسائل محلية فقط</div></div>';
                 return;
             }
             
-            container.innerHTML = data.reverse().map(msg => {
-                const isSelf = msg.user_id === currentUser.id;
-                const isAdmin = msg.is_admin;
-                const isMuted = msg.is_muted;
+            try {
+                const { data } = await supabase
+                    .from('chat_messages')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(50);
                 
-                return `
-                    <div class="chat-message ${isSelf?'self':''} ${isAdmin?'admin':''} ${isMuted?'muted':''}">
-                        <div class="sender">
-                            ${isAdmin ? '👑 ' : ''}${escapeHtml(msg.user_name)}
-                            ${isMuted ? '<span style="font-size:0.8em;color:var(--warning);margin-right:8px;">(مكتم)</span>' : ''}
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="chat-message system"><div class="sender">🤖 النظام</div><div class="text">أهلاً بك! ابدأ المحادثة</div></div>';
+                    return;
+                }                
+                container.innerHTML = data.reverse().map(msg => {
+                    const isSelf = msg.user_id === currentUser?.id;
+                    const isAdmin = msg.is_admin;
+                    const isMuted = msg.is_muted;
+                    
+                    return `
+                        <div class="chat-message ${isSelf?'self':''} ${isAdmin?'admin':''} ${isMuted?'muted':''}">
+                            <div class="sender">
+                                ${isAdmin ? '👑 ' : ''}${escapeHtml(msg.user_name)}
+                                ${isMuted ? '<span style="font-size:0.8em;color:var(--warning);margin-right:8px;">(مكتم)</span>' : ''}
+                            </div>
+                            <div class="text">${escapeHtml(msg.message)}</div>
                         </div>
-                        <div class="text">${escapeHtml(msg.message)}</div>
-                    </div>
-                `;
-            }).join('');
-            
-            container.scrollTop = container.scrollHeight;
+                    `;
+                }).join('');
+                
+                container.scrollTop = container.scrollHeight;
+            } catch (e) {
+                container.innerHTML = '<div class="chat-message system"><div class="sender">🤖 النظام</div><div class="text">لا يمكن تحميل الرسائل</div></div>';
+            }
         }
 
-        async function sendChat() {            const input = document.getElementById('chatInput');
+        async function sendChat() {
+            const input = document.getElementById('chatInput');
             const message = input.value.trim();
             
             if (!message || !chatEnabled) return;
-            if (currentUser.is_muted && !isVipAdmin) {
+            if (currentUser?.is_muted && !isVipAdmin) {
                 showToast('⚠️ تم كتمك - لا يمكنك إرسال رسائل', 'warning');
                 return;
             }
             
             try {
-                await supabase.from('chat_messages').insert({
-                    user_id: currentUser.id,
-                    user_name: currentUser.name,
-                    message: message,
-                    is_admin: isVipAdmin,
-                    is_muted: currentUser.is_muted || false,
-                    created_at: new Date().toISOString()
-                });
+                if (supabase && isOnline) {
+                    await supabase.from('chat_messages').insert({
+                        user_id: currentUser.id,
+                        user_name: currentUser.name,
+                        message: message,
+                        is_admin: isVipAdmin,
+                        is_muted: currentUser.is_muted || false,
+                        created_at: new Date().toISOString()
+                    });
+                } else {
+                    // Offline mode - add locally
+                    const container = document.getElementById('chatMessages');
+                    container.innerHTML += `
+                        <div class="chat-message self">
+                            <div class="sender">${currentUser.name}</div>
+                            <div class="text">${message}</div>                        </div>
+                    `;
+                    container.scrollTop = container.scrollHeight;
+                }
                 
                 input.value = '';
             } catch (error) {
@@ -1563,11 +1646,17 @@
                 return;
             }
             
+            if (!supabase || !isOnline) {
+                showToast('⚠️ الاتصال بالخادم مطلوب', 'warning');
+                return;
+            }
+            
             try {
                 await supabase.from('users').update({ name: newName }).eq('id', userId);
                 showToast('✅ تم تعديل الاسم بنجاح', 'success');
                 closeEditModal();
-                loadRegistrations();                loadPlayers();
+                loadRegistrations();
+                loadPlayers();
             } catch (error) {
                 showToast('❌ فشل تعديل الاسم', 'error');
             }
@@ -1575,6 +1664,9 @@
 
         async function muteUser(userId) {
             if (!confirm('هل أنت متأكد من كتم هذا اللاعب؟')) return;
+            if (!supabase || !isOnline) {                showToast('⚠️ الاتصال بالخادم مطلوب', 'warning');
+                return;
+            }
             
             try {
                 await supabase.from('users').update({ is_muted: true }).eq('id', userId);
@@ -1588,6 +1680,11 @@
         }
 
         async function unmuteUser(userId) {
+            if (!supabase || !isOnline) {
+                showToast('⚠️ الاتصال بالخادم مطلوب', 'warning');
+                return;
+            }
+            
             try {
                 await supabase.from('users').update({ is_muted: false }).eq('id', userId);
                 showToast('✅ تم فك كتم اللاعب', 'success');
@@ -1600,6 +1697,10 @@
 
         async function banUser(userId) {
             if (!confirm('هل أنت متأكد من حظر هذا اللاعب نهائياً؟')) return;
+            if (!supabase || !isOnline) {
+                showToast('⚠️ الاتصال بالخادم مطلوب', 'warning');
+                return;
+            }
             
             try {
                 await supabase.from('users').update({ is_banned: true, is_online: false }).eq('id', userId);
@@ -1612,29 +1713,44 @@
             }
         }
 
-        async function unbanUser(userId) {
+        async function unbanUser(userId) {            if (!supabase || !isOnline) {
+                showToast('⚠️ الاتصال بالخادم مطلوب', 'warning');
+                return;
+            }
+            
             try {
                 await supabase.from('users').update({ is_banned: false }).eq('id', userId);
                 showToast('✅ تم فك حظر اللاعب', 'success');
-                loadModeration();            } catch (error) {
+                loadModeration();
+            } catch (error) {
                 showToast('❌ فشل فك الحظر', 'error');
             }
         }
 
         // ===== Site Control =====
         async function toggleSiteSection(section) {
+            if (!supabase || !isOnline) {
+                showToast('⚠️ الاتصال بالخادم مطلوب', 'warning');
+                return;
+            }
+            
             if (section === 'chat') {
                 chatEnabled = !chatEnabled;
-                await supabase.from('site_settings').upsert({ key: 'chat_enabled', value: chatEnabled });
+                await supabase.from('site_settings').upsert({ key: 'chat_enabled', value: chatEnabled.toString() });
                 showToast(chatEnabled ? '✅ تم تفعيل الدردشة' : '⚠️ تم تعطيل الدردشة', 'info');
             } else if (section === 'game') {
                 gameEnabled = !gameEnabled;
-                await supabase.from('site_settings').upsert({ key: 'game_enabled', value: gameEnabled });
+                await supabase.from('site_settings').upsert({ key: 'game_enabled', value: gameEnabled.toString() });
                 showToast(gameEnabled ? '✅ تم تفعيل اللعبة' : '⚠️ تم تعطيل اللعبة', 'info');
             }
         }
 
         async function toggleSiteLock() {
+            if (!supabase || !isOnline) {
+                showToast('⚠️ الاتصال بالخادم مطلوب', 'warning');
+                return;
+            }
+            
             siteLocked = !siteLocked;
             const icon = document.getElementById('lockIcon');
             const text = document.getElementById('lockText');
@@ -1642,19 +1758,18 @@
             if (siteLocked) {
                 icon.className = 'fas fa-unlock';
                 text.textContent = 'فتح الموقع';
-                await supabase.from('site_settings').upsert({ key: 'site_locked', value: true });
+                await supabase.from('site_settings').upsert({ key: 'site_locked', value: 'true' });
                 showToast('🔒 تم قفل الموقع', 'warning');
             } else {
                 icon.className = 'fas fa-lock';
-                text.textContent = 'قفل الموقع';
-                await supabase.from('site_settings').upsert({ key: 'site_locked', value: false });
+                text.textContent = 'قفل الموقع';                await supabase.from('site_settings').upsert({ key: 'site_locked', value: 'false' });
                 showToast('🔓 تم فتح الموقع', 'success');
             }
         }
 
         // ===== Security Logging =====
         async function logSecurity(eventType, details, severity = 'low') {
-            if (!supabase) return;
+            if (!supabase || !isOnline) return;
             try {
                 await supabase.from('security_logs').insert({
                     event_type: eventType,
@@ -1666,41 +1781,37 @@
                 });
             } catch (e) { console.error('Security log error:', e); }
         }
+
         // ===== Real-time Updates =====
         function setupRealtimeListeners() {
             if (!supabase) return;
             
-            // Listen to users changes
             supabase.channel('users_changes')
                 .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, payload => {
                     loadAllData();
                 })
                 .subscribe();
             
-            // Listen to chat messages
             supabase.channel('chat_changes')
                 .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, payload => {
                     loadChat();
                 })
                 .subscribe();
             
-            // Listen to site settings
             supabase.channel('settings_changes')
                 .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, async payload => {
-                    if (payload.new.key === 'chat_enabled') chatEnabled = payload.new.value;
-                    if (payload.new.key === 'game_enabled') gameEnabled = payload.new.value;
-                    if (payload.new.key === 'site_locked') siteLocked = payload.new.value;
+                    if (payload.new.key === 'chat_enabled') chatEnabled = payload.new.value === 'true';
+                    if (payload.new.key === 'game_enabled') gameEnabled = payload.new.value === 'true';
+                    if (payload.new.key === 'site_locked') siteLocked = payload.new.value === 'true';
                 })
                 .subscribe();
             
-            // Update last seen every 30 seconds
             setInterval(updateLastSeen, 30000);
         }
 
         async function updateLastSeen() {
-            if (!supabase || !currentUser) return;
-            try {
-                await supabase.from('users').update({
+            if (!supabase || !isOnline || !currentUser) return;
+            try {                await supabase.from('users').update({
                     last_seen: new Date().toISOString(),
                     is_online: true
                 }).eq('id', currentUser.id);
@@ -1714,7 +1825,8 @@
             const minutes = Math.floor(seconds / 60);
             if (minutes < 60) return `منذ ${minutes} دقيقة`;
             const hours = Math.floor(minutes / 60);
-            if (hours < 24) return `منذ ${hours} ساعة`;            const days = Math.floor(hours / 24);
+            if (hours < 24) return `منذ ${hours} ساعة`;
+            const days = Math.floor(hours / 24);
             return `منذ ${days} يوم`;
         }
 
@@ -1738,7 +1850,7 @@
                 vip: 'fa-crown'
             };
             
-            toast.innerHTML = `<i class="fas ${icons[type]}"></i><span>${message}</span>`;
+            toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span>${message}</span>`;
             container.appendChild(toast);
             
             setTimeout(() => {
@@ -1748,8 +1860,7 @@
         }
 
         async function testConnection() {
-            try {
-                const { error } = await supabase.from('users').select('count').limit(1);
+            try {                const { error } = await supabase.from('users').select('count').limit(1);
                 if (error) throw error;
                 isOnline = true;
                 updateConnectionStatus(true);
@@ -1763,10 +1874,11 @@
             const status = document.getElementById('connectionStatus');
             const text = document.getElementById('connectionText');
             if (online) {
-                status.className = 'connection-status online';                text.textContent = 'متصل';
+                status.className = 'connection-status online';
+                text.textContent = 'متصل';
             } else {
                 status.className = 'connection-status offline';
-                text.textContent = 'غير متصل';
+                text.textContent = 'يعمل بدون اتصال';
             }
         }
 
@@ -1790,10 +1902,11 @@
 
         // Update online status on page unload
         window.addEventListener('beforeunload', async () => {
-            if (supabase && currentUser) {
-                await supabase.from('users').update({ is_online: false }).eq('id', currentUser.id);
+            if (supabase && isOnline && currentUser) {
+                try {
+                    await supabase.from('users').update({ is_online: false }).eq('id', currentUser.id);
+                } catch (e) { /* Ignore errors on unload */ }
             }
         });
     </script>
-</body>
-  </html>
+</body></html>
