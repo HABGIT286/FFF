@@ -38,7 +38,7 @@
       background-attachment: fixed;
     }
 
-    /* ✨ Animations */
+    /* Animations */
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -48,7 +48,7 @@
     .animate-fade { animation: fadeIn 0.5s ease forwards; }
     .animate-pulse { animation: pulse 2s infinite; }
     .animate-float { animation: float 3s ease-in-out infinite; }    
-    /* 🎨 Glassmorphism Cards */
+    /* Glassmorphism Cards */
     .card {
       background: var(--glass);
       border: 1px solid var(--glass-border);
@@ -61,7 +61,7 @@
     }
     .card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
 
-    /* 🎯 Buttons */
+    /* Buttons */
     .btn {
       padding: 12px 24px;
       border: none;
@@ -71,19 +71,23 @@
       transition: var(--transition);
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       font-size: 1rem;
+      width: 100%;
+      margin: 8px 0;
     }
     .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
-    .btn-primary:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(108,92,231,0.5); }
+    .btn-primary:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(108,92,231,0.5); }
     .btn-vip { background: linear-gradient(135deg, #f39c12, #e74c3c); color: white; animation: pulse 2s infinite; }
+    .btn-vip:hover { transform: scale(1.02); }
     .btn-danger { background: var(--danger); color: white; }
     .btn-success { background: var(--success); color: white; }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
 
-    /* 📝 Forms */
+    /* Forms */
     .form-group { margin: 15px 0; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; }
     .form-control {
       width: 100%;
       padding: 12px 15px;
@@ -92,19 +96,21 @@
       background: rgba(255,255,255,0.1);
       color: white;
       font-size: 1rem;
-      transition: var(--transition);
+      transition: var(--transition);      text-align: right;
     }
     .form-control:focus {
       outline: none;
-      border-color: var(--accent);      background: rgba(255,255,255,0.15);
+      border-color: var(--accent);
+      background: rgba(255,255,255,0.15);
       box-shadow: 0 0 0 3px rgba(0,206,201,0.2);
     }
+    .form-control::placeholder { color: rgba(255,255,255,0.5); }
 
-    /* 🗂️ Sections */
+    /* Sections */
     .section { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
     .section.active { display: block; }
     
-    /* 📊 Stats Cards */
+    /* Stats Cards */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -121,7 +127,7 @@
     .stat-value { font-size: 2rem; font-weight: bold; color: var(--accent); }
     .stat-label { font-size: 0.9rem; opacity: 0.9; }
 
-    /* 💬 Chat */
+    /* Chat */
     .chat-container {
       max-height: 400px;
       overflow-y: auto;
@@ -139,16 +145,16 @@
       max-width: 80%;
       animation: fadeIn 0.3s ease;
     }
-    .chat-message.own { 
-      align-self: flex-end; 
+    .chat-message.own {       align-self: flex-end; 
       background: linear-gradient(135deg, var(--primary), var(--secondary)); 
     }
     .chat-message.other { 
       align-self: flex-start; 
-      background: rgba(255,255,255,0.15);     }
+      background: rgba(255,255,255,0.15); 
+    }
     .chat-meta { font-size: 0.8rem; opacity: 0.8; margin-bottom: 3px; }
 
-    /* 👥 Players List */
+    /* Players List */
     .player-item {
       display: flex;
       justify-content: space-between;
@@ -169,7 +175,7 @@
     .status-online { background: var(--success); box-shadow: 0 0 10px var(--success); }
     .status-offline { background: #636e72; }
 
-    /* ⚠️ Warnings Table */
+    /* Warnings Table */
     .warning-table {
       width: 100%;
       border-collapse: collapse;
@@ -188,13 +194,13 @@
       font-weight: 500;
     }
     .badge-active { background: var(--success); color: white; }
-    .badge-muted { background: var(--warning); color: var(--dark); }
-    .badge-banned { background: var(--danger); color: white; }
+    .badge-muted { background: var(--warning); color: var(--dark); }    .badge-banned { background: var(--danger); color: white; }
 
-    /* 🎭 Modals */
+    /* Modals */
     .modal {
       display: none;
-      position: fixed;      top: 0; left: 0;
+      position: fixed;
+      top: 0; left: 0;
       width: 100%; height: 100%;
       background: rgba(0,0,0,0.8);
       justify-content: center;
@@ -231,19 +237,19 @@
     }
     .modal-close:hover { color: var(--danger); transform: rotate(90deg); }
 
-    /* 🎨 Header & Navigation */
+    /* Header & Navigation */
     .header {
       text-align: center;
       padding: 25px 20px;
       background: linear-gradient(135deg, rgba(108,92,231,0.3), rgba(0,206,201,0.2));
       border-bottom: 1px solid var(--glass-border);
-      margin-bottom: 20px;
-      animation: gradientBG 15s ease infinite;
+      margin-bottom: 20px;      animation: gradientBG 15s ease infinite;
       background-size: 200% 200%;
     }
     .header h1 {
       font-size: 2.2rem;
-      margin-bottom: 10px;      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: shimmer 3s linear infinite;
@@ -286,13 +292,13 @@
     }
     .nav-tab.vip-only {
       background: linear-gradient(135deg, #f39c12, #e74c3c);
-      animation: pulse 3s infinite;
-    }
+      animation: pulse 3s infinite;    }
 
-    /* 🎯 VIP Badge */
+    /* VIP Badge */
     .vip-badge {
       display: inline-block;
-      padding: 3px 10px;      background: linear-gradient(135deg, #f39c12, #e74c3c);
+      padding: 3px 10px;
+      background: linear-gradient(135deg, #f39c12, #e74c3c);
       border-radius: 20px;
       font-size: 0.75rem;
       font-weight: bold;
@@ -300,7 +306,7 @@
       animation: pulse 2s infinite;
     }
 
-    /* 📱 Responsive */
+    /* Responsive */
     @media (max-width: 768px) {
       .header h1 { font-size: 1.8rem; }
       .nav-tabs { flex-direction: column; }
@@ -308,7 +314,7 @@
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    /* 🔄 Loading */
+    /* Loading */
     .loading {
       display: inline-block;
       width: 20px; height: 20px;
@@ -316,11 +322,11 @@
       border-radius: 50%;
       border-top-color: var(--accent);
       animation: spin 1s linear infinite;
-      margin-left: 10px;
+      margin-right: 10px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* 🔔 Notifications */
+    /* Notifications */
     .notification {
       position: fixed;
       top: 20px;
@@ -335,17 +341,17 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
       display: none;
     }
-    .notification.show { display: block; }
-    .notification.success { background: var(--success); }
+    .notification.show { display: block; }    .notification.success { background: var(--success); }
     .notification.error { background: var(--danger); }
     .notification.warning { background: var(--warning); color: var(--dark); }
 
-    /* 🎨 Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 10px; }
     ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--secondary); }
 
-    /* 🎭 Auth Screen */
+    /* Auth Screen */
     .auth-container {
       display: flex;
       justify-content: center;
@@ -354,8 +360,8 @@
       padding: 20px;
     }
     .auth-card {
-      background: linear-gradient(135deg, rgba(30,39,73,0.9), rgba(15,52,96,0.95));
-      padding: 40px;
+      background: linear-gradient(135deg, rgba(30,39,73,0.95), rgba(15,52,96,0.98));
+      padding: 40px 30px;
       border-radius: 30px;
       width: 100%;
       max-width: 420px;
@@ -366,7 +372,7 @@
     .auth-title {
       text-align: center;
       font-size: 1.8rem;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
       color: var(--accent);
     }
     .auth-divider {
@@ -382,15 +388,15 @@
       background: var(--glass-border);
     }
     .auth-divider span {
-      background: var(--darker);
+      background: linear-gradient(135deg, rgba(30,39,73,0.95), rgba(15,52,96,0.98));
       padding: 0 15px;
-      position: relative;
-      color: var(--secondary);
+      position: relative;      color: var(--secondary);
     }
 
-    /* 🎨 Site Disabled Overlay */
+    /* Site Disabled Overlay */
     .site-disabled {
-      position: fixed;      top: 0; left: 0;
+      position: fixed;
+      top: 0; left: 0;
       width: 100%; height: 100%;
       background: rgba(0,0,0,0.95);
       display: none;
@@ -411,10 +417,10 @@
 </head>
 <body>
 
-  <!-- 🔔 Notification Container -->
+  <!-- Notification Container -->
   <div id="notification" class="notification"></div>
 
-  <!-- 🚫 Site Disabled Overlay -->
+  <!-- Site Disabled Overlay -->
   <div id="siteDisabled" class="site-disabled">
     <div class="card">
       <h2>⚠️ الموقع معطل حالياً</h2>
@@ -422,7 +428,7 @@
     </div>
   </div>
 
-  <!-- 🔐 Auth Screen -->
+  <!-- Auth Screen -->
   <div id="authScreen" class="auth-container">
     <div class="auth-card animate-fade">
       <h2 class="auth-title">🎮 لعبة الأحرف</h2>
@@ -433,26 +439,27 @@
           <label>👤 اسم المستخدم</label>
           <input type="text" id="signupUsername" class="form-control" placeholder="أدخل اسم المستخدم" required>
         </div>
-        <div class="form-group">
-          <label>🔐 كلمة المرور</label>
+        <div class="form-group">          <label>🔐 كلمة المرور</label>
           <input type="password" id="signupPassword" class="form-control" placeholder="أدخل كلمة المرور" required>
         </div>
         <div class="form-group">
           <label>🎭 الاسم في اللعبة</label>
-          <input type="text" id="signupDisplayName" class="form-control" placeholder="اسمك الظاهر في اللعبة">        </div>
-        <button class="btn btn-primary" style="width:100%" onclick="handleSignup()">
+          <input type="text" id="signupDisplayName" class="form-control" placeholder="اسمك الظاهر في اللعبة">
+        </div>
+        <button class="btn btn-primary" onclick="handleSignup()">
           ✨ إنشاء حساب جديد
         </button>
         
         <div class="auth-divider"><span>أو</span></div>
         
-        <button class="btn btn-vip" style="width:100%" onclick="showVIPLogin()">
+        <button class="btn btn-vip" onclick="showVIPLogin()">
           👑 LOGIN-VIP
         </button>
       </div>
 
       <!-- VIP Login Form -->
       <div id="vipLoginForm" style="display:none;">
+        <h3 style="text-align:center; margin-bottom:20px; color:var(--accent)">🔐 دخول VIP</h3>
         <div class="form-group">
           <label>🔑 كلمة السر</label>
           <input type="password" id="vipPassword" class="form-control" placeholder="أدخل كلمة السر" required>
@@ -461,17 +468,17 @@
           <label>🎫 الرمز السري</label>
           <input type="text" id="vipCode" class="form-control" placeholder="أدخل الرمز" required>
         </div>
-        <button class="btn btn-vip" style="width:100%" onclick="handleVIPLockin()">
+        <button class="btn btn-vip" onclick="handleVIPLogin()">
           🔓 دخول VIP
         </button>
-        <button class="btn" style="width:100%; margin-top:10px; background:rgba(255,255,255,0.1)" onclick="hideVIPLogin()">
+        <button class="btn" style="background:rgba(255,255,255,0.1); margin-top:10px;" onclick="hideVIPLogin()">
           ← العودة
         </button>
       </div>
     </div>
   </div>
 
-  <!-- 🎮 Main App -->
+  <!-- Main App -->
   <div id="mainApp" style="display:none;">
     
     <!-- Header -->
@@ -481,14 +488,14 @@
       <div id="vipIndicator" style="display:none;">
         <span class="vip-badge">👑 VIP</span>
         <span style="font-size:0.9rem; opacity:0.9">لوحة التحكم الإدارية</span>
-      </div>
-    </header>
+      </div>    </header>
 
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="showSection('profile')">👤 حسابي</button>
       <button class="nav-tab" onclick="showSection('players')">👥 اللاعبين</button>
-      <button class="nav-tab" onclick="showSection('visitors')">🟢 الزوار</button>      <button class="nav-tab" onclick="showSection('chat')">💬 الدردشة</button>
+      <button class="nav-tab" onclick="showSection('visitors')">🟢 الزوار</button>
+      <button class="nav-tab" onclick="showSection('chat')">💬 الدردشة</button>
       <button class="nav-tab" onclick="showSection('stats')">📊 الإحصائيات</button>
       <button class="nav-tab" onclick="showSection('warnings')">⚠️ التحذيرات</button>
       
@@ -502,7 +509,7 @@
 
     <!-- Sections -->
     
-    <!-- 👤 Profile Section -->
+    <!-- Profile Section -->
     <div id="profile" class="section active">
       <div class="card">
         <h3>📝 معلومات حسابي</h3>
@@ -514,11 +521,11 @@
           <label>الاسم في اللعبة</label>
           <input type="text" id="myDisplayName" class="form-control" onchange="updateDisplayName(this.value)">
         </div>
-        <button class="btn btn-primary" onclick="logout()">🚪 تسجيل الخروج</button>
+        <button class="btn btn-danger" onclick="logout()">🚪 تسجيل الخروج</button>
       </div>
     </div>
 
-    <!-- 👥 Players Section -->
+    <!-- Players Section -->
     <div id="players" class="section">
       <div class="card">
         <h3>👥 قائمة اللاعبين (<span id="playersCount">0</span>)</h3>
@@ -526,26 +533,26 @@
       </div>
     </div>
 
-    <!-- 🟢 Visitors Section -->
+    <!-- Visitors Section -->
     <div id="visitors" class="section">
       <div class="card">
         <h3>🟢 المتصلون الآن (<span id="visitorsCount">0</span>)</h3>
-        <div id="visitorsList"></div>
-      </div>
+        <div id="visitorsList"></div>      </div>
     </div>
 
-    <!-- 💬 Chat Section -->
+    <!-- Chat Section -->
     <div id="chat" class="section">
       <div class="card">
-        <h3>💬 الدردشة العامة</h3>        <div id="chatContainer" class="chat-container"></div>
+        <h3>💬 الدردشة العامة</h3>
+        <div id="chatContainer" class="chat-container"></div>
         <div style="display:flex; gap:10px; margin-top:10px;">
           <input type="text" id="chatInput" class="form-control" placeholder="اكتب رسالتك..." onkeypress="if(event.key==='Enter')sendMessage()">
-          <button class="btn btn-primary" onclick="sendMessage()">➤ إرسال</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="sendMessage()">➤</button>
         </div>
       </div>
     </div>
 
-    <!-- 📊 Stats Section -->
+    <!-- Stats Section -->
     <div id="stats" class="section">
       <div class="card">
         <h3>📊 إحصائياتي</h3>
@@ -579,14 +586,14 @@
               <th>فوز</th>
               <th>خسارة</th>
               <th>المرتبة</th>
-              <th>آخر خصم</th>
-            </tr>
+              <th>آخر خصم</th>            </tr>
           </thead>
           <tbody id="allStatsBody"></tbody>
         </table>
       </div>
     </div>
-    <!-- ⚠️ Warnings Section -->
+
+    <!-- Warnings Section -->
     <div id="warnings" class="section">
       <div class="card">
         <h3>⚠️ سجل التحذيرات والإجراءات</h3>
@@ -605,7 +612,7 @@
       </div>
     </div>
 
-    <!-- 📋 VIP: User Data Section -->
+    <!-- VIP: User Data Section -->
     <div id="userData" class="section">
       <div class="card">
         <h3>📋 بيانات جميع المستخدمين</h3>
@@ -625,17 +632,17 @@
       </div>
     </div>
 
-    <!-- 🎮 VIP: Manage Players -->
+    <!-- VIP: Manage Players -->
     <div id="managePlayers" class="section">
       <div class="card">
-        <h3>🎮 إدارة اللاعبين</h3>
-        <div id="managePlayersList"></div>
+        <h3>🎮 إدارة اللاعبين</h3>        <div id="managePlayersList"></div>
       </div>
     </div>
 
-    <!-- 🛡️ VIP: Moderation -->
+    <!-- VIP: Moderation -->
     <div id="moderation" class="section">
-      <div class="card">        <h3>🛡️ لوحة التحكم في التحذيرات</h3>
+      <div class="card">
+        <h3>🛡️ لوحة التحكم في التحذيرات</h3>
         <div class="form-group">
           <label>اختر المستخدم</label>
           <select id="modUserSelect" class="form-control"></select>
@@ -657,13 +664,13 @@
       </div>
     </div>
 
-    <!-- ⚙️ VIP: Site Control -->
+    <!-- VIP: Site Control -->
     <div id="siteControl" class="section">
       <div class="card">
         <h3>⚙️ تحكم في حالة الموقع</h3>
-        <div style="display:flex; align-items:center; gap:15px; margin:20px 0;">
+        <div style="display:flex; align-items:center; gap:15px; margin:20px 0; flex-wrap:wrap;">
           <span id="siteStatusText">الحالة الحالية: <strong style="color:var(--success)">🟢 مفعل</strong></span>
-          <button class="btn btn-danger" id="toggleSiteBtn" onclick="toggleSite()">🔴 تعطيل الموقع</button>
+          <button class="btn btn-danger" id="toggleSiteBtn" onclick="toggleSite()" style="width:auto;">🔴 تعطيل الموقع</button>
         </div>
         <div class="form-group">
           <label>رسالة الصيانة</label>
@@ -673,18 +680,18 @@
       </div>
     </div>
 
-    <!-- 🔐 VIP: Protection -->
+    <!-- VIP: Protection -->
     <div id="protection" class="section">
       <div class="card">
         <h3>🔐 نظام الحماية من التسلل</h3>
-        <p style="margin:15px 0; opacity:0.9;">
-          يعرض المحاولات المشبوهة للدخول من أجهزة أو متصفحات مختلفة عن البصمة الأصلية للمستخدم.
+        <p style="margin:15px 0; opacity:0.9;">          يعرض المحاولات المشبوهة للدخول من أجهزة أو متصفحات مختلفة عن البصمة الأصلية للمستخدم.
         </p>
         <table class="warning-table">
           <thead>
             <tr>
               <th>المستخدم</th>
-              <th>البصمة المسجلة</th>              <th>البصمة الحالية</th>
+              <th>البصمة المسجلة</th>
+              <th>البصمة الحالية</th>
               <th>تاريخ المحاولة</th>
               <th>الإجراء</th>
             </tr>
@@ -697,16 +704,22 @@
   </div>
 
   <script>
-    // ⚙️ Configuration
+    // Configuration
     const SUPABASE_URL = 'https://vtrwdcyjsnyvdtzisucv.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0cndkY3lqc255dmR0emlzdWN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NTExODAsImV4cCI6MjA5NTUyNzE4MH0.p908XmhnvEGiixWDM04eBeXL1vxLLg-dsxCoQ8CMD1s';
     const VIP_RAW_URL = 'https://gist.githubusercontent.com/HABGIT286/675ff47c78ff90ac39a07f349b8af32e/raw/f7637e33256bc7497a7c6f193d952934e9435c55/SS';
 
-    // 🌐 Initialize Supabase
-    const { createClient } = supabase;
-    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Initialize Supabase
+    let db;
+    try {
+      const { createClient } = supabase;
+      db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('✅ Supabase connected');
+    } catch (error) {
+      console.error('❌ Supabase connection failed:', error);
+    }
 
-    // 👤 Current User State
+    // Current User State
     let currentUser = null;
     let isVIP = false;
     let deviceFingerprint = null;
@@ -716,14 +729,20 @@
     let warningsSubscription = null;
     let settingsSubscription = null;
 
-    // 🎯 Initialize App
+    // Initialize App
     document.addEventListener('DOMContentLoaded', async () => {
-      await initFingerprint();
-      checkSiteStatus();
-      checkSession();
+      console.log('🚀 App initializing...');
+      try {
+        await initFingerprint();        await checkSiteStatus();
+        await checkSession();
+        console.log('✅ App initialized');
+      } catch (error) {
+        console.error('❌ Initialization error:', error);
+        showNotification('خطأ في تحميل التطبيق', 'error');
+      }
     });
 
-    // 🔐 Device Fingerprinting
+    // Device Fingerprinting
     async function initFingerprint() {
       try {
         const fp = await FingerprintJS.load();
@@ -733,9 +752,10 @@
       } catch (err) {
         console.error('❌ Fingerprint error:', err);
         deviceFingerprint = 'unknown_' + Math.random().toString(36).substr(2, 9);
-      }    }
+      }
+    }
 
-    // 🔔 Show Notification
+    // Show Notification
     function showNotification(message, type = 'success') {
       const notif = document.getElementById('notification');
       notif.textContent = message;
@@ -743,13 +763,17 @@
       setTimeout(() => notif.classList.remove('show'), 4000);
     }
 
-    // 🚫 Check if Site is Enabled
+    // Check if Site is Enabled
     async function checkSiteStatus() {
       try {
-        const { data, error } = await db.from('site_settings').select('*').eq('id', 1).single();
-        if (error) throw error;
+        if (!db) return true;
+        const { data, error } = await db.from('site_settings').select('*').eq('id', 1).maybeSingle();
+        if (error) {
+          console.error('Site status check error:', error);
+          return true;
+        }
         
-        if (!data.is_enabled && !isVIP) {
+        if (data && !data.is_enabled && !isVIP) {
           document.getElementById('maintenanceMsg').textContent = data.maintenance_message || 'الموقع تحت الصيانة';
           document.getElementById('siteDisabled').classList.add('active');
           return false;
@@ -757,98 +781,134 @@
         return true;
       } catch (err) {
         console.error('Error checking site status:', err);
-        return true; // Allow access on error
-      }
-    }
+        return true;
+      }    }
 
-    // 👤 Check Existing Session
+    // Check Existing Session
     async function checkSession() {
-      const saved = localStorage.getItem('harfGame_user');
-      const savedVIP = localStorage.getItem('harfGame_vip');
-      
-      if (savedVIP === 'true') {
-        isVIP = true;
-        currentUser = JSON.parse(saved);
-        await afterLogin();
-      } else if (saved) {
-        currentUser = JSON.parse(saved);
-        // Verify user still exists and is not banned
-        const { data, error } = await db.from('users')
-          .select('*').eq('id', currentUser.id).single();
-        if (!error && data && data.status === 'active') {
+      try {
+        const saved = localStorage.getItem('harfGame_user');
+        const savedVIP = localStorage.getItem('harfGame_vip');
+        
+        if (savedVIP === 'true') {
+          isVIP = true;
+          currentUser = JSON.parse(saved);
           await afterLogin();
-        } else {
-          logout();
+        } else if (saved) {
+          currentUser = JSON.parse(saved);
+          if (db) {
+            const { data, error } = await db.from('users')
+              .select('*').eq('id', currentUser.id).maybeSingle();
+            if (!error && data && data.status === 'active') {
+              await afterLogin();
+            } else {
+              logout();
+            }
+          } else {
+            await afterLogin();
+          }
         }
+      } catch (err) {
+        console.error('Session check error:', err);
       }
     }
-    // ✨ Sign Up Handler
+
+    // Sign Up Handler
     async function handleSignup() {
-      const username = document.getElementById('signupUsername').value.trim();
-      const password = document.getElementById('signupPassword').value;
-      const displayName = document.getElementById('signupDisplayName').value.trim() || username;
+      try {
+        const usernameInput = document.getElementById('signupUsername');
+        const passwordInput = document.getElementById('signupPassword');
+        const displayNameInput = document.getElementById('signupDisplayName');
+        
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        const displayName = displayNameInput.value.trim() || username;
 
-      if (!username || !password) {
-        showNotification('⚠️ يرجى ملء جميع الحقول المطلوبة', 'error');
-        return;
+        console.log('Signup attempt:', { username, displayName });
+
+        if (!username || !password) {
+          showNotification('⚠️ يرجى ملء جميع الحقول المطلوبة', 'error');
+          return;
+        }
+
+        if (!db) {          showNotification('❌ خطأ في الاتصال بقاعدة البيانات', 'error');
+          return;
+        }
+
+        // Check username uniqueness
+        const { data: existing } = await db.from('users').select('id').eq('username', username).maybeSingle();
+        if (existing) {
+          showNotification('❌ اسم المستخدم مستخدم مسبقاً!', 'error');
+          return;
+        }
+
+        // Create user
+        const { data, error } = await db.from('users').insert([{
+          username,
+          password,
+          display_name: displayName,
+          device_fingerprint: deviceFingerprint,
+          role: 'user'
+        }]).select().single();
+
+        if (error) {
+          console.error('Signup error:', error);
+          showNotification('❌ خطأ في إنشاء الحساب: ' + error.message, 'error');
+          return;
+        }
+
+        // Create stats entry
+        await db.from('stats').insert([{
+          user_id: data.id,
+          username: username,
+          wins: 0,
+          losses: 0,
+          rank: 0
+        }]);
+
+        // Auto login
+        currentUser = data;
+        localStorage.setItem('harfGame_user', JSON.stringify(data));
+        showNotification('✅ تم إنشاء الحساب بنجاح! 🎉', 'success');
+        await afterLogin();
+      } catch (err) {
+        console.error('Signup error:', err);
+        showNotification('❌ خطأ غير متوقع: ' + err.message, 'error');
       }
-
-      // Check username uniqueness
-      const { data: existing } = await db.from('users').select('id').eq('username', username).maybeSingle();
-      if (existing) {
-        showNotification('❌ اسم المستخدم مستخدم مسبقاً!', 'error');
-        return;
-      }
-
-      // Create user
-      const { data, error } = await db.from('users').insert([{
-        username,
-        password, // ⚠️ In production, hash passwords!
-        display_name: displayName,
-        device_fingerprint: deviceFingerprint,
-        role: 'user'
-      }]).select().single();
-
-      if (error) {
-        showNotification('❌ خطأ في إنشاء الحساب: ' + error.message, 'error');
-        return;
-      }
-
-      // Create stats entry
-      await db.from('stats').insert([{
-        user_id: data.id,
-        username: username,
-        wins: 0,
-        losses: 0,
-        rank: 0
-      }]);
-
-      // Auto login
-      currentUser = data;
-      localStorage.setItem('harfGame_user', JSON.stringify(data));
-      showNotification('✅ تم إنشاء الحساب بنجاح! 🎉', 'success');
-      await afterLogin();
     }
 
-    // 👑 Show VIP Login
-    function showVIPLogin() {      document.getElementById('signupForm').style.display = 'none';
-      document.getElementById('vipLoginForm').style.display = 'block';
+    // Show VIP Login
+    function showVIPLogin() {
+      console.log('Showing VIP login form');
+      document.getElementById('signupForm').style.display = 'none';      document.getElementById('vipLoginForm').style.display = 'block';
     }
 
     function hideVIPLogin() {
+      console.log('Hiding VIP login form');
       document.getElementById('signupForm').style.display = 'block';
       document.getElementById('vipLoginForm').style.display = 'none';
+      // Clear inputs
+      document.getElementById('vipPassword').value = '';
+      document.getElementById('vipCode').value = '';
     }
 
-    // 🔓 VIP Login Handler
-    async function handleVIPLockin() {
-      const inputPass = document.getElementById('vipPassword').value;
-      const inputCode = document.getElementById('vipCode').value;
-
+    // VIP Login Handler
+    async function handleVIPLogin() {
       try {
+        const inputPass = document.getElementById('vipPassword').value;
+        const inputCode = document.getElementById('vipCode').value;
+
+        console.log('VIP login attempt');
+
+        if (!inputPass || !inputCode) {
+          showNotification('⚠️ يرجى ملء جميع الحقول', 'error');
+          return;
+        }
+
         // Fetch VIP credentials from raw URL
         const response = await fetch(VIP_RAW_URL);
         const rawText = await response.text();
+        console.log('Raw VIP data:', rawText);
         
         // Parse format: 【S】ONX.COM【S】and【P】ONX【P】
         const sMatch = rawText.match(/【S】(.*?)【S】/);
@@ -856,6 +916,8 @@
         
         const validUser = sMatch?.[1]?.trim();
         const validPass = pMatch?.[1]?.trim();
+
+        console.log('Parsed VIP:', { validUser, validPass });
 
         if (inputPass === validPass && inputCode === validUser) {
           // Create VIP session
@@ -867,8 +929,7 @@
             role: 'vip'
           };
           localStorage.setItem('harfGame_user', JSON.stringify(currentUser));
-          localStorage.setItem('harfGame_vip', 'true');
-          
+          localStorage.setItem('harfGame_vip', 'true');          
           showNotification('👑 مرحباً بك في لوحة التحكم VIP! ✨', 'success');
           await afterLogin();
         } else {
@@ -876,197 +937,226 @@
         }
       } catch (err) {
         console.error('VIP Auth Error:', err);
-        showNotification('❌ خطأ في التحقق من بيانات VIP', 'error');
+        showNotification('❌ خطأ في التحقق من بيانات VIP: ' + err.message, 'error');
       }
     }
 
-    // 🎮 After Login Setup    async function afterLogin() {
-      document.getElementById('authScreen').style.display = 'none';
-      document.getElementById('mainApp').style.display = 'block';
-      
-      // Update UI
-      const displayName = currentUser.display_name || currentUser.username;
-      document.getElementById('userDisplay').textContent = `👤 ${displayName}`;
-      document.getElementById('myUsername').value = currentUser.username;
-      document.getElementById('myDisplayName').value = displayName;
-      
-      if (isVIP) {
-        document.getElementById('vipIndicator').style.display = 'block';
-        // Show VIP tabs
-        document.querySelectorAll('.vip-only').forEach(el => el.style.display = 'inline-block');
-        document.getElementById('allStatsCard').style.display = 'block';
-      }
-      
-      // Load initial data
-      loadPlayers();
-      loadVisitors();
-      loadChat();
-      loadStats();
-      loadWarnings();
-      
-      if (isVIP) {
-        loadUserData();
-        loadProtectionLogs();
-      }
-      
-      // Setup Realtime Subscriptions
-      setupRealtimeSubscriptions();
-      
-      // Update online status
-      updateOnlineStatus(true);
-    }
-
-    // 🔄 Setup Realtime Subscriptions
-    function setupRealtimeSubscriptions() {
-      // Chat messages
-      chatSubscription = db.channel('chat:public')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-          if (!payload.new.is_deleted) appendChatMessage(payload.new);
-        })
-        .subscribe();
-
-      // Visitors
-      visitorsSubscription = db.channel('visitors:public')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'visitors' }, () => {
-          loadVisitors();
-        })        .subscribe();
-
-      // Stats
-      statsSubscription = db.channel('stats:public')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'stats' }, () => {
-          loadStats();
-          if (isVIP) loadUserData();
-        })
-        .subscribe();
-
-      // Warnings
-      warningsSubscription = db.channel('warnings:public')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'warnings' }, () => {
-          loadWarnings();
-          if (isVIP) loadProtectionLogs();
-        })
-        .subscribe();
-
-      // Site Settings
-      settingsSubscription = db.channel('settings:public')
-        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'site_settings' }, async payload => {
-          if (!payload.new.is_enabled && !isVIP) {
-            document.getElementById('maintenanceMsg').textContent = payload.new.maintenance_message || 'الموقع معطل';
-            document.getElementById('siteDisabled').classList.add('active');
-          } else if (payload.new.is_enabled) {
-            document.getElementById('siteDisabled').classList.remove('active');
-          }
-        })
-        .subscribe();
-
-      // Users (for player list updates)
-      db.channel('users:public')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => {
-          loadPlayers();
-          if (isVIP) {
-            loadUserData();
-            updateModUserSelect();
-          }
-        })
-        .subscribe();
-    }
-
-    // 🌐 Update Online Status
-    async function updateOnlineStatus(online) {
-      if (!currentUser || currentUser.id === 'vip_admin') return;
-      
-      // Upsert visitor record
-      await db.from('visitors').upsert({
-        user_id: currentUser.id,
-        username: currentUser.display_name || currentUser.username,        device_fingerprint: deviceFingerprint,
-        is_online: online,
-        last_activity: new Date().toISOString()
-      }, { onConflict: 'user_id' });
-    }
-
-    // 📋 Load Players List
-    async function loadPlayers() {
-      const { data, error } = await db.from('users')
-        .select('id, username, display_name, status, created_at')
-        .neq('role', 'vip')
-        .order('created_at', { ascending: false });
-      
-      if (error) { console.error('Load players error:', error); return; }
-      
-      document.getElementById('playersCount').textContent = data?.length || 0;
-      const container = document.getElementById('playersList');
-      container.innerHTML = '';
-      
-      (data || []).forEach(player => {
-        const statusClass = player.status === 'active' ? 'status-online' : player.status === 'muted' ? 'status-offline' : 'status-offline';
-        const statusText = player.status === 'active' ? 'نشط' : player.status === 'muted' ? 'مكتوم' : 'محظور';
+    // After Login Setup
+    async function afterLogin() {
+      console.log('After login setup');
+      try {
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
         
-        container.innerHTML += `
-          <div class="player-item">
-            <span>
-              <span class="status-dot ${statusClass}"></span>
-              ${player.display_name || player.username}
-              <small style="opacity:0.7; margin-right:8px;">(@${player.username})</small>
-            </span>
-            <span class="badge badge-${player.status === 'active' ? 'active' : player.status === 'muted' ? 'muted' : 'banned'}">
-              ${statusText}
-            </span>
-          </div>
-        `;
-      });
+        // Update UI
+        const displayName = currentUser.display_name || currentUser.username;
+        document.getElementById('userDisplay').textContent = `👤 ${displayName}`;
+        document.getElementById('myUsername').value = currentUser.username;
+        document.getElementById('myDisplayName').value = displayName;
+        
+        if (isVIP) {
+          document.getElementById('vipIndicator').style.display = 'block';
+          // Show VIP tabs
+          document.querySelectorAll('.vip-only').forEach(el => el.style.display = 'inline-block');
+          document.getElementById('allStatsCard').style.display = 'block';
+        }
+        
+        // Load initial data
+        await loadPlayers();
+        await loadVisitors();
+        await loadChat();
+        await loadStats();
+        await loadWarnings();
+        
+        if (isVIP) {
+          await loadUserData();
+          await loadProtectionLogs();
+        }
+        
+        // Setup Realtime Subscriptions
+        setupRealtimeSubscriptions();
+        
+        // Update online status
+        await updateOnlineStatus(true);
+      } catch (err) {        console.error('After login error:', err);
+      }
     }
 
-    // 🟢 Load Visitors
+    // Setup Realtime Subscriptions
+    function setupRealtimeSubscriptions() {
+      if (!db) return;
+
+      // Chat messages
+      try {
+        chatSubscription = db.channel('chat:public')
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+            if (!payload.new.is_deleted) appendChatMessage(payload.new);
+          })
+          .subscribe();
+
+        // Visitors
+        visitorsSubscription = db.channel('visitors:public')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'visitors' }, () => {
+            loadVisitors();
+          })
+          .subscribe();
+
+        // Stats
+        statsSubscription = db.channel('stats:public')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'stats' }, () => {
+            loadStats();
+            if (isVIP) loadUserData();
+          })
+          .subscribe();
+
+        // Warnings
+        warningsSubscription = db.channel('warnings:public')
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'warnings' }, () => {
+            loadWarnings();
+            if (isVIP) loadProtectionLogs();
+          })
+          .subscribe();
+
+        // Site Settings
+        settingsSubscription = db.channel('settings:public')
+          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'site_settings' }, async payload => {
+            if (!payload.new.is_enabled && !isVIP) {
+              document.getElementById('maintenanceMsg').textContent = payload.new.maintenance_message || 'الموقع معطل';
+              document.getElementById('siteDisabled').classList.add('active');
+            } else if (payload.new.is_enabled) {
+              document.getElementById('siteDisabled').classList.remove('active');
+            }
+          })
+          .subscribe();
+        // Users
+        db.channel('users:public')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => {
+            loadPlayers();
+            if (isVIP) {
+              loadUserData();
+              updateModUserSelect();
+            }
+          })
+          .subscribe();
+      } catch (err) {
+        console.error('Subscription error:', err);
+      }
+    }
+
+    // Update Online Status
+    async function updateOnlineStatus(online) {
+      if (!currentUser || currentUser.id === 'vip_admin' || !db) return;
+      
+      try {
+        await db.from('visitors').upsert({
+          user_id: currentUser.id,
+          username: currentUser.display_name || currentUser.username,
+          device_fingerprint: deviceFingerprint,
+          is_online: online,
+          last_activity: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+      } catch (err) {
+        console.error('Update status error:', err);
+      }
+    }
+
+    // Load Players List
+    async function loadPlayers() {
+      if (!db) return;
+      try {
+        const { data, error } = await db.from('users')
+          .select('id, username, display_name, status, created_at')
+          .neq('role', 'vip')
+          .order('created_at', { ascending: false });
+        
+        if (error) { console.error('Load players error:', error); return; }
+        
+        document.getElementById('playersCount').textContent = data?.length || 0;
+        const container = document.getElementById('playersList');
+        container.innerHTML = '';
+        
+        (data || []).forEach(player => {
+          const statusClass = player.status === 'active' ? 'status-online' : 'status-offline';          const statusText = player.status === 'active' ? 'نشط' : player.status === 'muted' ? 'مكتوم' : 'محظور';
+          
+          container.innerHTML += `
+            <div class="player-item">
+              <span>
+                <span class="status-dot ${statusClass}"></span>
+                ${player.display_name || player.username}
+                <small style="opacity:0.7; margin-right:8px;">(@${player.username})</small>
+              </span>
+              <span class="badge badge-${player.status === 'active' ? 'active' : player.status === 'muted' ? 'muted' : 'banned'}">
+                ${statusText}
+              </span>
+            </div>
+          `;
+        });
+      } catch (err) {
+        console.error('Load players error:', err);
+      }
+    }
+
+    // Load Visitors
     async function loadVisitors() {
-      const { data, error } = await db.from('visitors')
-        .select('*, users(device_fingerprint)')
-        .eq('is_online', true)
-        .order('last_activity', { ascending: false });
-      
-      if (error) { console.error('Load visitors error:', error); return; }
-      
-      document.getElementById('visitorsCount').textContent = data?.length || 0;
-      const container = document.getElementById('visitorsList');
-      container.innerHTML = '';      
-      (data || []).forEach(visitor => {
-        container.innerHTML += `
-          <div class="player-item">
-            <span>
-              <span class="status-dot status-online"></span>
-              ${visitor.username}
-              ${visitor.user_id === currentUser?.id ? ' <small style="color:var(--accent)">(أنت)</small>' : ''}
-            </span>
-            <small style="opacity:0.7">${new Date(visitor.last_activity).toLocaleTimeString('ar-EG')}</small>
-          </div>
-        `;
-      });
-    }
+      if (!db) return;
+      try {
+        const { data, error } = await db.from('visitors')
+          .select('*, users(device_fingerprint)')
+          .eq('is_online', true)
+          .order('last_activity', { ascending: false });
+        
+        if (error) { console.error('Load visitors error:', error); return; }
+        
+        document.getElementById('visitorsCount').textContent = data?.length || 0;
+        const container = document.getElementById('visitorsList');
+        container.innerHTML = '';
+        
+        (data || []).forEach(visitor => {
+          container.innerHTML += `
+            <div class="player-item">
+              <span>
+                <span class="status-dot status-online"></span>
+                ${visitor.username}
+                ${visitor.user_id === currentUser?.id ? ' <small style="color:var(--accent)">(أنت)</small>' : ''}
+              </span>
+              <small style="opacity:0.7">${new Date(visitor.last_activity).toLocaleTimeString('ar-EG')}</small>
+            </div>
+          `;
+        });
+      } catch (err) {
+        console.error('Load visitors error:', err);
+      }    }
 
-    // 💬 Load Chat Messages
+    // Load Chat Messages
     async function loadChat() {
-      const { data, error } = await db.from('messages')
-        .select('*, users(status)')
-        .eq('is_deleted', false)
-        .order('timestamp', { ascending: true })
-        .limit(50);
-      
-      if (error) { console.error('Load chat error:', error); return; }
-      
-      const container = document.getElementById('chatContainer');
-      container.innerHTML = '';
-      
-      (data || []).forEach(msg => {
-        // Check if current user is muted
+      if (!db) return;
+      try {
+        const { data, error } = await db.from('messages')
+          .select('*, users(status)')
+          .eq('is_deleted', false)
+          .order('timestamp', { ascending: true })
+          .limit(50);
+        
+        if (error) { console.error('Load chat error:', error); return; }
+        
+        const container = document.getElementById('chatContainer');
+        container.innerHTML = '';
+        
+        // Check if muted
         if (currentUser?.status === 'muted' && currentUser?.id !== 'vip_admin') {
           container.innerHTML = '<div style="text-align:center; padding:20px; opacity:0.8">🔇 أنت مكتوم حالياً، لا يمكنك إرسال رسائل</div>';
           document.getElementById('chatInput').disabled = true;
           return;
         }
-        appendChatMessage(msg);
-      });
-      
-      // Scroll to bottom
-      container.scrollTop = container.scrollHeight;
+        
+        (data || []).forEach(msg => {
+          appendChatMessage(msg);
+        });
+        
+        container.scrollTop = container.scrollHeight;
+      } catch (err) {
+        console.error('Load chat error:', err);
+      }
     }
 
     function appendChatMessage(msg) {
@@ -1076,304 +1166,338 @@
       const div = document.createElement('div');
       div.className = `chat-message ${isOwn ? 'own' : 'other'}`;
       div.innerHTML = `
-        <div class="chat-meta">          <strong>${msg.username}</strong> 
+        <div class="chat-meta">
+          <strong>${escapeHtml(msg.username)}</strong> 
           <span style="opacity:0.7; margin-right:8px">•</span>
           <small>${new Date(msg.timestamp).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}</small>
         </div>
         <div>${escapeHtml(msg.message)}</div>
       `;
       container.appendChild(div);
-      container.scrollTop = container.scrollHeight;
-    }
+      container.scrollTop = container.scrollHeight;    }
 
-    // 💬 Send Message
+    // Send Message
     async function sendMessage() {
-      const input = document.getElementById('chatInput');
-      const message = input.value.trim();
-      
-      if (!message || !currentUser) return;
-      if (currentUser.status === 'muted' && !isVIP) {
-        showNotification('🔇 لا يمكنك إرسال رسائل وأنت مكتوم', 'warning');
-        return;
+      try {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        
+        if (!message || !currentUser || !db) return;
+        if (currentUser.status === 'muted' && !isVIP) {
+          showNotification('🔇 لا يمكنك إرسال رسائل وأنت مكتوم', 'warning');
+          return;
+        }
+        
+        const { error } = await db.from('messages').insert({
+          user_id: currentUser.id,
+          username: currentUser.display_name || currentUser.username,
+          message: message
+        });
+        
+        if (error) {
+          showNotification('❌ فشل إرسال الرسالة', 'error');
+          return;
+        }
+        
+        input.value = '';
+      } catch (err) {
+        console.error('Send message error:', err);
       }
-      
-      const { error } = await db.from('messages').insert({
-        user_id: currentUser.id,
-        username: currentUser.display_name || currentUser.username,
-        message: message
-      });
-      
-      if (error) {
-        showNotification('❌ فشل إرسال الرسالة', 'error');
-        return;
-      }
-      
-      input.value = '';
-      showNotification('✓ تم الإرسال', 'success');
     }
 
-    // 📊 Load Stats
+    // Load Stats
     async function loadStats() {
-      if (!currentUser) return;
+      if (!currentUser || !db) return;
       
-      // Load personal stats
-      const { data: myStats, error } = await db.from('stats')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .maybeSingle();
-      
-      if (myStats) {
-        document.getElementById('myWins').textContent = myStats.wins;
-        document.getElementById('myLosses').textContent = myStats.losses;
-        document.getElementById('myRank').textContent = myStats.rank || '-';        document.getElementById('myLastOpponent').textContent = myStats.last_opponent || '-';
+      try {
+        const { data: myStats, error } = await db.from('stats')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .maybeSingle();
+        
+        if (myStats) {
+          document.getElementById('myWins').textContent = myStats.wins;
+          document.getElementById('myLosses').textContent = myStats.losses;
+          document.getElementById('myRank').textContent = myStats.rank || '-';
+          document.getElementById('myLastOpponent').textContent = myStats.last_opponent || '-';
+        }
+        
+        if (isVIP) {
+          const { data: allStats } = await db.from('stats').select('*').order('rank', { ascending: false });          const tbody = document.getElementById('allStatsBody');
+          tbody.innerHTML = '';
+          
+          (allStats || []).forEach(stat => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${escapeHtml(stat.username)}</td>
+                <td style="color:var(--success)">${stat.wins}</td>
+                <td style="color:var(--danger)">${stat.losses}</td>
+                <td><strong>${stat.rank || '-'}</strong></td>
+                <td>${stat.last_opponent || '-'}</td>
+              </tr>
+            `;
+          });
+        }
+      } catch (err) {
+        console.error('Load stats error:', err);
       }
-      
-      // VIP: Load all stats
-      if (isVIP) {
-        const { data: allStats } = await db.from('stats').select('*').order('rank', { ascending: false });
-        const tbody = document.getElementById('allStatsBody');
+    }
+
+    // Load Warnings
+    async function loadWarnings() {
+      if (!db) return;
+      try {
+        const { data, error } = await db.from('warnings')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(20);
+        
+        if (error) { console.error('Load warnings error:', error); return; }
+        
+        const tbody = document.getElementById('warningsBody');
         tbody.innerHTML = '';
         
-        (allStats || []).forEach(stat => {
+        (data || []).forEach(warn => {
+          const actionBadge = warn.action === 'banned' ? 'badge-banned' : warn.action === 'muted' ? 'badge-muted' : 'badge-active';
+          const actionText = warn.action === 'banned' ? '🚫 محظور' : warn.action === 'muted' ? '🔇 مكتوم' : warn.action === 'unbanned' ? '✅ فك حظر' : '✅ فك كتم';
+          
           tbody.innerHTML += `
             <tr>
-              <td>${stat.username}</td>
-              <td style="color:var(--success)">${stat.wins}</td>
-              <td style="color:var(--danger)">${stat.losses}</td>
-              <td><strong>${stat.rank || '-'}</strong></td>
-              <td>${stat.last_opponent || '-'}</td>
+              <td><strong>${escapeHtml(warn.username)}</strong></td>
+              <td><span class="badge ${actionBadge}">${actionText}</span></td>
+              <td>${warn.reason || '-'}</td>
+              <td>${warn.admin_name || 'نظام'}</td>
+              <td><small>${new Date(warn.created_at).toLocaleDateString('ar-EG')}</small></td>
             </tr>
           `;
         });
-      }
+      } catch (err) {
+        console.error('Load warnings error:', err);      }
     }
 
-    // ⚠️ Load Warnings
-    async function loadWarnings() {
-      const { data, error } = await db.from('warnings')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(20);
-      
-      if (error) { console.error('Load warnings error:', error); return; }
-      
-      const tbody = document.getElementById('warningsBody');
-      tbody.innerHTML = '';
-      
-      (data || []).forEach(warn => {
-        const actionBadge = warn.action === 'banned' ? 'badge-banned' : warn.action === 'muted' ? 'badge-muted' : 'badge-active';
-        const actionText = warn.action === 'banned' ? '🚫 محظور' : warn.action === 'muted' ? '🔇 مكتوم' : warn.action === 'unbanned' ? '✅ فك حظر' : '✅ فك كتم';
-        
-        tbody.innerHTML += `
-          <tr>
-            <td><strong>${warn.username}</strong></td>
-            <td><span class="badge ${actionBadge}">${actionText}</span></td>
-            <td>${warn.reason || '-'}</td>
-            <td>${warn.admin_name || 'نظام'}</td>
-            <td><small>${new Date(warn.created_at).toLocaleDateString('ar-EG')}</small></td>
-          </tr>
-        `;
-      });
-    }
-    // 📋 VIP: Load User Data
+    // VIP: Load User Data
     async function loadUserData() {
-      if (!isVIP) return;
+      if (!isVIP || !db) return;
       
-      const { data, error } = await db.from('users').select('*').order('created_at', { ascending: false });
-      if (error) { console.error('Load user data error:', error); return; }
-      
-      const tbody = document.getElementById('userDataBody');
-      tbody.innerHTML = '';
-      
-      (data || []).forEach(user => {
-        const statusBadge = user.status === 'active' ? 'badge-active' : user.status === 'muted' ? 'badge-muted' : 'badge-banned';
-        tbody.innerHTML += `
-          <tr>
-            <td><small>${user.id.substr(0,8)}...</small></td>
-            <td><strong>${user.username}</strong></td>
-            <td><code style="font-size:0.8rem">${user.password}</code></td>
-            <td>${user.display_name || '-'}</td>
-            <td><small>${user.device_fingerprint?.substr(0,12)}...</small></td>
-            <td><span class="badge ${statusBadge}">${user.status}</span></td>
-          </tr>
-        `;
-      });
-      
-      // Also update manage players list and mod select
-      loadManagePlayers();
-      updateModUserSelect();
-    }
-
-    // 🎮 VIP: Load Manage Players
-    async function loadManagePlayers() {
-      if (!isVIP) return;
-      
-      const { data } = await db.from('users').select('id, username, display_name, status').neq('role', 'vip');
-      const container = document.getElementById('managePlayersList');
-      container.innerHTML = '';
-      
-      (data || []).forEach(player => {
-        container.innerHTML += `
-          <div class="player-item">
-            <span>
-              <strong>${player.display_name || player.username}</strong>
-              <small style="opacity:0.7; margin-right:8px;">(@${player.username})</small>
-            </span>
-            <div>
-              <button class="btn btn-success" style="padding:5px 12px; font-size:0.85rem" onclick="editPlayerName('${player.id}')">✏️ تعديل</button>
-              <button class="btn btn-danger" style="padding:5px 12px; font-size:0.85rem" onclick="quickBan('${player.id}', '${player.username}')">🚫 حظر</button>
-            </div>
-          </div>        `;
-      });
-    }
-
-    // 🛡️ VIP: Update Moderation User Select
-    async function updateModUserSelect() {
-      if (!isVIP) return;
-      
-      const { data } = await db.from('users').select('id, username, display_name').neq('role', 'vip');
-      const select = document.getElementById('modUserSelect');
-      select.innerHTML = '<option value="">-- اختر مستخدم --</option>';
-      
-      (data || []).forEach(user => {
-        select.innerHTML += `<option value="${user.id}">${user.display_name || user.username} (@${user.username})</option>`;
-      });
-    }
-
-    // 🛡️ VIP: Apply Moderation Action
-    async function applyModeration() {
-      const userId = document.getElementById('modUserSelect').value;
-      const action = document.getElementById('modAction').value;
-      const reason = document.getElementById('modReason').value.trim();
-      
-      if (!userId) { showNotification('⚠️ اختر مستخدماً أولاً', 'warning'); return; }
-      
-      // Get user info
-      const { data: user } = await db.from('users').select('username, status').eq('id', userId).single();
-      if (!user) return;
-      
-      // Update user status
-      let newStatus = user.status;
-      if (action === 'muted') newStatus = 'muted';
-      else if (action === 'banned') newStatus = 'banned';
-      else if (action === 'unmuted' || action === 'unbanned') newStatus = 'active';
-      
-      await db.from('users').update({ status: newStatus }).eq('id', userId);
-      
-      // Log warning
-      await db.from('warnings').insert({
-        user_id: userId,
-        username: user.username,
-        action: action,
-        reason: reason || 'بدون سبب',
-        admin_name: currentUser?.display_name || 'VIP_ADMIN'
-      });
-      
-      showNotification(`✅ تم تطبيق الإجراء: ${action} على ${user.username}`, 'success');
-      loadWarnings();
-      loadPlayers();
-      document.getElementById('modReason').value = '';    }
-
-    // ⚙️ VIP: Toggle Site Status
-    async function toggleSite() {
-      const btn = document.getElementById('toggleSiteBtn');
-      const statusText = document.getElementById('siteStatusText');
-      
-      // Get current status
-      const { data: current } = await db.from('site_settings').select('is_enabled').eq('id', 1).single();
-      const newStatus = !current.is_enabled;
-      
-      await db.from('site_settings').update({
-        is_enabled: newStatus,
-        updated_at: new Date().toISOString()
-      }).eq('id', 1);
-      
-      btn.textContent = newStatus ? '🔴 تعطيل الموقع' : '🟢 تفعيل الموقع';
-      statusText.innerHTML = `الحالة الحالية: <strong style="color:${newStatus ? 'var(--success)' : 'var(--danger)'}">${newStatus ? '🟢 مفعل' : '🔴 معطل'}</strong>`;
-      
-      showNotification(newStatus ? '✅ تم تفعيل الموقع' : '⚠️ تم تعطيل الموقع', newStatus ? 'success' : 'warning');
-    }
-
-    // ⚙️ VIP: Update Maintenance Message
-    async function updateMaintenanceMsg() {
-      const msg = document.getElementById('maintenanceMessage').value.trim();
-      if (!msg) { showNotification('⚠️ اكتب رسالة أولاً', 'warning'); return; }
-      
-      await db.from('site_settings').update({
-        maintenance_message: msg,
-        updated_at: new Date().toISOString()
-      }).eq('id', 1);
-      
-      showNotification('💾 تم حفظ رسالة الصيانة', 'success');
-    }
-
-    // 🔐 VIP: Load Protection Logs (Device Fingerprint Mismatches)
-    async function loadProtectionLogs() {
-      if (!isVIP) return;
-      
-      // This is a simplified example - in production, you'd log fingerprint mismatches separately
-      const { data: users } = await db.from('users').select('id, username, device_fingerprint');
-      const tbody = document.getElementById('protectionBody');
-      tbody.innerHTML = '';
-      
-      // Simulate some protection logs (in real app, you'd have a separate table for access attempts)
-      (users || []).forEach(user => {
-        if (user.device_fingerprint && user.device_fingerprint !== 'unknown_' && Math.random() > 0.7) {
+      try {
+        const { data, error } = await db.from('users').select('*').order('created_at', { ascending: false });
+        if (error) { console.error('Load user data error:', error); return; }
+        
+        const tbody = document.getElementById('userDataBody');
+        tbody.innerHTML = '';
+        
+        (data || []).forEach(user => {
+          const statusBadge = user.status === 'active' ? 'badge-active' : user.status === 'muted' ? 'badge-muted' : 'badge-banned';
           tbody.innerHTML += `
             <tr>
-              <td><strong>${user.username}</strong></td>              <td><small>${user.device_fingerprint.substr(0,16)}...</small></td>
-              <td><small style="color:var(--warning)">مختلف</small></td>
-              <td><small>${new Date(Date.now() - Math.random()*86400000).toLocaleString('ar-EG')}</small></td>
-              <td><span class="badge badge-muted">تم المراجعة</span></td>
+              <td><small>${user.id.substr(0,8)}...</small></td>
+              <td><strong>${escapeHtml(user.username)}</strong></td>
+              <td><code style="font-size:0.8rem">${escapeHtml(user.password)}</code></td>
+              <td>${escapeHtml(user.display_name || '-')}</td>
+              <td><small>${user.device_fingerprint?.substr(0,12)}...</small></td>
+              <td><span class="badge ${statusBadge}">${user.status}</span></td>
             </tr>
           `;
+        });
+        
+        loadManagePlayers();
+        updateModUserSelect();
+      } catch (err) {
+        console.error('Load user data error:', err);
+      }
+    }
+
+    // VIP: Load Manage Players
+    async function loadManagePlayers() {
+      if (!isVIP || !db) return;
+      
+      try {
+        const { data } = await db.from('users').select('id, username, display_name, status').neq('role', 'vip');
+        const container = document.getElementById('managePlayersList');
+        container.innerHTML = '';
+        
+        (data || []).forEach(player => {
+          container.innerHTML += `
+            <div class="player-item">
+              <span>
+                <strong>${escapeHtml(player.display_name || player.username)}</strong>
+                <small style="opacity:0.7; margin-right:8px;">(@${escapeHtml(player.username)})</small>              </span>
+              <div>
+                <button class="btn btn-success" style="padding:5px 12px; font-size:0.85rem; width:auto;" onclick="editPlayerName('${player.id}')">✏️</button>
+                <button class="btn btn-danger" style="padding:5px 12px; font-size:0.85rem; width:auto;" onclick="quickBan('${player.id}', '${escapeHtml(player.username)}')">🚫</button>
+              </div>
+            </div>
+          `;
+        });
+      } catch (err) {
+        console.error('Load manage players error:', err);
+      }
+    }
+
+    // VIP: Update Moderation User Select
+    async function updateModUserSelect() {
+      if (!isVIP || !db) return;
+      
+      try {
+        const { data } = await db.from('users').select('id, username, display_name').neq('role', 'vip');
+        const select = document.getElementById('modUserSelect');
+        select.innerHTML = '<option value="">-- اختر مستخدم --</option>';
+        
+        (data || []).forEach(user => {
+          select.innerHTML += `<option value="${user.id}">${escapeHtml(user.display_name || user.username)} (@${escapeHtml(user.username)})</option>`;
+        });
+      } catch (err) {
+        console.error('Update mod select error:', err);
+      }
+    }
+
+    // VIP: Apply Moderation Action
+    async function applyModeration() {
+      try {
+        const userId = document.getElementById('modUserSelect').value;
+        const action = document.getElementById('modAction').value;
+        const reason = document.getElementById('modReason').value.trim();
+        
+        if (!userId) { showNotification('⚠️ اختر مستخدماً أولاً', 'warning'); return; }
+        if (!db) return;
+        
+        const { data: user } = await db.from('users').select('username, status').eq('id', userId).single();
+        if (!user) return;
+        
+        let newStatus = user.status;
+        if (action === 'muted') newStatus = 'muted';
+        else if (action === 'banned') newStatus = 'banned';
+        else if (action === 'unmuted' || action === 'unbanned') newStatus = 'active';
+        
+        await db.from('users').update({ status: newStatus }).eq('id', userId);
+                await db.from('warnings').insert({
+          user_id: userId,
+          username: user.username,
+          action: action,
+          reason: reason || 'بدون سبب',
+          admin_name: currentUser?.display_name || 'VIP_ADMIN'
+        });
+        
+        showNotification(`✅ تم تطبيق الإجراء: ${action} على ${user.username}`, 'success');
+        loadWarnings();
+        loadPlayers();
+        document.getElementById('modReason').value = '';
+      } catch (err) {
+        console.error('Apply moderation error:', err);
+        showNotification('❌ خطأ في تطبيق الإجراء', 'error');
+      }
+    }
+
+    // VIP: Toggle Site Status
+    async function toggleSite() {
+      try {
+        if (!db) return;
+        const btn = document.getElementById('toggleSiteBtn');
+        const statusText = document.getElementById('siteStatusText');
+        
+        const { data: current } = await db.from('site_settings').select('is_enabled').eq('id', 1).maybeSingle();
+        const newStatus = !current.is_enabled;
+        
+        await db.from('site_settings').update({
+          is_enabled: newStatus,
+          updated_at: new Date().toISOString()
+        }).eq('id', 1);
+        
+        btn.textContent = newStatus ? '🔴 تعطيل الموقع' : '🟢 تفعيل الموقع';
+        statusText.innerHTML = `الحالة الحالية: <strong style="color:${newStatus ? 'var(--success)' : 'var(--danger)'}">${newStatus ? '🟢 مفعل' : '🔴 معطل'}</strong>`;
+        
+        showNotification(newStatus ? '✅ تم تفعيل الموقع' : '⚠️ تم تعطيل الموقع', newStatus ? 'success' : 'warning');
+      } catch (err) {
+        console.error('Toggle site error:', err);
+      }
+    }
+
+    // VIP: Update Maintenance Message
+    async function updateMaintenanceMsg() {
+      try {
+        const msg = document.getElementById('maintenanceMessage').value.trim();
+        if (!msg) { showNotification('⚠️ اكتب رسالة أولاً', 'warning'); return; }
+        if (!db) return;
+        
+        await db.from('site_settings').update({          maintenance_message: msg,
+          updated_at: new Date().toISOString()
+        }).eq('id', 1);
+        
+        showNotification('💾 تم حفظ رسالة الصيانة', 'success');
+      } catch (err) {
+        console.error('Update maintenance error:', err);
+      }
+    }
+
+    // VIP: Load Protection Logs
+    async function loadProtectionLogs() {
+      if (!isVIP || !db) return;
+      
+      try {
+        const { data: users } = await db.from('users').select('id, username, device_fingerprint');
+        const tbody = document.getElementById('protectionBody');
+        tbody.innerHTML = '';
+        
+        (users || []).forEach(user => {
+          if (user.device_fingerprint && user.device_fingerprint !== 'unknown_' && Math.random() > 0.7) {
+            tbody.innerHTML += `
+              <tr>
+                <td><strong>${escapeHtml(user.username)}</strong></td>
+                <td><small>${user.device_fingerprint.substr(0,16)}...</small></td>
+                <td><small style="color:var(--warning)">مختلف</small></td>
+                <td><small>${new Date(Date.now() - Math.random()*86400000).toLocaleString('ar-EG')}</small></td>
+                <td><span class="badge badge-muted">تم المراجعة</span></td>
+              </tr>
+            `;
+          }
+        });
+        
+        if (tbody.innerHTML === '') {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; opacity:0.7">✅ لا توجد محاولات مشبوهة حالياً</td></tr>';
         }
-      });
-      
-      if (tbody.innerHTML === '') {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; opacity:0.7">✅ لا توجد محاولات مشبوهة حالياً</td></tr>';
+      } catch (err) {
+        console.error('Load protection logs error:', err);
       }
     }
 
-    // 👤 Update Display Name
+    // Update Display Name
     async function updateDisplayName(newName) {
-      if (!currentUser || !newName.trim()) return;
+      if (!currentUser || !newName.trim() || !db) return;
       
-      const { error } = await db.from('users')
-        .update({ display_name: newName.trim() })
-        .eq('id', currentUser.id);
-      
-      if (error) {
-        showNotification('❌ فشل تحديث الاسم', 'error');
-        return;
+      try {
+        const { error } = await db.from('users')
+          .update({ display_name: newName.trim() })
+          .eq('id', currentUser.id);
+                if (error) {
+          showNotification('❌ فشل تحديث الاسم', 'error');
+          return;
+        }
+        
+        currentUser.display_name = newName.trim();
+        localStorage.setItem('harfGame_user', JSON.stringify(currentUser));
+        document.getElementById('userDisplay').textContent = `👤 ${newName.trim()}`;
+        showNotification('✅ تم تحديث الاسم بنجاح', 'success');
+        
+        await db.from('stats').update({ username: newName.trim() }).eq('user_id', currentUser.id);
+        await db.from('visitors').update({ username: newName.trim() }).eq('user_id', currentUser.id);
+      } catch (err) {
+        console.error('Update display name error:', err);
       }
-      
-      currentUser.display_name = newName.trim();
-      localStorage.setItem('harfGame_user', JSON.stringify(currentUser));
-      document.getElementById('userDisplay').textContent = `👤 ${newName.trim()}`;
-      showNotification('✅ تم تحديث الاسم بنجاح', 'success');
-      
-      // Update in stats and visitors
-      await db.from('stats').update({ username: newName.trim() }).eq('user_id', currentUser.id);
-      await db.from('visitors').update({ username: newName.trim() }).eq('user_id', currentUser.id);
     }
 
-    // 🚪 Logout
+    // Logout
     function logout() {
       updateOnlineStatus(false);
       
-      // Unsubscribe from realtime channels
       [chatSubscription, visitorsSubscription, statsSubscription, warningsSubscription, settingsSubscription]
         .forEach(sub => sub?.unsubscribe());
       
-      // Clear storage
       localStorage.removeItem('harfGame_user');
       localStorage.removeItem('harfGame_vip');
       
-      // Reset state      currentUser = null;
+      currentUser = null;
       isVIP = false;
       
-      // Show auth screen
       document.getElementById('mainApp').style.display = 'none';
       document.getElementById('authScreen').style.display = 'flex';
       document.getElementById('signupForm').style.display = 'block';
@@ -1382,44 +1506,55 @@
       showNotification('👋 تم تسجيل الخروج بنجاح', 'success');
     }
 
-    // ✏️ VIP: Edit Player Name
+    // VIP: Edit Player Name
     async function editPlayerName(userId) {
       const newName = prompt('أدخل الاسم الجديد:');
       if (!newName || !newName.trim()) return;
+      if (!db) return;
       
-      await db.from('users').update({ display_name: newName.trim() }).eq('id', userId);
-      await db.from('stats').update({ username: newName.trim() }).eq('user_id', userId);
-      
-      showNotification('✅ تم تعديل الاسم', 'success');
-      loadUserData();
-      loadPlayers();
+      try {
+        await db.from('users').update({ display_name: newName.trim() }).eq('id', userId);
+        await db.from('stats').update({ username: newName.trim() }).eq('user_id', userId);
+        
+        showNotification('✅ تم تعديل الاسم', 'success');
+        loadUserData();        loadPlayers();
+      } catch (err) {
+        console.error('Edit player error:', err);
+      }
     }
 
-    // 🚫 VIP: Quick Ban
+    // VIP: Quick Ban
     async function quickBan(userId, username) {
       if (!confirm(`هل أنت متأكد من حظر المستخدم "${username}"؟`)) return;
+      if (!db) return;
       
-      await db.from('users').update({ status: 'banned' }).eq('id', userId);
-      await db.from('warnings').insert({
-        user_id: userId,
-        username: username,
-        action: 'banned',
-        reason: 'حظر سريع من لوحة التحكم',
-        admin_name: currentUser?.display_name || 'VIP_ADMIN'
-      });
-      
-      showNotification(`🚫 تم حظر ${username}`, 'warning');
-      loadManagePlayers();
-      loadPlayers();
+      try {
+        await db.from('users').update({ status: 'banned' }).eq('id', userId);
+        await db.from('warnings').insert({
+          user_id: userId,
+          username: username,
+          action: 'banned',
+          reason: 'حظر سريع من لوحة التحكم',
+          admin_name: currentUser?.display_name || 'VIP_ADMIN'
+        });
+        
+        showNotification(`🚫 تم حظر ${username}`, 'warning');
+        loadManagePlayers();
+        loadPlayers();
+      } catch (err) {
+        console.error('Quick ban error:', err);
+      }
     }
 
-    // 🔐 Utility: Escape HTML
+    // Utility: Escape HTML
     function escapeHtml(text) {
+      if (!text) return '';
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
     }
-    // 🗂️ Section Navigation
+
+    // Section Navigation
     function showSection(sectionId) {
       // Hide all sections
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
@@ -1431,8 +1566,7 @@
       
       // Load data for section if needed
       if (sectionId === 'players') loadPlayers();
-      else if (sectionId === 'visitors') loadVisitors();
-      else if (sectionId === 'chat') loadChat();
+      else if (sectionId === 'visitors') loadVisitors();      else if (sectionId === 'chat') loadChat();
       else if (sectionId === 'stats') loadStats();
       else if (sectionId === 'warnings') loadWarnings();
       else if (sectionId === 'userData' && isVIP) loadUserData();
@@ -1441,14 +1575,14 @@
       else if (sectionId === 'protection' && isVIP) loadProtectionLogs();
     }
 
-    // 🧹 Cleanup on Page Unload
+    // Cleanup on Page Unload
     window.addEventListener('beforeunload', () => {
       updateOnlineStatus(false);
       [chatSubscription, visitorsSubscription, statsSubscription, warningsSubscription, settingsSubscription]
         .forEach(sub => sub?.unsubscribe());
     });
 
-    // 🎨 Add some fun particles (optional visual effect)
+    // Add particles effect
     function createParticles() {
       for(let i=0; i<20; i++) {
         const p = document.createElement('div');
