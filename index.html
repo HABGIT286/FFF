@@ -1559,12 +1559,13 @@
           // Create VIP session
           isVIP = true;
           currentUser = {
-            id: 'vip_admin',
-            username: 'VIP_ADMIN',
-            display_name: '👑 المدير العام',
-            role: 'vip',
-            status: 'active'
-          };
+  id: '00000000-0000-0000-0000-000000000001', // <--- التصحيح
+  username: 'VIP_ADMIN',
+  display_name: '👑 المدير العام',
+  role: 'vip',
+  status: 'active'
+
+};
           localStorage.setItem('harfGame_user', JSON.stringify(currentUser));
           localStorage.setItem('harfGame_vip', 'true');          
           showNotification('👑 مرحباً بك في لوحة التحكم VIP! ✨', 'success');
